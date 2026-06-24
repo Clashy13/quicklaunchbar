@@ -1,1 +1,1 @@
-# qlaunchbar
+# QuickLaunchBar
