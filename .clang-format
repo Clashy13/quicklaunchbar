@@ -1,0 +1,43 @@
+# .clang-format
+
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+ColumnLimit: 100
+
+BreakBeforeBraces: Attach
+
+BinPackParameters: false
+BinPackArguments: false
+
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowAllArgumentsOnNextLine: false
+
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+SortIncludes: true
+IncludeBlocks: Regroup
+
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: true
+SpacesInSquareBrackets: true
+
+IndentCaseLabels: true
+
+NamespaceIndentation: All
+
+FixNamespaceComments: true
+
+ReflowComments: true
+
+Cpp11BracedListStyle: true
+
+Standard: Latest

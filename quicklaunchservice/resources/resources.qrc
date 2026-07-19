@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/command_icon.svg</file>
+    </qresource>
+</RCC>

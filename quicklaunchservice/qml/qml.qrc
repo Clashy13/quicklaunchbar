@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>Colors.qml</file>
+        <file>ExecutionTarget/ListScrollView.qml</file>
+        <file>ExecutionTarget/VerticalIconGridView.qml</file>
+        <file>ExecutionTarget/GroupIcon.qml</file>
+        <file>ExecutionTarget/Constants.qml</file>
+        <file>ExecutionTarget/ListGridView.qml</file>
+        <file>ExecutionTarget/HorizontalIconGridView.qml</file>
+        <file>ExecutionTarget/FlowView.qml</file>
+        <file>ExecutionTarget/HorizontalIconScrollView.qml</file>
+        <file>ExecutionTarget/MovableScrollRow.qml</file>
+        <file>ExecutionTarget/VerticalIconScrollView.qml</file>
+        <file>ExecutionTarget/MovableScrollColumn.qml</file>
+        <file>ExecutionTarget/FlowElement.qml</file>
+        <file>ExecutionTarget/IconFlowElement.qml</file>
+        <file>ExecutionTarget/ListFlowElement.qml</file>
+    </qresource>
+</RCC>
