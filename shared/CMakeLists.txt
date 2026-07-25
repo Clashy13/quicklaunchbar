@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_AUTORCC ON)
 
+add_subdirectory(include/shared/external/QHotkey-1.5.0)
+
 add_library(shared 
     include/shared/ProfileConfigNames.hpp
     include/shared/ProfileConfigPath.hpp

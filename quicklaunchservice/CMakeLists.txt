@@ -11,7 +11,6 @@ find_package(Boost 1.83.0 REQUIRED)
 
 qt_standard_project_setup()
 
-add_subdirectory(external/QHotkey-1.5.0)
 add_subdirectory(../shared shared_build)
 add_subdirectory(src)
 
