@@ -1,0 +1,13 @@
+set(SOURCES
+    ${SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Command.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GroupExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/UriExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/IconSource.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Profile.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileView.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Uri.hpp
+    PARENT_SCOPE
+)
