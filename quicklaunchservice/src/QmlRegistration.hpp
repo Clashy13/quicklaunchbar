@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Backend.hpp"
-#include "ExecutionTarget.hpp"
 #include "ThemeManager.hpp"
 
 class QmlRegistration {
@@ -11,11 +10,6 @@ class QmlRegistration {
                                   QmlRegistration::versionMajor,
                                   QmlRegistration::versionMinor,
                                   "Backend" );
-        qmlRegisterUncreatableType<ExecutionTarget>( QmlRegistration::uri,
-                                                     QmlRegistration::versionMajor,
-                                                     QmlRegistration::versionMinor,
-                                                     "ExecutionTarget",
-                                                     "Enums only" );
         qmlRegisterSingletonType( QUrl( "qrc:/qml/Colors.qml" ),
                                   QmlRegistration::uri,
                                   QmlRegistration::versionMajor,

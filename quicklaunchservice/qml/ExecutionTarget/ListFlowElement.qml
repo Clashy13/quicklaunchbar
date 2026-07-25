@@ -31,7 +31,7 @@ FlowElement {
             id: iconImage
             width: root.iconSize
             height: root.iconSize
-            sources: root.iconSources()
+            sources: root.executionTarget.iconSources
         }
 
         Label {

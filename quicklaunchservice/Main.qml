@@ -51,12 +51,10 @@ Window {
 
         onShowProfile: (profile) => {
             profileTitle.text = profile.name;
-            const source = backend.executionTargetViewSource(profile.view);
 
             const availableContentWidth = backend.availableContentWidth();
             const availableContentHeight = backend.availableContentHeight();
-
-            profileViewLoader.setSource(source, {
+            profileViewLoader.setSource(profile.viewSource, {
                 executionTargets: profile.executionTargets,
                 availableWidth: availableContentWidth - root.contentMargin*2,
                 availableHeight: (availableContentHeight - profileTitle.height - column.spacing - root.contentMargin*2)

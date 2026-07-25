@@ -27,14 +27,4 @@ Rectangle {
             }
         }
     }
-
-    function iconSources() {
-        switch(executionTarget.type) {
-            case ExecutionTarget.Type.Single:
-                return [executionTarget.iconSource];
-            case ExecutionTarget.Type.Group:
-                return executionTarget.iconSources;
-        }
-        return [];
-    }
 }
