@@ -18,6 +18,22 @@ namespace Serializer {
         return value.toString();
     }
 
+    std::optional<bool> PropertySerializer::serializedBoolProperty( const QJsonObject& obj,
+                                                                    const QString& key ) {
+        if ( !PropertySerializer::containsKey( obj, key ) ) {
+            return std::nullopt;
+        }
+
+        const auto value = obj[ key ];
+
+        if ( !value.isBool() ) {
+            qWarning().noquote() << "Property is not a bool:" << key;
+            return std::nullopt;
+        }
+
+        return value.toBool();
+    }
+
     std::optional<int> PropertySerializer::serializedIntProperty( const QJsonObject& obj,
                                                                   const QString& key ) {
         if ( !PropertySerializer::containsKey( obj, key ) ) {

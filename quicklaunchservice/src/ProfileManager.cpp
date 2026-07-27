@@ -31,10 +31,13 @@ void ProfileManager::launchExecutionTargetByIndex( const qsizetype index ) {
 
 void ProfileManager::connectShortcutsToProfiles() {
     for ( qsizetype i = 0; i < this->_profiles.size(); ++i ) {
-        auto* hotkey = new QHotkey( QKeySequence( this->_profiles.at( i ).shortcut ), true, this );
-        connect( hotkey, &QHotkey::activated, this, [ this, i ]() {
-            emit this->toggleProfile( i );
-        } );
+        if ( this->_profiles.at( i ).enabled ) {
+            auto* hotkey =
+                new QHotkey( QKeySequence( this->_profiles.at( i ).shortcut ), true, this );
+            connect( hotkey, &QHotkey::activated, this, [ this, i ]() {
+                emit this->toggleProfile( i );
+            } );
+        }
     }
 }
 
