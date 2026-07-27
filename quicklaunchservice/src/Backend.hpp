@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Profile.hpp"
+#include "ProfileManager.hpp"
 
 #include <QObject>
 #include <QPoint>
@@ -8,6 +8,7 @@
 #include <QQuickWindow>
 #include <QRect>
 #include <QScreen>
+#include <qtypes.h>
 
 class Backend : public QObject {
     Q_OBJECT
@@ -28,23 +29,16 @@ class Backend : public QObject {
 
     Q_INVOKABLE QRect currentScreenRect() const;
 
-    Q_INVOKABLE QString executionTargetViewSource( ProfileView* profileView );
-
   signals:
-    void showProfile( Profile* profile );
+    void showProfile( QmlProfile* profile );
 
     void hideWindow();
 
   private:
-    void setProfilesFromConfigFile();
-
-    void connectShortcutsToProfiles();
-
-    void toggleProfile( Profile* profile );
+    void toggleProfile( qsizetype profileIndex );
 
     QScreen* newCurrentScreen() const;
 
-    QList<Profile*> _profiles;
-    Profile* _currentProfile = nullptr;
+    ProfileManager _profileManager;
     QScreen* _currentProfileScreen = nullptr;
 };

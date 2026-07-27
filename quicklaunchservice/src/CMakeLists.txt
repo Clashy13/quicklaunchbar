@@ -2,16 +2,13 @@ set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/Backend.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/Backend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Profile.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileView.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTarget.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTarget.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/GroupExecutionTarget.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileSerializer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileSerializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileManager.hpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FileIconProvider.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ThemeIconProvider.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ThemeManager.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/QmlRegistration.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/QmlProfile.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/QmlExecutionTarget.hpp
     PARENT_SCOPE
 )
