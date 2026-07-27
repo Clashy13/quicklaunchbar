@@ -11,6 +11,9 @@ namespace Serializer {
         static std::optional<QString> serializedStringProperty( const QJsonObject& obj,
                                                                 const QString& key );
 
+        static std::optional<bool> serializedBoolProperty( const QJsonObject& obj,
+                                                           const QString& key );
+
         static std::optional<int> serializedIntProperty( const QJsonObject& obj,
                                                          const QString& key );
 

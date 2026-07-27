@@ -28,6 +28,7 @@ namespace Serializer {
 
         static constexpr auto uuidStr = "uuid";
         static constexpr auto nameStr = "name";
+        static constexpr auto enabledStr = "enabled";
         static constexpr auto shortcutStr = "shortcut";
         static constexpr auto viewStr = "view";
         static constexpr auto executionTargetsStr = "execution_targets";

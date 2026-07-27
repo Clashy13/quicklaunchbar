@@ -21,6 +21,14 @@ namespace Serializer {
         } else {
             return std::nullopt;
         }
+        bool enabled;
+        if ( const auto enabledOpt =
+                 PropertySerializer::serializedBoolProperty( obj,
+                                                             ProfileSerializer::enabledStr ) ) {
+            enabled = *enabledOpt;
+        } else {
+            return std::nullopt;
+        }
         QString shortcut;
         if ( const auto shortcutOpt =
                  PropertySerializer::serializedStringProperty( obj,
@@ -35,7 +43,12 @@ namespace Serializer {
             if ( const auto view = ProfileViewSerializer::serialized( *viewObj ) ) {
                 if ( auto executionTargets =
                          ProfileSerializer::serializedExecutionTargets( obj ) ) {
-                    Profile profile( uuid, name, shortcut, *view, std::move( *executionTargets ) );
+                    Profile profile( uuid,
+                                     name,
+                                     enabled,
+                                     shortcut,
+                                     *view,
+                                     std::move( *executionTargets ) );
                     return profile;
                 } else {
                     return std::nullopt;
@@ -52,6 +65,7 @@ namespace Serializer {
         return {
             { ProfileSerializer::uuidStr, profile.uuid.toString( QUuid::WithoutBraces ) },
             { ProfileSerializer::nameStr, profile.name },
+            { ProfileSerializer::enabledStr, profile.enabled },
             { ProfileSerializer::shortcutStr, profile.shortcut },
             { ProfileSerializer::viewStr, ProfileViewSerializer::deserialized( profile.view ) },
             { ProfileSerializer::executionTargetsStr,
