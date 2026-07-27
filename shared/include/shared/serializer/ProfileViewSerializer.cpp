@@ -3,6 +3,7 @@
 #include "PropertySerializer.hpp"
 
 #include <qdebug.h>
+#include <qjsonobject.h>
 #include <qtypes.h>
 
 namespace Serializer {
@@ -72,35 +73,55 @@ namespace Serializer {
         } else {
             return std::nullopt;
         }
-        ProfileView::FlowDirection flowDirection;
-        if ( const auto flowDirectionStrOpt = PropertySerializer::serializedStringProperty(
-                 obj,
-                 ProfileViewSerializer::flowDirectionStr ) ) {
-            if ( const auto flowDirectionOpt =
-                     ProfileViewSerializer::flowDirectionFromString( *flowDirectionStrOpt ) ) {
-                flowDirection = *flowDirectionOpt;
+        if ( mode == ProfileView::Mode::Icon ) {
+            ProfileView::FlowDirection flowDirection;
+            if ( const auto flowDirectionStrOpt = PropertySerializer::serializedStringProperty(
+                     obj,
+                     ProfileViewSerializer::flowDirectionStr ) ) {
+                if ( const auto flowDirectionOpt =
+                         ProfileViewSerializer::flowDirectionFromString( *flowDirectionStrOpt ) ) {
+                    flowDirection = *flowDirectionOpt;
+                } else {
+                    return std::nullopt;
+                }
             } else {
                 return std::nullopt;
             }
+            ProfileView view( mode,
+                              horizontalAnchor,
+                              verticalAnchor,
+                              margin,
+                              wrapMode,
+                              flowDirection );
+            return view;
         } else {
-            return std::nullopt;
+            ProfileView view( mode,
+                              horizontalAnchor,
+                              verticalAnchor,
+                              margin,
+                              wrapMode,
+                              ProfileView::FlowDirection::Vertical );
+            return view;
         }
-        ProfileView view( mode, horizontalAnchor, verticalAnchor, margin, wrapMode, flowDirection );
-        return view;
     }
 
     QJsonObject ProfileViewSerializer::deserialized( const ProfileView& view ) {
-        return {
-            { ProfileViewSerializer::modeStr, ProfileViewSerializer::modeToString( view.mode ) },
-            { ProfileViewSerializer::horizontalAnchorStr,
-              ProfileViewSerializer::horizontalAnchorToString( view.horizontalAnchor ) },
-            { ProfileViewSerializer::verticalAnchorStr,
-              ProfileViewSerializer::verticalAnchorToString( view.verticalAnchor ) },
-            { ProfileViewSerializer::marginStr, view.margin },
-            { ProfileViewSerializer::wrapModeStr,
-              ProfileViewSerializer::wrapModeToString( view.wrapMode ) },
-            { ProfileViewSerializer::flowDirectionStr,
-              ProfileViewSerializer::flowDirectionToString( view.flowDirection ) } };
+        QJsonObject obj;
+        obj[ ProfileViewSerializer::modeStr ] = ProfileViewSerializer::modeToString( view.mode );
+        obj[ ProfileViewSerializer::horizontalAnchorStr ] =
+            ProfileViewSerializer::horizontalAnchorToString( view.horizontalAnchor );
+        obj[ ProfileViewSerializer::verticalAnchorStr ] =
+            ProfileViewSerializer::verticalAnchorToString( view.verticalAnchor );
+        obj[ ProfileViewSerializer::marginStr ] = view.margin;
+        obj[ ProfileViewSerializer::wrapModeStr ] =
+            ProfileViewSerializer::wrapModeToString( view.wrapMode );
+
+        if ( view.mode == ProfileView::Mode::Icon ) {
+            obj[ ProfileViewSerializer::flowDirectionStr ] =
+                ProfileViewSerializer::flowDirectionToString( view.flowDirection );
+        }
+
+        return obj;
     }
 
     QString ProfileViewSerializer::modeToString( const ProfileView::Mode mode ) {
