@@ -1,29 +1,34 @@
 #pragma once
 
+#include "Command.hpp"
 #include "IconSource.hpp"
+#include "Uri.hpp"
 
 #include <QList>
 #include <QUuid>
 
-namespace Models::ExecutionTarget {
+namespace Shared::Models::ExecutionTarget {
 
     class ExecutionTarget {
+
       public:
         enum class Type { DesktopApplication, ExecutableFile, Command, OpenFile, OpenUrl, Group };
 
         explicit ExecutionTarget( const QUuid& uuid,
                                   const QString& name,
-                                  ExecutionTarget::Type type,
-                                  const QList<IconSource>& iconSources )
-            : uuid( uuid ), name( name ), type( type ), iconSources( iconSources ) {}
-
-        virtual ~ExecutionTarget() = 0;
+                                  const Type type,
+                                  const QList<IconSource>& iconSources,
+                                  const QList<Command>& commands,
+                                  const QList<Uri>& uriList )
+            : uuid( uuid ), name( name ), type( type ), iconSources( iconSources ),
+              commands( commands ), uriList( uriList ) {}
 
         QUuid uuid;
         QString name;
-        ExecutionTarget::Type type;
+        Type type;
         QList<IconSource> iconSources;
+        QList<Command> commands;
+        QList<Uri> uriList;
     };
 
-    inline ExecutionTarget::~ExecutionTarget() = default;
-} // namespace Models::ExecutionTarget
+} // namespace Shared::Models::ExecutionTarget

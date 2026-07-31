@@ -2,15 +2,15 @@
 
 #include <QString>
 
-namespace Models::ExecutionTarget {
+namespace Shared::Models::ExecutionTarget {
 
     class Uri {
       public:
-        enum Type { File, Url };
+        enum class Type { File, Url };
 
-        Uri( Type type, const QString& value ) : type( type ), value( value ) {}
+        Uri( const Type type, const QString& value ) : type( type ), value( value ) {}
 
-        Type type;
+        Uri::Type type;
         QString value;
     };
-} // namespace Models::ExecutionTarget
+} // namespace Shared::Models::ExecutionTarget

@@ -3,7 +3,7 @@
 #include <QJsonObject>
 #include <QString>
 
-namespace Serializer {
+namespace Shared::Serializer {
 
     class JsonSerializer {
       public:
@@ -11,4 +11,4 @@ namespace Serializer {
 
         static bool saveJsonObject( const QJsonObject& json, const QString& filePath );
     };
-} // namespace Serializer
+} // namespace Shared::Serializer

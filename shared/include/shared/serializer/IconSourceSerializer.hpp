@@ -5,17 +5,23 @@
 #include <QJsonObject>
 #include <optional>
 
-namespace Serializer {
-
-    using IconSource = Models::ExecutionTarget::IconSource;
+namespace Shared::Serializer {
 
     class IconSourceSerializer {
+
+      protected:
+        using IconSource = Models::ExecutionTarget::IconSource;
+
       public:
         static std::optional<IconSource> serialized( const QJsonObject& obj );
 
-        static QJsonObject deserialized( const IconSource& command );
+        static QJsonObject deserialized( const IconSource& iconSource );
 
       private:
+        static std::optional<IconSource::Type> serializedType( const QJsonObject& obj );
+
+        static std::optional<QString> serializedValue( const QJsonObject& obj );
+
         static QString typeToString( const IconSource::Type type );
 
         static std::optional<IconSource::Type> typeFromString( const QString& type );
@@ -29,4 +35,4 @@ namespace Serializer {
         static constexpr auto resourceTypeStr = "resource";
     };
 
-} // namespace Serializer
+} // namespace Shared::Serializer

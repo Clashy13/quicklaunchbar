@@ -1,6 +1,6 @@
 #include "PropertySerializer.hpp"
 
-namespace Serializer {
+namespace Shared::Serializer {
 
     std::optional<QString> PropertySerializer::serializedStringProperty( const QJsonObject& obj,
                                                                          const QString& key ) {
@@ -90,4 +90,4 @@ namespace Serializer {
         return false;
     }
 
-} // namespace Serializer
+} // namespace Shared::Serializer

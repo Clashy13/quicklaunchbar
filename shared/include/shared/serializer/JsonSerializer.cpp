@@ -5,7 +5,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-namespace Serializer {
+namespace Shared::Serializer {
     QJsonObject JsonSerializer::loadJsonObject( const QString& filePath ) {
         QFile file( filePath );
 
@@ -56,4 +56,4 @@ namespace Serializer {
 
         return true;
     }
-} // namespace Serializer
+} // namespace Shared::Serializer

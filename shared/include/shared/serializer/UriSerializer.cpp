@@ -2,34 +2,46 @@
 
 #include "PropertySerializer.hpp"
 
-namespace Serializer {
+namespace Shared::Serializer {
 
-    std::optional<Uri> UriSerializer::serialized( const QJsonObject& obj ) {
-        Uri::Type type;
+    std::optional<UriSerializer::Uri> UriSerializer::serialized( const QJsonObject& obj ) {
+        const auto type = UriSerializer::serializedType( obj );
+        const auto value = UriSerializer::serializedValue( obj );
+
+        if ( type && value ) {
+            Uri uri( *type, *value );
+            return uri;
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    QJsonObject UriSerializer::deserialized( const Uri& uri ) {
+        return { { UriSerializer::typeStr, UriSerializer::typeToString( uri.type ) },
+                 { UriSerializer::valueStr, uri.value } };
+    }
+
+    std::optional<UriSerializer::Uri::Type>
+    UriSerializer::serializedType( const QJsonObject& obj ) {
         if ( const auto typeStrOpt =
                  PropertySerializer::serializedStringProperty( obj, UriSerializer::typeStr ) ) {
             if ( const auto typeOpt = UriSerializer::typeFromString( *typeStrOpt ) ) {
-                type = *typeOpt;
+                return *typeOpt;
             } else {
                 return std::nullopt;
             }
         } else {
             return std::nullopt;
         }
-        QString value;
+    }
+
+    std::optional<QString> UriSerializer::serializedValue( const QJsonObject& obj ) {
         if ( const auto valueOpt =
                  PropertySerializer::serializedStringProperty( obj, UriSerializer::valueStr ) ) {
-            value = *valueOpt;
+            return *valueOpt;
         } else {
             return std::nullopt;
         }
-        Uri iconSource( type, value );
-        return iconSource;
-    }
-
-    QJsonObject UriSerializer::deserialized( const Uri& iconSource ) {
-        return { { UriSerializer::typeStr, UriSerializer::typeToString( iconSource.type ) },
-                 { UriSerializer::valueStr, iconSource.value } };
     }
 
     QString UriSerializer::typeToString( const Uri::Type type ) {
@@ -43,7 +55,7 @@ namespace Serializer {
         }
     }
 
-    std::optional<Uri::Type> UriSerializer::typeFromString( const QString& type ) {
+    std::optional<UriSerializer::Uri::Type> UriSerializer::typeFromString( const QString& type ) {
         if ( type == UriSerializer::fileTypeStr ) {
             return Uri::Type::File;
         } else if ( type == UriSerializer::urlTypeStr ) {
@@ -54,4 +66,4 @@ namespace Serializer {
         }
     }
 
-} // namespace Serializer
+} // namespace Shared::Serializer

@@ -1,30 +1,27 @@
 #pragma once
 
-#include "../models/ExecutionTarget.hpp"
-#include "../models/Profile.hpp"
+#include "../models/ProfileView.hpp"
 
 #include <QJsonArray>
 #include <QJsonObject>
-#include <memory>
 #include <optional>
 
-namespace Serializer {
-
-    using Profile = Models::Profile::Profile;
-    using ExecutionTarget = Models::ExecutionTarget::ExecutionTarget;
+namespace Shared::Serializer {
 
     class ProfileSerializer {
-      public:
-        static std::optional<Profile> serialized( const QJsonObject& obj );
 
-        static QJsonObject deserialized( const Profile& profile );
+        using ProfileView = Models::Profile::ProfileView;
 
-      private:
-        static std::optional<std::vector<std::unique_ptr<ExecutionTarget>>>
-        serializedExecutionTargets( const QJsonObject& obj );
+      protected:
+        static std::optional<QUuid> serializedUuid( const QJsonObject& obj );
 
-        static QJsonArray deserializedExecutionTargets(
-            const std::vector<std::unique_ptr<ExecutionTarget>>& executionTargets );
+        static std::optional<QString> serializedName( const QJsonObject& obj );
+
+        static std::optional<bool> serializedEnabled( const QJsonObject& obj );
+
+        static std::optional<QString> serializedShortcut( const QJsonObject& obj );
+
+        static std::optional<ProfileView> serializedView( const QJsonObject& obj );
 
         static constexpr auto uuidStr = "uuid";
         static constexpr auto nameStr = "name";
@@ -34,4 +31,4 @@ namespace Serializer {
         static constexpr auto executionTargetsStr = "execution_targets";
     };
 
-} // namespace Serializer
+} // namespace Shared::Serializer

@@ -2,26 +2,19 @@
 
 #include "PropertySerializer.hpp"
 
-namespace Serializer {
+namespace Shared::Serializer {
 
-    std::optional<Command> CommandSerializer::serialized( const QJsonObject& obj ) {
-        QString program;
-        if ( const auto programOpt =
-                 PropertySerializer::serializedStringProperty( obj,
-                                                               CommandSerializer::programStr ) ) {
-            program = *programOpt;
+    std::optional<CommandSerializer::Command>
+    CommandSerializer::serialized( const QJsonObject& obj ) {
+        const auto program = CommandSerializer::serializedProgram( obj );
+        const auto arguments = CommandSerializer::serializedArguments( obj );
+
+        if ( program && arguments ) {
+            Command command( *program, *arguments );
+            return command;
         } else {
             return std::nullopt;
         }
-        QStringList arguments;
-        if ( const auto argumentsOpt = CommandSerializer::serializedArguments( obj ) ) {
-            arguments = *argumentsOpt;
-        } else {
-            return std::nullopt;
-        }
-
-        Command command( program, arguments );
-        return command;
     }
 
     QJsonObject CommandSerializer::deserialized( const Command& command ) {
@@ -36,6 +29,16 @@ namespace Serializer {
             deserializedArguments.push_back( QJsonValue( argument ) );
         }
         return deserializedArguments;
+    }
+
+    std::optional<QString> CommandSerializer::serializedProgram( const QJsonObject& obj ) {
+        if ( const auto programOpt =
+                 PropertySerializer::serializedStringProperty( obj,
+                                                               CommandSerializer::programStr ) ) {
+            return *programOpt;
+        } else {
+            return std::nullopt;
+        }
     }
 
     std::optional<QStringList> CommandSerializer::serializedArguments( const QJsonObject& obj ) {
@@ -57,4 +60,4 @@ namespace Serializer {
         }
     }
 
-} // namespace Serializer
+} // namespace Shared::Serializer
