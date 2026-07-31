@@ -3,7 +3,7 @@
 #include <QString>
 #include <QStringList>
 
-namespace Models::ExecutionTarget {
+namespace Shared::Models::ExecutionTarget {
 
     class Command {
       public:
@@ -13,4 +13,4 @@ namespace Models::ExecutionTarget {
         QString program;
         QStringList arguments;
     };
-} // namespace Models::ExecutionTarget
+} // namespace Shared::Models::ExecutionTarget

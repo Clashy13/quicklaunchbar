@@ -2,106 +2,37 @@
 
 #include "PropertySerializer.hpp"
 
-#include <qdebug.h>
-#include <qjsonobject.h>
-#include <qtypes.h>
+namespace Shared::Serializer {
 
-namespace Serializer {
+    std::optional<ProfileViewSerializer::ProfileView>
+    ProfileViewSerializer::serialized( const QJsonObject& obj ) {
+        const auto mode = ProfileViewSerializer::serializedMode( obj );
+        const auto horizontalAnchor = ProfileViewSerializer::serializedHorizontalAnchor( obj );
+        const auto verticalAnchor = ProfileViewSerializer::serializedVerticalAnchor( obj );
+        const auto margin = ProfileViewSerializer::serializedMargin( obj );
+        const auto wrapMode = ProfileViewSerializer::serializedWrapMode( obj );
 
-    std::optional<ProfileView> ProfileViewSerializer::serialized( const QJsonObject& obj ) {
-        ProfileView::Mode mode;
-        if ( const auto modeStrOpt =
-                 PropertySerializer::serializedStringProperty( obj,
-                                                               ProfileViewSerializer::modeStr ) ) {
-            if ( const auto modeOpt = ProfileViewSerializer::modeFromString( *modeStrOpt ) ) {
-                mode = *modeOpt;
-            } else {
-                return std::nullopt;
-            }
-        } else {
-            return std::nullopt;
-        }
-        ProfileView::HorizontalAnchor horizontalAnchor;
-        if ( const auto horizontalAnchorStrOpt = PropertySerializer::serializedStringProperty(
-                 obj,
-                 ProfileViewSerializer::horizontalAnchorStr ) ) {
-            if ( const auto horizontalAnchorOpt = ProfileViewSerializer::horizontalAnchorFromString(
-                     *horizontalAnchorStrOpt ) ) {
-                horizontalAnchor = *horizontalAnchorOpt;
-            } else {
-                return std::nullopt;
-            }
-        } else {
-            return std::nullopt;
-        }
-        ProfileView::VerticalAnchor verticalAnchor;
-        if ( const auto verticalAnchorStrOpt = PropertySerializer::serializedStringProperty(
-                 obj,
-                 ProfileViewSerializer::verticalAnchorStr ) ) {
-            if ( const auto verticalAnchorOpt =
-                     ProfileViewSerializer::verticalAnchorFromString( *verticalAnchorStrOpt ) ) {
-                verticalAnchor = *verticalAnchorOpt;
-            } else {
-                return std::nullopt;
-            }
-        } else {
-            return std::nullopt;
-        }
-        qsizetype margin;
-        if ( const auto marginOpt =
-                 PropertySerializer::serializedIntProperty( obj,
-                                                            ProfileViewSerializer::marginStr ) ) {
-            if ( *marginOpt < 0 ) {
-                qWarning().noquote()
-                    << "Property is not a size type:" << ProfileViewSerializer::marginStr;
-                return std::nullopt;
-            }
-            margin = *marginOpt;
-        } else {
-            return std::nullopt;
-        }
-        ProfileView::WrapMode wrapMode;
-        if ( const auto wrapModeStrOpt = PropertySerializer::serializedStringProperty(
-                 obj,
-                 ProfileViewSerializer::wrapModeStr ) ) {
-            if ( const auto wrapModeOpt =
-                     ProfileViewSerializer::wrapModeFromString( *wrapModeStrOpt ) ) {
-                wrapMode = *wrapModeOpt;
-            } else {
-                return std::nullopt;
-            }
-        } else {
-            return std::nullopt;
-        }
-        if ( mode == ProfileView::Mode::Icon ) {
+        if ( mode && horizontalAnchor && verticalAnchor && margin && wrapMode ) {
             ProfileView::FlowDirection flowDirection;
-            if ( const auto flowDirectionStrOpt = PropertySerializer::serializedStringProperty(
-                     obj,
-                     ProfileViewSerializer::flowDirectionStr ) ) {
+            if ( *mode == ProfileView::Mode::Icon ) {
                 if ( const auto flowDirectionOpt =
-                         ProfileViewSerializer::flowDirectionFromString( *flowDirectionStrOpt ) ) {
+                         ProfileViewSerializer::serializedFlowDirection( obj ) ) {
                     flowDirection = *flowDirectionOpt;
                 } else {
                     return std::nullopt;
                 }
             } else {
-                return std::nullopt;
+                flowDirection = ProfileView::FlowDirection::Vertical;
             }
-            ProfileView view( mode,
-                              horizontalAnchor,
-                              verticalAnchor,
-                              margin,
-                              wrapMode,
+            ProfileView view( *mode,
+                              *horizontalAnchor,
+                              *verticalAnchor,
+                              *margin,
+                              *wrapMode,
                               flowDirection );
             return view;
         } else {
-            ProfileView view( mode,
-                              horizontalAnchor,
-                              verticalAnchor,
-                              margin,
-                              wrapMode,
-                              ProfileView::FlowDirection::Vertical );
-            return view;
+            return std::nullopt;
         }
     }
 
@@ -124,6 +55,100 @@ namespace Serializer {
         return obj;
     }
 
+    std::optional<ProfileViewSerializer::ProfileView::Mode>
+    ProfileViewSerializer::serializedMode( const QJsonObject& obj ) {
+        if ( const auto modeStrOpt =
+                 PropertySerializer::serializedStringProperty( obj,
+                                                               ProfileViewSerializer::modeStr ) ) {
+            if ( const auto modeOpt = ProfileViewSerializer::modeFromString( *modeStrOpt ) ) {
+                return *modeOpt;
+            } else {
+                return std::nullopt;
+            }
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<ProfileViewSerializer::ProfileView::HorizontalAnchor>
+    ProfileViewSerializer::serializedHorizontalAnchor( const QJsonObject& obj ) {
+        if ( const auto horizontalAnchorStrOpt = PropertySerializer::serializedStringProperty(
+                 obj,
+                 ProfileViewSerializer::horizontalAnchorStr ) ) {
+            if ( const auto horizontalAnchorOpt = ProfileViewSerializer::horizontalAnchorFromString(
+                     *horizontalAnchorStrOpt ) ) {
+                return *horizontalAnchorOpt;
+            } else {
+                return std::nullopt;
+            }
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<ProfileViewSerializer::ProfileView::VerticalAnchor>
+    ProfileViewSerializer::serializedVerticalAnchor( const QJsonObject& obj ) {
+        if ( const auto verticalAnchorStrOpt = PropertySerializer::serializedStringProperty(
+                 obj,
+                 ProfileViewSerializer::verticalAnchorStr ) ) {
+            if ( const auto verticalAnchorOpt =
+                     ProfileViewSerializer::verticalAnchorFromString( *verticalAnchorStrOpt ) ) {
+                return *verticalAnchorOpt;
+            } else {
+                return std::nullopt;
+            }
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<qsizetype> ProfileViewSerializer::serializedMargin( const QJsonObject& obj ) {
+        if ( const auto marginOpt =
+                 PropertySerializer::serializedIntProperty( obj,
+                                                            ProfileViewSerializer::marginStr ) ) {
+            if ( *marginOpt < 0 ) {
+                qWarning().noquote()
+                    << "Property is not a size type:" << ProfileViewSerializer::marginStr;
+                return std::nullopt;
+            }
+            return *marginOpt;
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<ProfileViewSerializer::ProfileView::WrapMode>
+    ProfileViewSerializer::serializedWrapMode( const QJsonObject& obj ) {
+        if ( const auto wrapModeStrOpt = PropertySerializer::serializedStringProperty(
+                 obj,
+                 ProfileViewSerializer::wrapModeStr ) ) {
+            if ( const auto wrapModeOpt =
+                     ProfileViewSerializer::wrapModeFromString( *wrapModeStrOpt ) ) {
+                return *wrapModeOpt;
+            } else {
+                return std::nullopt;
+            }
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<ProfileViewSerializer::ProfileView::FlowDirection>
+    ProfileViewSerializer::serializedFlowDirection( const QJsonObject& obj ) {
+        if ( const auto flowDirectionStrOpt = PropertySerializer::serializedStringProperty(
+                 obj,
+                 ProfileViewSerializer::flowDirectionStr ) ) {
+            if ( const auto flowDirectionOpt =
+                     ProfileViewSerializer::flowDirectionFromString( *flowDirectionStrOpt ) ) {
+                return *flowDirectionOpt;
+            } else {
+                return std::nullopt;
+            }
+        } else {
+            return std::nullopt;
+        }
+    }
+
     QString ProfileViewSerializer::modeToString( const ProfileView::Mode mode ) {
         switch ( mode ) {
             case ProfileView::Mode::Icon:
@@ -135,7 +160,8 @@ namespace Serializer {
         }
     }
 
-    std::optional<ProfileView::Mode> ProfileViewSerializer::modeFromString( const QString& mode ) {
+    std::optional<ProfileViewSerializer::ProfileView::Mode>
+    ProfileViewSerializer::modeFromString( const QString& mode ) {
         if ( mode == ProfileViewSerializer::iconModeStr ) {
             return ProfileView::Mode::Icon;
         } else if ( mode == ProfileViewSerializer::listModeStr ) {
@@ -160,7 +186,7 @@ namespace Serializer {
         }
     }
 
-    std::optional<ProfileView::HorizontalAnchor>
+    std::optional<ProfileViewSerializer::ProfileView::HorizontalAnchor>
     ProfileViewSerializer::horizontalAnchorFromString( const QString& horizontalAnchor ) {
         if ( horizontalAnchor == ProfileViewSerializer::leftHorizontalAnchorStr ) {
             return ProfileView::HorizontalAnchor::Left;
@@ -188,7 +214,7 @@ namespace Serializer {
         }
     }
 
-    std::optional<ProfileView::VerticalAnchor>
+    std::optional<ProfileViewSerializer::ProfileView::VerticalAnchor>
     ProfileViewSerializer::verticalAnchorFromString( const QString& verticalAnchor ) {
         if ( verticalAnchor == ProfileViewSerializer::topVerticalAnchorStr ) {
             return ProfileView::VerticalAnchor::Top;
@@ -213,7 +239,7 @@ namespace Serializer {
         }
     }
 
-    std::optional<ProfileView::WrapMode>
+    std::optional<ProfileViewSerializer::ProfileView::WrapMode>
     ProfileViewSerializer::wrapModeFromString( const QString& wrapMode ) {
         if ( wrapMode == ProfileViewSerializer::scrollWrapModeStr ) {
             return ProfileView::WrapMode::Scroll;
@@ -237,7 +263,7 @@ namespace Serializer {
         }
     }
 
-    std::optional<ProfileView::FlowDirection>
+    std::optional<ProfileViewSerializer::ProfileView::FlowDirection>
     ProfileViewSerializer::flowDirectionFromString( const QString& flowDirection ) {
         if ( flowDirection == ProfileViewSerializer::horizontalFlowDirectionStr ) {
             return ProfileView::FlowDirection::Horizontal;
@@ -249,4 +275,4 @@ namespace Serializer {
         }
     }
 
-} // namespace Serializer
+} // namespace Shared::Serializer

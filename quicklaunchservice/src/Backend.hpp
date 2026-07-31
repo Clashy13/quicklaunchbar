@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ProfileManager.hpp"
+#include "models/Profile.hpp"
 
 #include <QObject>
 #include <QPoint>
@@ -10,35 +11,38 @@
 #include <QScreen>
 #include <qtypes.h>
 
-class Backend : public QObject {
-    Q_OBJECT
-    QML_ELEMENT
+namespace Service {
 
-  public:
-    explicit Backend( QObject* parent = nullptr );
+    class Backend : public QObject {
+        Q_OBJECT
+        QML_ELEMENT
 
-    Q_INVOKABLE void launchExecutionTargetByIndex( const qsizetype index );
+      public:
+        explicit Backend( QObject* parent = nullptr );
 
-    Q_INVOKABLE QPoint contentPosition( const qsizetype width, const qsizetype height ) const;
+        Q_INVOKABLE void launchExecutionTargetByIndex( const qsizetype index );
 
-    Q_INVOKABLE qsizetype availableContentWidth();
+        Q_INVOKABLE QPoint contentPosition( const qsizetype width, const qsizetype height ) const;
 
-    Q_INVOKABLE qsizetype availableContentHeight();
+        Q_INVOKABLE qsizetype availableContentWidth();
 
-    Q_INVOKABLE void maskWindow( QQuickWindow* window, QRect contentRect );
+        Q_INVOKABLE qsizetype availableContentHeight();
 
-    Q_INVOKABLE QRect currentScreenRect() const;
+        Q_INVOKABLE void maskWindow( QQuickWindow* window, QRect contentRect );
 
-  signals:
-    void showProfile( QmlProfile* profile );
+        Q_INVOKABLE QRect currentScreenRect() const;
 
-    void hideWindow();
+      signals:
+        void showProfile( Models::Profile* profile );
 
-  private:
-    void toggleProfile( qsizetype profileIndex );
+        void hideWindow();
 
-    QScreen* newCurrentScreen() const;
+      private:
+        void toggleProfile( Models::Profile* profile );
 
-    ProfileManager _profileManager;
-    QScreen* _currentProfileScreen = nullptr;
-};
+        QScreen* newCurrentScreen() const;
+
+        ProfileManager _profileManager{ this };
+        QScreen* _currentProfileScreen = nullptr;
+    };
+} // namespace Service

@@ -2,37 +2,50 @@
 
 #include "PropertySerializer.hpp"
 
-namespace Serializer {
+namespace Shared::Serializer {
 
-    std::optional<IconSource> IconSourceSerializer::serialized( const QJsonObject& obj ) {
-        IconSource::Type type;
-        if ( const auto typeStrOpt =
-                 PropertySerializer::serializedStringProperty( obj,
-                                                               IconSourceSerializer::typeStr ) ) {
-            if ( const auto typeOpt = IconSourceSerializer::typeFromString( *typeStrOpt ) ) {
-                type = *typeOpt;
-            } else {
-                return std::nullopt;
-            }
+    std::optional<IconSourceSerializer::IconSource>
+    IconSourceSerializer::serialized( const QJsonObject& obj ) {
+        const auto type = IconSourceSerializer::serializedType( obj );
+        const auto value = IconSourceSerializer::serializedValue( obj );
+
+        if ( type && value ) {
+            IconSource iconSource( *type, *value );
+            return iconSource;
         } else {
             return std::nullopt;
         }
-        QString value;
-        if ( const auto valueOpt =
-                 PropertySerializer::serializedStringProperty( obj,
-                                                               IconSourceSerializer::valueStr ) ) {
-            value = *valueOpt;
-        } else {
-            return std::nullopt;
-        }
-        IconSource iconSource( type, value );
-        return iconSource;
     }
 
     QJsonObject IconSourceSerializer::deserialized( const IconSource& iconSource ) {
         return { { IconSourceSerializer::typeStr,
                    IconSourceSerializer::typeToString( iconSource.type ) },
                  { IconSourceSerializer::valueStr, iconSource.value } };
+    }
+
+    std::optional<IconSourceSerializer::IconSource::Type>
+    IconSourceSerializer::serializedType( const QJsonObject& obj ) {
+        if ( const auto typeStrOpt =
+                 PropertySerializer::serializedStringProperty( obj,
+                                                               IconSourceSerializer::typeStr ) ) {
+            if ( const auto typeOpt = IconSourceSerializer::typeFromString( *typeStrOpt ) ) {
+                return *typeOpt;
+            } else {
+                return std::nullopt;
+            }
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<QString> IconSourceSerializer::serializedValue( const QJsonObject& obj ) {
+        if ( const auto valueOpt =
+                 PropertySerializer::serializedStringProperty( obj,
+                                                               IconSourceSerializer::valueStr ) ) {
+            return *valueOpt;
+        } else {
+            return std::nullopt;
+        }
     }
 
     QString IconSourceSerializer::typeToString( const IconSource::Type type ) {
@@ -50,7 +63,8 @@ namespace Serializer {
         }
     }
 
-    std::optional<IconSource::Type> IconSourceSerializer::typeFromString( const QString& type ) {
+    std::optional<IconSourceSerializer::IconSource::Type>
+    IconSourceSerializer::typeFromString( const QString& type ) {
         if ( type == IconSourceSerializer::themeTypeStr ) {
             return IconSource::Type::Theme;
         } else if ( type == IconSourceSerializer::fromFileTypeStr ) {
@@ -65,4 +79,4 @@ namespace Serializer {
         }
     }
 
-} // namespace Serializer
+} // namespace Shared::Serializer

@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <optional>
 
-namespace Serializer {
+namespace Shared::Serializer {
 
     class PropertySerializer {
       public:
@@ -27,4 +27,4 @@ namespace Serializer {
         static bool containsKey( const QJsonObject& obj, const QString& key );
     };
 
-} // namespace Serializer
+} // namespace Shared::Serializer

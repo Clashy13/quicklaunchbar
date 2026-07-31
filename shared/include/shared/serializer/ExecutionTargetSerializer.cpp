@@ -5,190 +5,73 @@
 #include "PropertySerializer.hpp"
 #include "UriSerializer.hpp"
 
-#include <memory>
-#include <optional>
+namespace Shared::Serializer {
 
-namespace Serializer {
-
-    namespace ExecutionTarget = Models::ExecutionTarget;
-
-    std::optional<std::unique_ptr<ExecutionTarget::ExecutionTarget>>
+    std::optional<ExecutionTargetSerializer::ExecutionTarget>
     ExecutionTargetSerializer::serialized( const QJsonObject& obj ) {
-        QUuid uuid;
+        const auto uuid = ExecutionTargetSerializer::serializedUuid( obj );
+        const auto name = ExecutionTargetSerializer::serializedName( obj );
+        const auto type = ExecutionTargetSerializer::serializedType( obj );
+        const auto iconSources = ExecutionTargetSerializer::serializedIconSources( obj );
+        const auto commands = ExecutionTargetSerializer::serializedCommands( obj );
+        const auto uriList = ExecutionTargetSerializer::serializedUriLists( obj );
+
+        if ( uuid && name && type && iconSources && commands && uriList ) {
+            ExecutionTarget executionTarget( *uuid,
+                                             *name,
+                                             *type,
+                                             *iconSources,
+                                             *commands,
+                                             *uriList );
+            return executionTarget;
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    QJsonObject ExecutionTargetSerializer::deserialized( const ExecutionTarget& executionTarget ) {
+        return {
+            { ExecutionTargetSerializer::uuidStr,
+              executionTarget.uuid.toString( QUuid::WithoutBraces ) },
+            { ExecutionTargetSerializer::nameStr, executionTarget.name },
+            { ExecutionTargetSerializer::typeStr,
+              ExecutionTargetSerializer::typeToString( executionTarget.type ) },
+            { ExecutionTargetSerializer::iconSourcesStr,
+              ExecutionTargetSerializer::deserializedIconSources( executionTarget.iconSources ) },
+            { ExecutionTargetSerializer::commandsStr,
+              ExecutionTargetSerializer::deserializedCommands( executionTarget.commands ) },
+            { ExecutionTargetSerializer::uriListStr,
+              ExecutionTargetSerializer::deserializedUriList( executionTarget.uriList ) } };
+    }
+
+    std::optional<QUuid> ExecutionTargetSerializer::serializedUuid( const QJsonObject& obj ) {
         if ( const auto uuidOpt = PropertySerializer::serializedStringProperty(
                  obj,
                  ExecutionTargetSerializer::uuidStr ) ) {
-            uuid = QUuid( *uuidOpt );
+            return QUuid( *uuidOpt );
         } else {
             return std::nullopt;
         }
-        QString name;
+    }
+
+    std::optional<QString> ExecutionTargetSerializer::serializedName( const QJsonObject& obj ) {
         if ( const auto nameOpt = PropertySerializer::serializedStringProperty(
                  obj,
                  ExecutionTargetSerializer::nameStr ) ) {
-            name = *nameOpt;
+            return *nameOpt;
         } else {
             return std::nullopt;
         }
-        QList<IconSource> iconSources;
-        if ( const auto iconSourcesOpt = ExecutionTargetSerializer::serializedIconSources( obj ) ) {
-            iconSources = *iconSourcesOpt;
-        } else {
-            return std::nullopt;
-        }
+    }
 
-        using Type = ExecutionTarget::ExecutionTarget::Type;
-
-        QString typeStr;
-        Type type;
+    std::optional<ExecutionTargetSerializer::ExecutionTarget::Type>
+    ExecutionTargetSerializer::serializedType( const QJsonObject& obj ) {
+        ExecutionTarget::Type type;
         if ( const auto typeStrOpt = PropertySerializer::serializedStringProperty(
                  obj,
                  ExecutionTargetSerializer::typeStr ) ) {
-            typeStr = *typeStrOpt;
             if ( const auto typeOpt = ExecutionTargetSerializer::typeFromString( *typeStrOpt ) ) {
-                type = *typeOpt;
-            } else {
-                return std::nullopt;
-            }
-        } else {
-            return std::nullopt;
-        }
-
-        switch ( type ) {
-            case Type::DesktopApplication:
-            case Type::ExecutableFile:
-            case Type::Command:
-                return ExecutionTargetSerializer::serializedSingle( uuid,
-                                                                    name,
-                                                                    type,
-                                                                    iconSources,
-                                                                    obj );
-            case Type::OpenFile:
-            case Type::OpenUrl:
-                return ExecutionTargetSerializer::serializedUri( uuid,
-                                                                 name,
-                                                                 type,
-                                                                 iconSources,
-                                                                 obj );
-            case Type::Group:
-                return ExecutionTargetSerializer::serializedGroup( uuid,
-                                                                   name,
-                                                                   type,
-                                                                   iconSources,
-                                                                   obj );
-            default:
-                qWarning().noquote() << "Unknown execution target type:" << typeStr;
-                return std::nullopt;
-        }
-    }
-
-    QJsonObject ExecutionTargetSerializer::deserialized(
-        const std::unique_ptr<ExecutionTarget::ExecutionTarget>& executionTarget ) {
-        QJsonObject obj;
-        obj[ ExecutionTargetSerializer::uuidStr ] =
-            executionTarget->uuid.toString( QUuid::WithoutBraces );
-        obj[ ExecutionTargetSerializer::nameStr ] = executionTarget->name;
-        obj[ ExecutionTargetSerializer::iconSourcesStr ] =
-            ExecutionTargetSerializer::deserializedIconSources( executionTarget->iconSources );
-        obj[ ExecutionTargetSerializer::typeStr ] =
-            ExecutionTargetSerializer::typeToString( executionTarget->type );
-        using Type = ExecutionTarget::ExecutionTarget::Type;
-        switch ( executionTarget->type ) {
-            case Type::DesktopApplication:
-            case Type::ExecutableFile:
-            case Type::Command:
-                ExecutionTargetSerializer::deserializedSingle(
-                    obj,
-                    static_cast<ExecutionTarget::SingleExecutionTarget*>( executionTarget.get() ) );
-                break;
-            case Type::OpenFile:
-            case Type::OpenUrl:
-                ExecutionTargetSerializer::deserializedUri(
-                    obj,
-                    static_cast<ExecutionTarget::UriExecutionTarget*>( executionTarget.get() ) );
-                break;
-            case Type::Group:
-                ExecutionTargetSerializer::deserializedGroup(
-                    obj,
-                    static_cast<ExecutionTarget::GroupExecutionTarget*>( executionTarget.get() ) );
-                break;
-        }
-        return obj;
-    }
-
-    std::optional<std::unique_ptr<ExecutionTarget::GroupExecutionTarget>>
-    ExecutionTargetSerializer::serializedGroup(
-        const QUuid& uuid,
-        const QString& name,
-        ExecutionTarget::ExecutionTarget::Type type,
-        const QList<ExecutionTarget::IconSource>& iconSources,
-        const QJsonObject& obj ) {
-        if ( const auto array = PropertySerializer::serializedArrayProperty(
-                 obj,
-                 ExecutionTargetSerializer::commandsStr ) ) {
-            QList<ExecutionTarget::Command> commands;
-            for ( const auto element : *array ) {
-                if ( !element.isObject() ) {
-                    qWarning().noquote() << "Property list element is not an object";
-                    return std::nullopt;
-                }
-
-                if ( const auto command = CommandSerializer::serialized( element.toObject() ) ) {
-                    commands.push_back( *command );
-                } else {
-                    return std::nullopt;
-                }
-            }
-
-            if ( const auto array = PropertySerializer::serializedArrayProperty(
-                     obj,
-                     ExecutionTargetSerializer::uriListStr ) ) {
-                QList<ExecutionTarget::Uri> uriList;
-                for ( const auto element : *array ) {
-                    if ( !element.isObject() ) {
-                        qWarning().noquote() << "Property list element is not an object";
-                        return std::nullopt;
-                    }
-
-                    if ( const auto uri = UriSerializer::serialized( element.toObject() ) ) {
-                        uriList.push_back( *uri );
-                    } else {
-                        return std::nullopt;
-                    }
-                }
-
-                return std::make_unique<ExecutionTarget::GroupExecutionTarget>( uuid,
-                                                                                name,
-                                                                                type,
-                                                                                iconSources,
-                                                                                commands,
-                                                                                uriList );
-
-            } else {
-                return std::nullopt;
-            }
-
-        } else {
-            return std::nullopt;
-        }
-    }
-
-    std::optional<std::unique_ptr<ExecutionTarget::SingleExecutionTarget>>
-    ExecutionTargetSerializer::serializedSingle(
-        const QUuid& uuid,
-        const QString& name,
-        ExecutionTarget::ExecutionTarget::Type type,
-        const QList<ExecutionTarget::IconSource>& iconSources,
-        const QJsonObject& obj ) {
-        if ( const auto commandObj = PropertySerializer::serializedObjectProperty(
-                 obj,
-                 ExecutionTargetSerializer::commandStr ) ) {
-            if ( const auto command = CommandSerializer::serialized( *commandObj ) ) {
-                return std::make_unique<ExecutionTarget::SingleExecutionTarget>( uuid,
-                                                                                 name,
-                                                                                 type,
-                                                                                 iconSources,
-                                                                                 *command );
+                return *typeOpt;
             } else {
                 return std::nullopt;
             }
@@ -197,28 +80,7 @@ namespace Serializer {
         }
     }
 
-    std::optional<std::unique_ptr<ExecutionTarget::UriExecutionTarget>>
-    ExecutionTargetSerializer::serializedUri( const QUuid& uuid,
-                                              const QString& name,
-                                              ExecutionTarget::ExecutionTarget::Type type,
-                                              const QList<ExecutionTarget::IconSource>& iconSources,
-                                              const QJsonObject& obj ) {
-        QString uri;
-        if ( const auto uriOpt = PropertySerializer::serializedStringProperty(
-                 obj,
-                 ExecutionTargetSerializer::uriStr ) ) {
-            uri = *uriOpt;
-        } else {
-            return std::nullopt;
-        }
-        return std::make_unique<ExecutionTarget::UriExecutionTarget>( uuid,
-                                                                      name,
-                                                                      type,
-                                                                      iconSources,
-                                                                      uri );
-    }
-
-    std::optional<QList<IconSource>>
+    std::optional<QList<ExecutionTargetSerializer::IconSource>>
     ExecutionTargetSerializer::serializedIconSources( const QJsonObject& obj ) {
         if ( const auto array = PropertySerializer::serializedArrayProperty(
                  obj,
@@ -243,83 +105,118 @@ namespace Serializer {
         }
     }
 
+    std::optional<QList<ExecutionTargetSerializer::Command>>
+    ExecutionTargetSerializer::serializedCommands( const QJsonObject& obj ) {
+        if ( const auto array = PropertySerializer::serializedArrayProperty(
+                 obj,
+                 ExecutionTargetSerializer::commandsStr ) ) {
+            QList<Command> commands;
+            for ( const auto element : *array ) {
+                if ( !element.isObject() ) {
+                    qWarning().noquote() << "Property list element is not an object";
+                    return std::nullopt;
+                }
+
+                if ( const auto command = CommandSerializer::serialized( element.toObject() ) ) {
+                    commands.push_back( *command );
+                } else {
+                    return std::nullopt;
+                }
+            }
+            return commands;
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    std::optional<QList<ExecutionTargetSerializer::Uri>>
+    ExecutionTargetSerializer::serializedUriLists( const QJsonObject& obj ) {
+        if ( const auto array = PropertySerializer::serializedArrayProperty(
+                 obj,
+                 ExecutionTargetSerializer::uriListStr ) ) {
+            QList<Uri> uriList;
+            for ( const auto element : *array ) {
+                if ( !element.isObject() ) {
+                    qWarning().noquote() << "Property list element is not an object";
+                    return std::nullopt;
+                }
+
+                if ( const auto uri = UriSerializer::serialized( element.toObject() ) ) {
+                    uriList.push_back( *uri );
+                } else {
+                    return std::nullopt;
+                }
+            }
+            return uriList;
+        } else {
+            return std::nullopt;
+        }
+    }
+
     QJsonArray
     ExecutionTargetSerializer::deserializedIconSources( const QList<IconSource>& iconSources ) {
         QJsonArray jsonIconSources;
-        for ( const auto& iconSource : iconSources ) {
-            jsonIconSources.push_back( IconSourceSerializer::deserialized( iconSource ) );
+        for ( const auto iconSource : iconSources ) {
+            jsonIconSources.push_back(
+                Shared::Serializer::IconSourceSerializer::deserialized( iconSource ) );
         }
         return jsonIconSources;
     }
 
-    void ExecutionTargetSerializer::deserializedGroup(
-        QJsonObject& obj,
-        ExecutionTarget::GroupExecutionTarget* executionTarget ) {
-        QJsonArray commands;
-        for ( const auto& command : executionTarget->commands ) {
-            commands.push_back( CommandSerializer::deserialized( command ) );
+    QJsonArray ExecutionTargetSerializer::deserializedCommands( const QList<Command>& commands ) {
+        QJsonArray jsonCommands;
+        for ( const auto& command : commands ) {
+            jsonCommands.push_back(
+                Shared::Serializer::CommandSerializer::deserialized( command ) );
         }
-        obj[ ExecutionTargetSerializer::commandsStr ] = commands;
-        QJsonArray uriList;
-        for ( const auto& uri : executionTarget->uriList ) {
-            uriList.push_back( UriSerializer::deserialized( uri ) );
+        return jsonCommands;
+    }
+
+    QJsonArray ExecutionTargetSerializer::deserializedUriList( const QList<Uri>& uriList ) {
+        QJsonArray jsonUriList;
+        for ( const auto& uri : uriList ) {
+            jsonUriList.push_back( Shared::Serializer::UriSerializer::deserialized( uri ) );
         }
-        obj[ ExecutionTargetSerializer::uriListStr ] = uriList;
+        return jsonUriList;
     }
 
-    void ExecutionTargetSerializer::deserializedSingle(
-        QJsonObject& obj,
-        ExecutionTarget::SingleExecutionTarget* executionTarget ) {
-        obj[ ExecutionTargetSerializer::commandStr ] =
-            CommandSerializer::deserialized( executionTarget->command );
-    }
-
-    void ExecutionTargetSerializer::deserializedUri(
-        QJsonObject& obj,
-        ExecutionTarget::UriExecutionTarget* executionTarget ) {
-        obj[ ExecutionTargetSerializer::uriStr ] = executionTarget->uri;
-    }
-
-    QString
-    ExecutionTargetSerializer::typeToString( const ExecutionTarget::ExecutionTarget::Type type ) {
-        using Type = ExecutionTarget::ExecutionTarget::Type;
+    QString ExecutionTargetSerializer::typeToString( const ExecutionTarget::Type type ) {
         switch ( type ) {
-            case Type::DesktopApplication:
+            case ExecutionTarget::Type::DesktopApplication:
                 return ExecutionTargetSerializer::desktopApplicationTypeStr;
-            case Type::ExecutableFile:
+            case ExecutionTarget::Type::ExecutableFile:
                 return ExecutionTargetSerializer::executableFileTypeStr;
-            case Type::Command:
+            case ExecutionTarget::Type::Command:
                 return ExecutionTargetSerializer::commandTypeStr;
-            case Type::OpenFile:
+            case ExecutionTarget::Type::OpenFile:
                 return ExecutionTargetSerializer::openFileTypeStr;
-            case Type::OpenUrl:
+            case ExecutionTarget::Type::OpenUrl:
                 return ExecutionTargetSerializer::openUrlTypeStr;
-            case Type::Group:
+            case ExecutionTarget::Type::Group:
                 return ExecutionTargetSerializer::groupTypeStr;
             default:
                 return "";
         }
     }
 
-    std::optional<ExecutionTarget::ExecutionTarget::Type>
+    std::optional<ExecutionTargetSerializer::ExecutionTarget::Type>
     ExecutionTargetSerializer::typeFromString( const QString& type ) {
-        using Type = ExecutionTarget::ExecutionTarget::Type;
         if ( type == ExecutionTargetSerializer::desktopApplicationTypeStr ) {
-            return Type::DesktopApplication;
+            return ExecutionTarget::Type::DesktopApplication;
         } else if ( type == ExecutionTargetSerializer::executableFileTypeStr ) {
-            return Type::ExecutableFile;
+            return ExecutionTarget::Type::ExecutableFile;
         } else if ( type == ExecutionTargetSerializer::commandTypeStr ) {
-            return Type::Command;
+            return ExecutionTarget::Type::Command;
         } else if ( type == ExecutionTargetSerializer::openFileTypeStr ) {
-            return Type::OpenFile;
+            return ExecutionTarget::Type::OpenFile;
         } else if ( type == ExecutionTargetSerializer::openUrlTypeStr ) {
-            return Type::OpenUrl;
+            return ExecutionTarget::Type::OpenUrl;
         } else if ( type == ExecutionTargetSerializer::groupTypeStr ) {
-            return Type::Group;
+            return ExecutionTarget::Type::Group;
         } else {
             qWarning().noquote() << "Unknown execution target type:" << type;
             return std::nullopt;
         }
     }
 
-} // namespace Serializer
+} // namespace Shared::Serializer

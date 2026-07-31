@@ -3,18 +3,35 @@
 #include "../models/ProfileView.hpp"
 
 #include <QJsonObject>
+#include <optional>
 
-namespace Serializer {
-
-    using ProfileView = Models::Profile::ProfileView;
+namespace Shared::Serializer {
 
     class ProfileViewSerializer {
+
+        using ProfileView = Models::Profile::ProfileView;
+
       public:
         static std::optional<ProfileView> serialized( const QJsonObject& obj );
 
         static QJsonObject deserialized( const ProfileView& view );
 
       private:
+        static std::optional<ProfileView::Mode> serializedMode( const QJsonObject& obj );
+
+        static std::optional<ProfileView::HorizontalAnchor>
+        serializedHorizontalAnchor( const QJsonObject& obj );
+
+        static std::optional<ProfileView::VerticalAnchor>
+        serializedVerticalAnchor( const QJsonObject& obj );
+
+        static std::optional<qsizetype> serializedMargin( const QJsonObject& obj );
+
+        static std::optional<ProfileView::WrapMode> serializedWrapMode( const QJsonObject& obj );
+
+        static std::optional<ProfileView::FlowDirection>
+        serializedFlowDirection( const QJsonObject& obj );
+
         static QString modeToString( const ProfileView::Mode mode );
 
         static std::optional<ProfileView::Mode> modeFromString( const QString& mode );
@@ -64,4 +81,4 @@ namespace Serializer {
         static constexpr auto verticalFlowDirectionStr = "vertical";
     };
 
-} // namespace Serializer
+} // namespace Shared::Serializer

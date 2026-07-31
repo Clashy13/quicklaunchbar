@@ -1,75 +1,55 @@
 #pragma once
 
+#include "../models/Command.hpp"
 #include "../models/ExecutionTarget.hpp"
-#include "../models/GroupExecutionTarget.hpp"
-#include "../models/SingleExecutionTarget.hpp"
-#include "../models/UriExecutionTarget.hpp"
+#include "../models/IconSource.hpp"
+#include "../models/Uri.hpp"
 
 #include <QJsonObject>
 #include <optional>
 
-namespace Serializer {
+namespace Shared::Serializer {
 
     class ExecutionTargetSerializer {
+
+        using ExecutionTarget = Models::ExecutionTarget::ExecutionTarget;
+        using IconSource = Models::ExecutionTarget::IconSource;
+        using Command = Models::ExecutionTarget::Command;
+        using Uri = Models::ExecutionTarget::Uri;
+
       public:
-        static std::optional<std::unique_ptr<Models::ExecutionTarget::ExecutionTarget>>
-        serialized( const QJsonObject& obj );
+        static std::optional<ExecutionTarget> serialized( const QJsonObject& obj );
 
-        static QJsonObject deserialized(
-            const std::unique_ptr<Models::ExecutionTarget::ExecutionTarget>& executionTarget );
+        static QJsonObject deserialized( const ExecutionTarget& executionTarget );
 
-      private:
-        static std::optional<std::unique_ptr<Models::ExecutionTarget::GroupExecutionTarget>>
-        serializedGroup( const QUuid& uuid,
-                         const QString& name,
-                         Models::ExecutionTarget::ExecutionTarget::Type type,
-                         const QList<Models::ExecutionTarget::IconSource>& iconSources,
-                         const QJsonObject& obj );
+      protected:
+        static std::optional<QUuid> serializedUuid( const QJsonObject& obj );
 
-        static std::optional<std::unique_ptr<Models::ExecutionTarget::SingleExecutionTarget>>
-        serializedSingle( const QUuid& uuid,
-                          const QString& name,
-                          Models::ExecutionTarget::ExecutionTarget::Type type,
-                          const QList<Models::ExecutionTarget::IconSource>& iconSources,
-                          const QJsonObject& obj );
+        static std::optional<QString> serializedName( const QJsonObject& obj );
 
-        static std::optional<std::unique_ptr<Models::ExecutionTarget::UriExecutionTarget>>
-        serializedUri( const QUuid& uuid,
-                       const QString& name,
-                       Models::ExecutionTarget::ExecutionTarget::Type type,
-                       const QList<Models::ExecutionTarget::IconSource>& iconSources,
-                       const QJsonObject& obj );
+        static std::optional<ExecutionTarget::Type> serializedType( const QJsonObject& obj );
 
-        static std::optional<QList<Models::ExecutionTarget::IconSource>>
-        serializedIconSources( const QJsonObject& obj );
+        static std::optional<QList<IconSource>> serializedIconSources( const QJsonObject& obj );
 
-        static QJsonArray
-        deserializedIconSources( const QList<Models::ExecutionTarget::IconSource>& iconSources );
+        static std::optional<QList<Command>> serializedCommands( const QJsonObject& obj );
 
-        static void
-        deserializedGroup( QJsonObject& obj,
-                           Models::ExecutionTarget::GroupExecutionTarget* executionTarget );
+        static std::optional<QList<Uri>> serializedUriLists( const QJsonObject& obj );
 
-        static void
-        deserializedSingle( QJsonObject& obj,
-                            Models::ExecutionTarget::SingleExecutionTarget* executionTarget );
+        static QJsonArray deserializedIconSources( const QList<IconSource>& iconSources );
 
-        static void deserializedUri( QJsonObject& obj,
-                                     Models::ExecutionTarget::UriExecutionTarget* executionTarget );
+        static QJsonArray deserializedCommands( const QList<Command>& commands );
 
-        static std::optional<Models::ExecutionTarget::ExecutionTarget::Type>
-        typeFromString( const QString& type );
+        static QJsonArray deserializedUriList( const QList<Uri>& uriList );
 
-        static QString typeToString( const Models::ExecutionTarget::ExecutionTarget::Type type );
+        static std::optional<ExecutionTarget::Type> typeFromString( const QString& type );
+
+        static QString typeToString( const ExecutionTarget::Type type );
 
         static constexpr auto uuidStr = "uuid";
         static constexpr auto nameStr = "name";
         static constexpr auto typeStr = "type";
         static constexpr auto iconSourcesStr = "icon_sources";
-
         static constexpr auto commandsStr = "commands";
-        static constexpr auto commandStr = "command";
-        static constexpr auto uriStr = "uri";
         static constexpr auto uriListStr = "uri_list";
 
         static constexpr auto desktopApplicationTypeStr = "desktop_application";
@@ -79,4 +59,4 @@ namespace Serializer {
         static constexpr auto openUrlTypeStr = "open_url";
         static constexpr auto groupTypeStr = "group";
     };
-} // namespace Serializer
+} // namespace Shared::Serializer

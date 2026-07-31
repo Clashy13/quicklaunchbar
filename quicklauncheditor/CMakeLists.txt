@@ -14,9 +14,11 @@ find_package(Boost 1.83.0 REQUIRED)
 qt_standard_project_setup()
 
 add_subdirectory(../shared shared_build)
+add_subdirectory(src)
 
 qt_add_executable(quicklauncheditor
     main.cpp
+    ${SOURCES}
 )
 
 target_link_libraries(quicklauncheditor PRIVATE Qt6::Widgets Boost::boost shared QHotkey::QHotkey)

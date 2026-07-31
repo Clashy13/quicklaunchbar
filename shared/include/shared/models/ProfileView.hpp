@@ -2,7 +2,8 @@
 
 #include <qtypes.h>
 
-namespace Models::Profile {
+namespace Shared::Models::Profile {
+
     class ProfileView {
       public:
         enum class Mode { Icon, List };
@@ -11,12 +12,12 @@ namespace Models::Profile {
         enum class WrapMode { Scroll, Grid };
         enum class FlowDirection { Horizontal, Vertical };
 
-        explicit ProfileView( Mode mode,
-                              HorizontalAnchor horizontalAnchor,
-                              VerticalAnchor verticalAnchor,
-                              qsizetype margin,
-                              WrapMode wrapMode,
-                              FlowDirection flowDirection )
+        explicit ProfileView( const Mode mode,
+                              const HorizontalAnchor horizontalAnchor,
+                              const VerticalAnchor verticalAnchor,
+                              const qsizetype margin,
+                              const WrapMode wrapMode,
+                              const FlowDirection flowDirection )
             : mode( mode ), horizontalAnchor( horizontalAnchor ), verticalAnchor( verticalAnchor ),
               margin( margin ), wrapMode( wrapMode ), flowDirection( flowDirection ) {}
 
@@ -27,4 +28,4 @@ namespace Models::Profile {
         WrapMode wrapMode;
         FlowDirection flowDirection;
     };
-} // namespace Models::Profile
+} // namespace Shared::Models::Profile

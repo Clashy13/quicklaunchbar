@@ -1,52 +1,34 @@
 #pragma once
 
-#include "QmlProfile.hpp"
+#include "models/Profile.hpp"
 #include "shared/models/Command.hpp"
-#include "shared/models/IconSource.hpp"
-#include "shared/models/Profile.hpp"
+#include "shared/models/Uri.hpp"
 
 #include <QObject>
-#include <qtmetamacros.h>
-#include <qtypes.h>
 
-class ProfileManager : public QObject {
-    Q_OBJECT
+namespace Service {
 
-  public:
-    ProfileManager( QObject* parent = nullptr );
+    class ProfileManager : public QObject {
+        Q_OBJECT
 
-    void launchExecutionTargetByIndex( const qsizetype index );
+        using Command = Shared::Models::ExecutionTarget::Command;
+        using Uri = Shared::Models::ExecutionTarget::Uri;
 
-    auto qmlProfileAt( qsizetype n ) const {
-        return this->_qmlProfiles.at( n );
-    }
+      public:
+        ProfileManager( QObject* parent = nullptr );
 
-    bool hasCurrentProfile() const {
-        return this->currentProfileIndex != -1;
-    }
+        void launchExecutionTargetByIndex( const qsizetype index );
 
-    auto& currentProfileView() const {
-        return this->_profiles.at( this->currentProfileIndex ).view;
-    }
+        Models::Profile* currentProfile;
 
-    qsizetype currentProfileIndex = -1;
+      signals:
+        void toggleProfile( Models::Profile* profile );
 
-  signals:
-    void toggleProfile( qsizetype profileIndex );
+      private:
+        void connectShortcutsToProfiles();
 
-  private:
-    void connectShortcutsToProfiles();
+        static void startProcesses( const QList<Command>& commands, const QList<QUrl>& uriList );
 
-    void setQmlProfiles();
-
-    static QUrl iconSourceUrl( const Models::ExecutionTarget::IconSource& iconSource );
-
-    static QString executionTargetViewSource( const Models::Profile::ProfileView& profileView );
-
-    void startExecutionTargetProcess( qsizetype index );
-
-    static void startSingleProcess( const Models::ExecutionTarget::Command& command );
-
-    const std::vector<Models::Profile::Profile> _profiles;
-    std::vector<QmlProfile*> _qmlProfiles;
-};
+        const QList<Models::Profile*> _profiles;
+    };
+} // namespace Service

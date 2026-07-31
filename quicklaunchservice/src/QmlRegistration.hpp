@@ -6,10 +6,10 @@
 class QmlRegistration {
   public:
     static void registerTypes() {
-        qmlRegisterType<Backend>( QmlRegistration::uri,
-                                  QmlRegistration::versionMajor,
-                                  QmlRegistration::versionMinor,
-                                  "Backend" );
+        qmlRegisterType<Service::Backend>( QmlRegistration::uri,
+                                           QmlRegistration::versionMajor,
+                                           QmlRegistration::versionMinor,
+                                           "Backend" );
         qmlRegisterSingletonType( QUrl( "qrc:/qml/Colors.qml" ),
                                   QmlRegistration::uri,
                                   QmlRegistration::versionMajor,

@@ -1,3 +1,6 @@
+add_subdirectory(models)
+add_subdirectory(serializer)
+
 set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/Backend.hpp 
@@ -8,7 +11,5 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ThemeIconProvider.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ThemeManager.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/QmlRegistration.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/QmlProfile.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/QmlExecutionTarget.hpp
     PARENT_SCOPE
 )

@@ -1,58 +1,54 @@
 #include "ProfileSerializer.hpp"
 
-#include "ExecutionTargetSerializer.hpp"
 #include "ProfileViewSerializer.hpp"
 #include "PropertySerializer.hpp"
 
-namespace Serializer {
+namespace Shared::Serializer {
 
-    std::optional<Profile> ProfileSerializer::serialized( const QJsonObject& obj ) {
-        QUuid uuid;
+    std::optional<QUuid> ProfileSerializer::serializedUuid( const QJsonObject& obj ) {
         if ( const auto uuidOpt =
                  PropertySerializer::serializedStringProperty( obj, ProfileSerializer::uuidStr ) ) {
-            uuid = QUuid( *uuidOpt );
+            return QUuid( *uuidOpt );
         } else {
             return std::nullopt;
         }
-        QString name;
+    }
+
+    std::optional<QString> ProfileSerializer::serializedName( const QJsonObject& obj ) {
         if ( const auto nameOpt =
                  PropertySerializer::serializedStringProperty( obj, ProfileSerializer::nameStr ) ) {
-            name = *nameOpt;
+            return *nameOpt;
         } else {
             return std::nullopt;
         }
-        bool enabled;
+    }
+
+    std::optional<bool> ProfileSerializer::serializedEnabled( const QJsonObject& obj ) {
         if ( const auto enabledOpt =
                  PropertySerializer::serializedBoolProperty( obj,
                                                              ProfileSerializer::enabledStr ) ) {
-            enabled = *enabledOpt;
+            return *enabledOpt;
         } else {
             return std::nullopt;
         }
-        QString shortcut;
+    }
+
+    std::optional<QString> ProfileSerializer::serializedShortcut( const QJsonObject& obj ) {
         if ( const auto shortcutOpt =
                  PropertySerializer::serializedStringProperty( obj,
                                                                ProfileSerializer::shortcutStr ) ) {
-            shortcut = *shortcutOpt;
+            return *shortcutOpt;
         } else {
             return std::nullopt;
         }
+    }
 
+    std::optional<ProfileSerializer::ProfileView>
+    ProfileSerializer::serializedView( const QJsonObject& obj ) {
         if ( const auto viewObj =
                  PropertySerializer::serializedObjectProperty( obj, ProfileSerializer::viewStr ) ) {
             if ( const auto view = ProfileViewSerializer::serialized( *viewObj ) ) {
-                if ( auto executionTargets =
-                         ProfileSerializer::serializedExecutionTargets( obj ) ) {
-                    Profile profile( uuid,
-                                     name,
-                                     enabled,
-                                     shortcut,
-                                     *view,
-                                     std::move( *executionTargets ) );
-                    return profile;
-                } else {
-                    return std::nullopt;
-                }
+                return *view;
             } else {
                 return std::nullopt;
             }
@@ -61,52 +57,4 @@ namespace Serializer {
         }
     }
 
-    QJsonObject ProfileSerializer::deserialized( const Profile& profile ) {
-        return {
-            { ProfileSerializer::uuidStr, profile.uuid.toString( QUuid::WithoutBraces ) },
-            { ProfileSerializer::nameStr, profile.name },
-            { ProfileSerializer::enabledStr, profile.enabled },
-            { ProfileSerializer::shortcutStr, profile.shortcut },
-            { ProfileSerializer::viewStr, ProfileViewSerializer::deserialized( profile.view ) },
-            { ProfileSerializer::executionTargetsStr,
-              ProfileSerializer::deserializedExecutionTargets( profile.executionTargets ) } };
-    }
-
-    std::optional<std::vector<std::unique_ptr<ExecutionTarget>>>
-    ProfileSerializer::serializedExecutionTargets( const QJsonObject& obj ) {
-        if ( const auto array = PropertySerializer::serializedArrayProperty(
-                 obj,
-                 ProfileSerializer::executionTargetsStr ) ) {
-            std::vector<std::unique_ptr<ExecutionTarget>> executionTargets;
-            for ( const auto element : *array ) {
-                if ( !element.isObject() ) {
-                    qWarning().noquote() << "Property list element is not an object";
-                    return std::nullopt;
-                }
-
-                if ( auto executionTarget =
-                         ExecutionTargetSerializer::serialized( element.toObject() ) ) {
-                    executionTargets.push_back( std::move( *executionTarget ) );
-                } else {
-                    return std::nullopt;
-                }
-            }
-            return executionTargets;
-        } else {
-            return std::nullopt;
-        }
-    }
-
-    QJsonArray ProfileSerializer::deserializedExecutionTargets(
-        const std::vector<std::unique_ptr<ExecutionTarget>>& executionTargets ) {
-        QJsonArray jsonExecutionTargets;
-        for ( const auto& executionTarget : executionTargets ) {
-            if ( executionTarget ) {
-                jsonExecutionTargets.push_back(
-                    ExecutionTargetSerializer::deserialized( executionTarget ) );
-            }
-        }
-        return jsonExecutionTargets;
-    }
-
-} // namespace Serializer
+} // namespace Shared::Serializer
