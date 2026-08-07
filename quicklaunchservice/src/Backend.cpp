@@ -57,27 +57,39 @@ namespace Service {
         using ProfileView = Shared::Models::Profile::ProfileView;
 
         qsizetype x = 0;
-        switch ( view.horizontalAnchor ) {
-            case ProfileView::HorizontalAnchor::Left:
-                x = margin;
+        switch ( view.position ) {
+            case ProfileView::Position::TopLeft:
+            case ProfileView::Position::Left:
+            case ProfileView::Position::BottomLeft:
+                x = x = margin;
                 break;
-            case ProfileView::HorizontalAnchor::Center:
+            case ProfileView::Position::Top:
+            case ProfileView::Position::Center:
+            case ProfileView::Position::Bottom:
                 x = geo.width() / 2 - width / 2;
                 break;
-            case ProfileView::HorizontalAnchor::Right:
+            case ProfileView::Position::TopRight:
+            case ProfileView::Position::Right:
+            case ProfileView::Position::BottomRight:
                 x = geo.width() - width - margin;
                 break;
         }
 
         qsizetype y = 0;
-        switch ( view.verticalAnchor ) {
-            case ProfileView::VerticalAnchor::Top:
+        switch ( view.position ) {
+            case ProfileView::Position::TopLeft:
+            case ProfileView::Position::Top:
+            case ProfileView::Position::TopRight:
                 y = margin;
                 break;
-            case ProfileView::VerticalAnchor::Center:
+            case ProfileView::Position::Left:
+            case ProfileView::Position::Center:
+            case ProfileView::Position::Right:
                 y = geo.height() / 2 - height / 2;
                 break;
-            case ProfileView::VerticalAnchor::Bottom:
+            case ProfileView::Position::BottomLeft:
+            case ProfileView::Position::Bottom:
+            case ProfileView::Position::BottomRight:
                 y = geo.height() - height - margin;
                 break;
         }

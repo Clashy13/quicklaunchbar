@@ -19,11 +19,7 @@ namespace Shared::Serializer {
       private:
         static std::optional<ProfileView::Mode> serializedMode( const QJsonObject& obj );
 
-        static std::optional<ProfileView::HorizontalAnchor>
-        serializedHorizontalAnchor( const QJsonObject& obj );
-
-        static std::optional<ProfileView::VerticalAnchor>
-        serializedVerticalAnchor( const QJsonObject& obj );
+        static std::optional<ProfileView::Position> serializedPosition( const QJsonObject& obj );
 
         static std::optional<qsizetype> serializedMargin( const QJsonObject& obj );
 
@@ -36,16 +32,9 @@ namespace Shared::Serializer {
 
         static std::optional<ProfileView::Mode> modeFromString( const QString& mode );
 
-        static QString
-        horizontalAnchorToString( const ProfileView::HorizontalAnchor horizontalAnchor );
+        static QString positionToString( const ProfileView::Position position );
 
-        static std::optional<ProfileView::HorizontalAnchor>
-        horizontalAnchorFromString( const QString& horizontalAnchor );
-
-        static QString verticalAnchorToString( const ProfileView::VerticalAnchor verticalAnchor );
-
-        static std::optional<ProfileView::VerticalAnchor>
-        verticalAnchorFromString( const QString& verticalAnchor );
+        static std::optional<ProfileView::Position> positionFromString( const QString& position );
 
         static QString wrapModeToString( const ProfileView::WrapMode wrapMode );
 
@@ -57,8 +46,7 @@ namespace Shared::Serializer {
         flowDirectionFromString( const QString& flowDirection );
 
         static constexpr auto modeStr = "mode";
-        static constexpr auto horizontalAnchorStr = "horizontal_anchor";
-        static constexpr auto verticalAnchorStr = "vertical_anchor";
+        static constexpr auto positionStr = "position";
         static constexpr auto marginStr = "margin";
         static constexpr auto wrapModeStr = "wrap_mode";
         static constexpr auto flowDirectionStr = "flow_direction";
@@ -66,13 +54,15 @@ namespace Shared::Serializer {
         static constexpr auto iconModeStr = "icon";
         static constexpr auto listModeStr = "list";
 
-        static constexpr auto leftHorizontalAnchorStr = "left";
-        static constexpr auto centerHorizontalAnchorStr = "center";
-        static constexpr auto rightHorizontalAnchorStr = "right";
-
-        static constexpr auto topVerticalAnchorStr = "top";
-        static constexpr auto centerVerticalAnchorStr = "center";
-        static constexpr auto bottomVerticalAnchorStr = "bottom";
+        static constexpr auto topLeftPositionStr = "top_left";
+        static constexpr auto topPositionStr = "top";
+        static constexpr auto topRightPositionStr = "top_right";
+        static constexpr auto leftPositionStr = "left";
+        static constexpr auto centerPositionStr = "center";
+        static constexpr auto rightPositionStr = "right";
+        static constexpr auto bottomLeftPositionStr = "bottom_left";
+        static constexpr auto bottomPositionStr = "bottom";
+        static constexpr auto bottomRightPositionStr = "bottom_right";
 
         static constexpr auto scrollWrapModeStr = "scroll";
         static constexpr auto gridWrapModeStr = "grid";
