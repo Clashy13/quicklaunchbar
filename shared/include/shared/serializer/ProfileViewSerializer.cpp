@@ -21,7 +21,7 @@ namespace Shared::Serializer {
                     return std::nullopt;
                 }
             } else {
-                flowDirection = ProfileView::FlowDirection::Vertical;
+                flowDirection = ProfileView::FlowDirection::Down;
             }
             ProfileView view( *mode, *position, *offset, *wrapMode, flowDirection );
             return view;
@@ -225,10 +225,10 @@ namespace Shared::Serializer {
     QString
     ProfileViewSerializer::flowDirectionToString( const ProfileView::FlowDirection flowDirection ) {
         switch ( flowDirection ) {
-            case ProfileView::FlowDirection::Horizontal:
-                return ProfileViewSerializer::horizontalFlowDirectionStr;
-            case ProfileView::FlowDirection::Vertical:
-                return ProfileViewSerializer::verticalFlowDirectionStr;
+            case ProfileView::FlowDirection::Right:
+                return ProfileViewSerializer::rightFlowDirectionStr;
+            case ProfileView::FlowDirection::Down:
+                return ProfileViewSerializer::downFlowDirectionStr;
             default:
                 return "";
         }
@@ -236,10 +236,10 @@ namespace Shared::Serializer {
 
     std::optional<ProfileViewSerializer::ProfileView::FlowDirection>
     ProfileViewSerializer::flowDirectionFromString( const QString& flowDirection ) {
-        if ( flowDirection == ProfileViewSerializer::horizontalFlowDirectionStr ) {
-            return ProfileView::FlowDirection::Horizontal;
-        } else if ( flowDirection == ProfileViewSerializer::verticalFlowDirectionStr ) {
-            return ProfileView::FlowDirection::Vertical;
+        if ( flowDirection == ProfileViewSerializer::rightFlowDirectionStr ) {
+            return ProfileView::FlowDirection::Right;
+        } else if ( flowDirection == ProfileViewSerializer::downFlowDirectionStr ) {
+            return ProfileView::FlowDirection::Down;
         } else {
             qWarning().noquote() << "Unknown profile view flow direction:" << flowDirection;
             return std::nullopt;

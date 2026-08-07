@@ -67,8 +67,8 @@ namespace Shared::Serializer {
         static constexpr auto scrollWrapModeStr = "scroll";
         static constexpr auto gridWrapModeStr = "grid";
 
-        static constexpr auto horizontalFlowDirectionStr = "horizontal";
-        static constexpr auto verticalFlowDirectionStr = "vertical";
+        static constexpr auto rightFlowDirectionStr = "right";
+        static constexpr auto downFlowDirectionStr = "down";
     };
 
 } // namespace Shared::Serializer

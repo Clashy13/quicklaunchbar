@@ -19,7 +19,7 @@ namespace Shared::Models::Profile {
             BottomRight
         };
         enum class WrapMode { Scroll, Grid };
-        enum class FlowDirection { Horizontal, Vertical };
+        enum class FlowDirection { Right, Down };
 
         explicit ProfileView( const Mode mode,
                               const Position position,
