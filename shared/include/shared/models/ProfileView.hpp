@@ -23,15 +23,15 @@ namespace Shared::Models::Profile {
 
         explicit ProfileView( const Mode mode,
                               const Position position,
-                              const qsizetype margin,
+                              const qsizetype offset,
                               const WrapMode wrapMode,
                               const FlowDirection flowDirection )
-            : mode( mode ), position( position ), margin( margin ), wrapMode( wrapMode ),
+            : mode( mode ), position( position ), offset( offset ), wrapMode( wrapMode ),
               flowDirection( flowDirection ) {}
 
         Mode mode;
         Position position;
-        qsizetype margin;
+        qsizetype offset;
         WrapMode wrapMode;
         FlowDirection flowDirection;
     };

@@ -21,7 +21,7 @@ namespace Shared::Serializer {
 
         static std::optional<ProfileView::Position> serializedPosition( const QJsonObject& obj );
 
-        static std::optional<qsizetype> serializedMargin( const QJsonObject& obj );
+        static std::optional<qsizetype> serializedOffset( const QJsonObject& obj );
 
         static std::optional<ProfileView::WrapMode> serializedWrapMode( const QJsonObject& obj );
 
@@ -47,7 +47,7 @@ namespace Shared::Serializer {
 
         static constexpr auto modeStr = "mode";
         static constexpr auto positionStr = "position";
-        static constexpr auto marginStr = "margin";
+        static constexpr auto offsetStr = "offset";
         static constexpr auto wrapModeStr = "wrap_mode";
         static constexpr auto flowDirectionStr = "flow_direction";
 

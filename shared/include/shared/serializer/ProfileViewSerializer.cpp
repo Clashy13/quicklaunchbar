@@ -8,10 +8,10 @@ namespace Shared::Serializer {
     ProfileViewSerializer::serialized( const QJsonObject& obj ) {
         const auto mode = ProfileViewSerializer::serializedMode( obj );
         const auto position = ProfileViewSerializer::serializedPosition( obj );
-        const auto margin = ProfileViewSerializer::serializedMargin( obj );
+        const auto offset = ProfileViewSerializer::serializedOffset( obj );
         const auto wrapMode = ProfileViewSerializer::serializedWrapMode( obj );
 
-        if ( mode && position && margin && wrapMode ) {
+        if ( mode && position && offset && wrapMode ) {
             ProfileView::FlowDirection flowDirection;
             if ( *mode == ProfileView::Mode::Icon ) {
                 if ( const auto flowDirectionOpt =
@@ -23,7 +23,7 @@ namespace Shared::Serializer {
             } else {
                 flowDirection = ProfileView::FlowDirection::Vertical;
             }
-            ProfileView view( *mode, *position, *margin, *wrapMode, flowDirection );
+            ProfileView view( *mode, *position, *offset, *wrapMode, flowDirection );
             return view;
         } else {
             return std::nullopt;
@@ -35,7 +35,7 @@ namespace Shared::Serializer {
         obj[ ProfileViewSerializer::modeStr ] = ProfileViewSerializer::modeToString( view.mode );
         obj[ ProfileViewSerializer::positionStr ] =
             ProfileViewSerializer::positionToString( view.position );
-        obj[ ProfileViewSerializer::marginStr ] = view.margin;
+        obj[ ProfileViewSerializer::offsetStr ] = view.offset;
         obj[ ProfileViewSerializer::wrapModeStr ] =
             ProfileViewSerializer::wrapModeToString( view.wrapMode );
 
@@ -78,13 +78,13 @@ namespace Shared::Serializer {
         }
     }
 
-    std::optional<qsizetype> ProfileViewSerializer::serializedMargin( const QJsonObject& obj ) {
+    std::optional<qsizetype> ProfileViewSerializer::serializedOffset( const QJsonObject& obj ) {
         if ( const auto marginOpt =
                  PropertySerializer::serializedIntProperty( obj,
-                                                            ProfileViewSerializer::marginStr ) ) {
+                                                            ProfileViewSerializer::offsetStr ) ) {
             if ( *marginOpt < 0 ) {
                 qWarning().noquote()
-                    << "Property is not a size type:" << ProfileViewSerializer::marginStr;
+                    << "Property is not a size type:" << ProfileViewSerializer::offsetStr;
                 return std::nullopt;
             }
             return *marginOpt;
