@@ -16,7 +16,6 @@ add_subdirectory(src)
 
 qt_add_executable(appquicklaunchservice
     main.cpp
-    resources/resources.qrc
     main.qrc
     qml/qml.qrc
     ${SOURCES}

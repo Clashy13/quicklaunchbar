@@ -7,7 +7,8 @@ add_subdirectory(include/shared/models)
 add_subdirectory(include/shared/serializer)
 add_subdirectory(include/shared/iconprovider)
 
-add_library(shared
+qt_add_library(shared
+    include/shared/resources/resources.qrc
     ${SOURCES}
 )
 
