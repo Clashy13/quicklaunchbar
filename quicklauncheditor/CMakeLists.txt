@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.8.3 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 6.8.3 REQUIRED COMPONENTS Quick Widgets)
 find_package(Boost 1.83.0 REQUIRED)
 
 qt_standard_project_setup()
@@ -18,10 +18,12 @@ add_subdirectory(src)
 
 qt_add_executable(quicklauncheditor
     main.cpp
+    main.qrc
+    resources/resources.qrc
     ${SOURCES}
 )
 
-target_link_libraries(quicklauncheditor PRIVATE Qt6::Widgets Boost::boost shared QHotkey::QHotkey)
+target_link_libraries(quicklauncheditor PRIVATE Qt6::Quick Qt6::Widgets Boost::boost shared QHotkey::QHotkey)
 
 set_target_properties(quicklauncheditor PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
