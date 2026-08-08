@@ -1,43 +1,112 @@
 #include "ExecutionTargetSerializer.hpp"
 
-#include "serializer/IconSourceSerializer.hpp"
-#include "serializer/UriSerializer.hpp"
-#include "shared/serializer/ExecutionTargetSerializer.hpp"
+#include "../models/ExecutionTarget.hpp"
+#include "shared/serializer/IconSourceSerializer.hpp"
+#include "shared/serializer/PropertySerializer.hpp"
 
 namespace Service::Serializer {
 
     std::optional<Models::ExecutionTarget*>
     ExecutionTargetSerializer::serialized( const QJsonObject& obj ) {
-        if ( const auto executionTarget =
-                 Shared::Serializer::ExecutionTargetSerializer::serialized( obj ) ) {
-            return new Models::ExecutionTarget(
-                executionTarget->uuid,
-                executionTarget->name,
-                executionTarget->type,
-                ExecutionTargetSerializer::iconSourcesToIconUrls( executionTarget->iconSources ),
-                executionTarget->commands,
-                ExecutionTargetSerializer::uriListToUrlList( executionTarget->uriList ) );
+        const auto uuid = ExecutionTargetSerializer::serializedUuid( obj );
+        const auto name = ExecutionTargetSerializer::serializedName( obj );
+        const auto type = ExecutionTargetSerializer::serializedType( obj );
+        QList<QUrl> iconSources;
+        QList<Command> commands;
+        QList<QUrl> uriList;
+
+        if ( uuid && name && type ) {
+            if ( *type == Type::Group ) {
+                if ( const auto array =
+                         Shared::Serializer::PropertySerializer::serializedArrayProperty(
+                             obj,
+                             ExecutionTargetSerializer::executionTargetsStr ) ) {
+                    for ( const auto element : *array ) {
+                        if ( !element.isObject() ) {
+                            qWarning().noquote() << "Property list element is not an object";
+                            return std::nullopt;
+                        }
+
+                        const auto executionTargetObj = element.toObject();
+                        const auto elementType =
+                            ExecutionTargetSerializer::serializedType( executionTargetObj );
+                        if ( elementType ) {
+                            const auto success =
+                                ExecutionTargetSerializer::serializeSingleProperties(
+                                    iconSources,
+                                    commands,
+                                    uriList,
+                                    *elementType,
+                                    executionTargetObj );
+                        }
+                    }
+                }
+            } else {
+                const auto success =
+                    ExecutionTargetSerializer::serializeSingleProperties( iconSources,
+                                                                          commands,
+                                                                          uriList,
+                                                                          *type,
+                                                                          obj );
+                if ( !success ) {
+                    return std::nullopt;
+                }
+            }
+            return new Models::ExecutionTarget( *uuid,
+                                                *name,
+                                                *type,
+                                                iconSources,
+                                                commands,
+                                                uriList );
         } else {
             return std::nullopt;
         }
     }
 
-    QList<QUrl> ExecutionTargetSerializer::iconSourcesToIconUrls(
-        const QList<Shared::Models::ExecutionTarget::IconSource>& iconSources ) {
-        QList<QUrl> urls;
-        for ( const auto& iconSource : iconSources ) {
-            urls.push_back( IconSourceSerializer::iconSourceToUrl( iconSource ) );
+    bool ExecutionTargetSerializer::serializeSingleProperties( QList<QUrl>& iconSources,
+                                                               QList<Command>& commands,
+                                                               QList<QUrl>& uriList,
+                                                               const Type type,
+                                                               const QJsonObject& obj ) {
+        if ( type != Type::Group ) {
+            if ( const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj ) ) {
+                iconSources.push_back(
+                    Shared::Serializer::IconSourceSerializer::iconSourceToUrl( *iconSource ) );
+            } else {
+                return false;
+            }
         }
-        return urls;
-    }
-
-    QList<QUrl> ExecutionTargetSerializer::uriListToUrlList(
-        const QList<Shared::Models::ExecutionTarget::Uri>& uriList ) {
-        QList<QUrl> urls;
-        for ( const auto& uri : uriList ) {
-            urls.push_back( UriSerializer::uriToUrl( uri ) );
+        switch ( type ) {
+            case Type::DesktopApplication:
+            case Type::ExecutableFile:
+            case Type::Command: {
+                if ( const auto command = ExecutionTargetSerializer::serializedCommand( obj ) ) {
+                    commands.push_back( *command );
+                    break;
+                } else {
+                    return false;
+                }
+            }
+            case Type::OpenFile: {
+                if ( const auto filePath = ExecutionTargetSerializer::serializedFilePath( obj ) ) {
+                    uriList.push_back( QUrl::fromLocalFile( *filePath ) );
+                    break;
+                } else {
+                    return false;
+                }
+            }
+            case Type::OpenUrl: {
+                if ( const auto url = ExecutionTargetSerializer::serializedUrl( obj ) ) {
+                    uriList.push_back( QUrl( *url ) );
+                    break;
+                } else {
+                    return false;
+                }
+            }
+            default:
+                return false;
         }
-        return urls;
+        return true;
     }
 
 } // namespace Service::Serializer

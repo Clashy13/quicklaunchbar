@@ -7,18 +7,18 @@ namespace Editor::Serializer {
 
     class ProfileSerializer : public Shared::Serializer::ProfileSerializer {
 
-        using ExecutionTarget = Shared::Models::ExecutionTarget::ExecutionTarget;
-
       public:
-        static std::optional<Models::Profile> serialized( const QJsonObject& obj );
+        static std::optional<Models::Profile*> serialized( const QJsonObject& obj );
 
-        static QJsonObject deserialized( const Models::Profile& profile );
+        static QJsonObject deserialized( Models::Profile* profile );
 
       private:
-        static std::optional<QList<ExecutionTarget>>
+        static std::optional<Models::ProfileView*> serializedView( const QJsonObject& obj );
+
+        static std::optional<QList<Models::ExecutionTarget*>>
         serializedExecutionTargets( const QJsonObject& obj );
 
         static QJsonArray
-        deserializedExecutionTargets( const QList<ExecutionTarget>& executionTargets );
+        deserializedExecutionTargets( const QList<Models::ExecutionTarget*>& executionTargets );
     };
 } // namespace Editor::Serializer

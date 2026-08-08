@@ -1,15 +1,11 @@
 set(SOURCES
     ${SOURCES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/IconSourceSerializer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/IconSourceSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileViewSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileViewSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileConfigSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileConfigSerializer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/UriSerializer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/UriSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileSerializer.cpp
     PARENT_SCOPE

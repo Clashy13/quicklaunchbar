@@ -1,8 +1,7 @@
 #pragma once
 
 #include "shared/models/Command.hpp"
-#include "shared/models/ExecutionTarget.hpp"
-#include "shared/models/Uri.hpp"
+#include "shared/models/ExecutionTargetType.hpp"
 
 #include <QObject>
 #include <QUuid>
@@ -16,8 +15,7 @@ namespace Service::Models {
         Q_PROPERTY( QList<QUrl> iconSources READ iconSources CONSTANT )
 
         using Command = Shared::Models::ExecutionTarget::Command;
-        using Uri = Shared::Models::ExecutionTarget::Uri;
-        using Type = Shared::Models::ExecutionTarget::ExecutionTarget::Type;
+        using Type = Shared::Models::ExecutionTarget::Type;
 
       public:
         explicit ExecutionTarget( const QUuid& uuid,

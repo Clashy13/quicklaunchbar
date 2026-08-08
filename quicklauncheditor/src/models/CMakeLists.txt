@@ -1,5 +1,12 @@
 set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/Profile.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Command.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileView.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenFileExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenUrlExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GroupExecutionTarget.hpp
     PARENT_SCOPE
 )

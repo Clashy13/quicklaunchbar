@@ -17,6 +17,8 @@ namespace Shared::Serializer {
 
         static QJsonObject deserialized( const IconSource& iconSource );
 
+        static QUrl iconSourceToUrl( const IconSource& iconSource );
+
       private:
         static std::optional<IconSource::Type> serializedType( const QJsonObject& obj );
 
