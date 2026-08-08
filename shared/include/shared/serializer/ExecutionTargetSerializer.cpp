@@ -1,9 +1,9 @@
 #include "ExecutionTargetSerializer.hpp"
 
-#include "CommandSerializer.hpp"
 #include "IconSourceSerializer.hpp"
 #include "PropertySerializer.hpp"
 
+#include <QProcess>
 #include <optional>
 
 namespace Shared::Serializer {
@@ -58,12 +58,13 @@ namespace Shared::Serializer {
 
     std::optional<Models::ExecutionTarget::Command>
     ExecutionTargetSerializer::serializedCommand( const QJsonObject& obj ) {
-        if ( const auto commandObjOpt = PropertySerializer::serializedObjectProperty(
+        if ( const auto commandOpt = PropertySerializer::serializedStringProperty(
                  obj,
                  ExecutionTargetSerializer::commandStr ) ) {
-            if ( const auto commandOpt = CommandSerializer::serialized( *commandObjOpt ) ) {
-                return *commandOpt;
-            }
+            auto arguments = QProcess::splitCommand( *commandOpt );
+            const auto program = arguments.takeFirst();
+            Command cmd( program, arguments );
+            return cmd;
         }
         return std::nullopt;
     }

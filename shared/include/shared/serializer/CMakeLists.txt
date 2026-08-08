@@ -2,8 +2,6 @@ set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertySerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertySerializer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CommandSerializer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CommandSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/IconSourceSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/IconSourceSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetSerializer.hpp

@@ -3,7 +3,6 @@
 #include "../models/OpenFileExecutionTarget.hpp"
 #include "../models/OpenUrlExecutionTarget.hpp"
 #include "../models/ProgramExecutionTarget.hpp"
-#include "shared/serializer/CommandSerializer.hpp"
 #include "shared/serializer/IconSourceSerializer.hpp"
 #include "shared/serializer/PropertySerializer.hpp"
 
@@ -44,7 +43,7 @@ namespace Editor::Serializer {
                     Shared::Serializer::IconSourceSerializer::deserialized(
                         programExecutionTarget->iconSource() );
                 obj[ ExecutionTargetSerializer::commandStr ] =
-                    Shared::Serializer::CommandSerializer::deserialized(
+                    ExecutionTargetSerializer::deserializedCommand(
                         *programExecutionTarget->command() );
                 return obj;
             }
@@ -198,6 +197,14 @@ namespace Editor::Serializer {
             return new Models::GroupExecutionTarget( *uuid, *name, *type, *executionTargets );
         } else {
             return std::nullopt;
+        }
+    }
+
+    QString ExecutionTargetSerializer::deserializedCommand( const Models::Command& command ) {
+        if ( command.arguments.isEmpty() ) {
+            return command.program;
+        } else {
+            return command.program + " " + command.arguments.join( " " );
         }
     }
 } // namespace Editor::Serializer

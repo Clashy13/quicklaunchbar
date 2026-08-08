@@ -32,5 +32,7 @@ namespace Editor::Serializer {
 
         static std::optional<Models::GroupExecutionTarget*>
         serializedGroup( const QJsonObject& obj );
+
+        static QString deserializedCommand( const Models::Command& command );
     };
 } // namespace Editor::Serializer
