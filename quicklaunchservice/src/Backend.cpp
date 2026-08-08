@@ -52,33 +52,45 @@ namespace Service {
 
         const auto view = this->_profileManager.currentProfile->view();
         const auto geo = this->_currentProfileScreen->geometry();
-        const auto margin = view.margin;
+        const auto offset = view.offset;
 
         using ProfileView = Shared::Models::Profile::ProfileView;
 
         qsizetype x = 0;
-        switch ( view.horizontalAnchor ) {
-            case ProfileView::HorizontalAnchor::Left:
-                x = margin;
+        switch ( view.position ) {
+            case ProfileView::Position::TopLeft:
+            case ProfileView::Position::Left:
+            case ProfileView::Position::BottomLeft:
+                x = x = offset;
                 break;
-            case ProfileView::HorizontalAnchor::Center:
+            case ProfileView::Position::Top:
+            case ProfileView::Position::Center:
+            case ProfileView::Position::Bottom:
                 x = geo.width() / 2 - width / 2;
                 break;
-            case ProfileView::HorizontalAnchor::Right:
-                x = geo.width() - width - margin;
+            case ProfileView::Position::TopRight:
+            case ProfileView::Position::Right:
+            case ProfileView::Position::BottomRight:
+                x = geo.width() - width - offset;
                 break;
         }
 
         qsizetype y = 0;
-        switch ( view.verticalAnchor ) {
-            case ProfileView::VerticalAnchor::Top:
-                y = margin;
+        switch ( view.position ) {
+            case ProfileView::Position::TopLeft:
+            case ProfileView::Position::Top:
+            case ProfileView::Position::TopRight:
+                y = offset;
                 break;
-            case ProfileView::VerticalAnchor::Center:
+            case ProfileView::Position::Left:
+            case ProfileView::Position::Center:
+            case ProfileView::Position::Right:
                 y = geo.height() / 2 - height / 2;
                 break;
-            case ProfileView::VerticalAnchor::Bottom:
-                y = geo.height() - height - margin;
+            case ProfileView::Position::BottomLeft:
+            case ProfileView::Position::Bottom:
+            case ProfileView::Position::BottomRight:
+                y = geo.height() - height - offset;
                 break;
         }
 
@@ -89,20 +101,20 @@ namespace Service {
         const auto screenWidth = this->_currentProfileScreen
                                      ? this->_currentProfileScreen->geometry().width()
                                      : this->newCurrentScreen()->geometry().width();
-        const auto margin = this->_profileManager.currentProfile != nullptr
-                                ? this->_profileManager.currentProfile->view().margin
+        const auto offset = this->_profileManager.currentProfile != nullptr
+                                ? this->_profileManager.currentProfile->view().offset
                                 : 0;
-        return screenWidth - margin * 2;
+        return screenWidth - offset * 2;
     }
 
     qsizetype Backend::availableContentHeight() {
         const auto screenHeight = this->_currentProfileScreen
                                       ? this->_currentProfileScreen->geometry().height()
                                       : this->newCurrentScreen()->geometry().height();
-        const auto margin = this->_profileManager.currentProfile != nullptr
-                                ? this->_profileManager.currentProfile->view().margin
+        const auto offset = this->_profileManager.currentProfile != nullptr
+                                ? this->_profileManager.currentProfile->view().offset
                                 : 0;
-        return screenHeight - margin * 2;
+        return screenHeight - offset * 2;
     }
 
     void Backend::maskWindow( QQuickWindow* window, QRect contentRect ) {

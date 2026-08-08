@@ -2,8 +2,6 @@ set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertySerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertySerializer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CommandSerializer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CommandSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/IconSourceSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/IconSourceSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetSerializer.hpp
@@ -14,8 +12,6 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileConfigSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileConfigSerializer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/UriSerializer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/UriSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/JsonSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/JsonSerializer.cpp
     PARENT_SCOPE

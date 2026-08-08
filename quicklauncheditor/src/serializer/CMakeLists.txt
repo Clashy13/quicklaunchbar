@@ -4,5 +4,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileSerializer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileConfigSerializer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileConfigSerializer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetSerializer.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetSerializer.cpp
     PARENT_SCOPE
 )

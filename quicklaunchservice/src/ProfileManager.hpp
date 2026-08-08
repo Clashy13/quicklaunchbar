@@ -2,7 +2,6 @@
 
 #include "models/Profile.hpp"
 #include "shared/models/Command.hpp"
-#include "shared/models/Uri.hpp"
 
 #include <QObject>
 
@@ -12,7 +11,6 @@ namespace Service {
         Q_OBJECT
 
         using Command = Shared::Models::ExecutionTarget::Command;
-        using Uri = Shared::Models::ExecutionTarget::Uri;
 
       public:
         ProfileManager( QObject* parent = nullptr );

@@ -1,6 +1,6 @@
-#include "FileIconProvider.hpp"
 #include "QmlRegistration.hpp"
-#include "ThemeIconProvider.hpp"
+#include "shared/iconprovider/FileIconProvider.hpp"
+#include "shared/iconprovider/ThemeIconProvider.hpp"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -13,8 +13,8 @@ int main( int argc, char* argv[] ) {
     QmlRegistration::registerThemeManager( &themeManager );
 
     QQmlApplicationEngine engine;
-    engine.addImageProvider( "fileicons", new FileIconProvider );
-    engine.addImageProvider( "themeicons", new ThemeIconProvider );
+    engine.addImageProvider( "fileicons", new Shared::IconProvider::FileIconProvider );
+    engine.addImageProvider( "themeicons", new Shared::IconProvider::ThemeIconProvider );
     const QUrl url( QStringLiteral( "qrc:/Main.qml" ) );
     QObject::connect(
         &engine,

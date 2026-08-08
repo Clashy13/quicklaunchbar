@@ -11,13 +11,13 @@ namespace Service::Serializer {
             }
         } else {
             if ( view.wrapMode == ProfileView::WrapMode::Grid ) {
-                if ( view.flowDirection == ProfileView::FlowDirection::Vertical ) {
+                if ( view.flowDirection == ProfileView::FlowDirection::Down ) {
                     return "qml/ExecutionTarget/VerticalIconGridView.qml";
                 } else {
                     return "qml/ExecutionTarget/HorizontalIconGridView.qml";
                 }
             } else {
-                if ( view.flowDirection == ProfileView::FlowDirection::Vertical ) {
+                if ( view.flowDirection == ProfileView::FlowDirection::Down ) {
                     return "qml/ExecutionTarget/VerticalIconScrollView.qml";
                 } else {
                     return "qml/ExecutionTarget/HorizontalIconScrollView.qml";

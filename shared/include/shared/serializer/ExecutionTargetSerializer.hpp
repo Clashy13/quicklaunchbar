@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../models/Command.hpp"
-#include "../models/ExecutionTarget.hpp"
+#include "../models/ExecutionTargetType.hpp"
 #include "../models/IconSource.hpp"
-#include "../models/Uri.hpp"
 
 #include <QJsonObject>
 #include <optional>
@@ -12,45 +11,38 @@ namespace Shared::Serializer {
 
     class ExecutionTargetSerializer {
 
-        using ExecutionTarget = Models::ExecutionTarget::ExecutionTarget;
+        using Type = Models::ExecutionTarget::Type;
         using IconSource = Models::ExecutionTarget::IconSource;
         using Command = Models::ExecutionTarget::Command;
-        using Uri = Models::ExecutionTarget::Uri;
-
-      public:
-        static std::optional<ExecutionTarget> serialized( const QJsonObject& obj );
-
-        static QJsonObject deserialized( const ExecutionTarget& executionTarget );
 
       protected:
         static std::optional<QUuid> serializedUuid( const QJsonObject& obj );
 
         static std::optional<QString> serializedName( const QJsonObject& obj );
 
-        static std::optional<ExecutionTarget::Type> serializedType( const QJsonObject& obj );
+        static std::optional<Type> serializedType( const QJsonObject& obj );
 
-        static std::optional<QList<IconSource>> serializedIconSources( const QJsonObject& obj );
+        static std::optional<IconSource> serializedIconSource( const QJsonObject& obj );
 
-        static std::optional<QList<Command>> serializedCommands( const QJsonObject& obj );
+        static std::optional<Command> serializedCommand( const QJsonObject& obj );
 
-        static std::optional<QList<Uri>> serializedUriLists( const QJsonObject& obj );
+        static std::optional<QString> serializedFilePath( const QJsonObject& obj );
 
-        static QJsonArray deserializedIconSources( const QList<IconSource>& iconSources );
+        static std::optional<QUrl> serializedUrl( const QJsonObject& obj );
 
-        static QJsonArray deserializedCommands( const QList<Command>& commands );
+        static std::optional<Type> typeFromString( const QString& type );
 
-        static QJsonArray deserializedUriList( const QList<Uri>& uriList );
-
-        static std::optional<ExecutionTarget::Type> typeFromString( const QString& type );
-
-        static QString typeToString( const ExecutionTarget::Type type );
+        static QString typeToString( const Type type );
 
         static constexpr auto uuidStr = "uuid";
         static constexpr auto nameStr = "name";
         static constexpr auto typeStr = "type";
-        static constexpr auto iconSourcesStr = "icon_sources";
-        static constexpr auto commandsStr = "commands";
-        static constexpr auto uriListStr = "uri_list";
+
+        static constexpr auto iconSourceStr = "icon_source";
+        static constexpr auto commandStr = "command";
+        static constexpr auto filePathStr = "file_path";
+        static constexpr auto urlStr = "url";
+        static constexpr auto executionTargetsStr = "execution_targets";
 
         static constexpr auto desktopApplicationTypeStr = "desktop_application";
         static constexpr auto executableFileTypeStr = "executable_file";
