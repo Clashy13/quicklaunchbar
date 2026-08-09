@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>utils/Colors.qml</file>
+        <file>utils/Icons.qml</file>
     </qresource>
 </RCC>

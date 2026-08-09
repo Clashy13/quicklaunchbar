@@ -19,6 +19,11 @@ namespace Editor {
                                       QmlRegistration::versionMajor,
                                       QmlRegistration::versionMinor,
                                       "Colors" );
+            qmlRegisterSingletonType( QUrl( "qrc:/utils/Icons.qml" ),
+                                      QmlRegistration::uri,
+                                      QmlRegistration::versionMajor,
+                                      QmlRegistration::versionMinor,
+                                      "Icons" );
         }
 
       private:
