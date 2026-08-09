@@ -6,6 +6,7 @@ add_subdirectory(include/shared/external/QHotkey-1.5.0)
 add_subdirectory(include/shared/models)
 add_subdirectory(include/shared/serializer)
 add_subdirectory(include/shared/iconprovider)
+add_subdirectory(include/shared/manager)
 
 qt_add_library(shared
     include/shared/resources/resources.qrc

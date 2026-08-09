@@ -9,8 +9,6 @@ int main( int argc, char* argv[] ) {
     QGuiApplication app( argc, argv );
 
     QmlRegistration::registerTypes();
-    ThemeManager themeManager;
-    QmlRegistration::registerThemeManager( &themeManager );
 
     QQmlApplicationEngine engine;
     engine.addImageProvider( "fileicons", new Shared::IconProvider::FileIconProvider );
