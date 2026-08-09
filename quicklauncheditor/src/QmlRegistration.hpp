@@ -14,6 +14,11 @@ namespace Editor {
                                           QmlRegistration::versionMinor,
                                           "Theme",
                                           ThemeManager::instance() );
+            qmlRegisterSingletonType( QUrl( "qrc:/utils/Colors.qml" ),
+                                      QmlRegistration::uri,
+                                      QmlRegistration::versionMajor,
+                                      QmlRegistration::versionMinor,
+                                      "Colors" );
         }
 
       private:

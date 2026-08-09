@@ -19,6 +19,7 @@ add_subdirectory(src)
 qt_add_executable(quicklauncheditor
     main.cpp
     main.qrc
+    qml/qml.qrc
     resources/resources.qrc
     ${SOURCES}
 )
