@@ -8,6 +8,8 @@ namespace Editor::Models {
 
     class OpenUrlExecutionTarget : public SingleExecutionTarget {
 
+        Q_OBJECT
+
         Q_PROPERTY( QUrl url READ url WRITE setUrl NOTIFY urlChanged );
 
       public:

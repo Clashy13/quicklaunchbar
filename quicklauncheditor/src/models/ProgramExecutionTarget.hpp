@@ -9,6 +9,8 @@ namespace Editor::Models {
 
     class ProgramExecutionTarget : public SingleExecutionTarget {
 
+        Q_OBJECT
+
         Q_PROPERTY( Command* command READ command WRITE setCommand NOTIFY commandChanged );
 
       public:

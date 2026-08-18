@@ -8,6 +8,8 @@ namespace Editor::Models {
 
     class GroupExecutionTarget : public ExecutionTarget {
 
+        Q_OBJECT
+
         Q_PROPERTY( QQmlListProperty<SingleExecutionTarget> executionTargets READ
                         getExecutionTargets CONSTANT )
 

@@ -6,6 +6,8 @@ namespace Editor::Models {
 
     class OpenFileExecutionTarget : public SingleExecutionTarget {
 
+        Q_OBJECT
+
         Q_PROPERTY( QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged );
 
       public:

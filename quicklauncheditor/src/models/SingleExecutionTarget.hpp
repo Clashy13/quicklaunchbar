@@ -10,6 +10,8 @@ namespace Editor::Models {
 
     class SingleExecutionTarget : public ExecutionTarget {
 
+        Q_OBJECT
+
         Q_PROPERTY( QUrl iconUrl READ iconUrl NOTIFY iconUrlChanged );
 
       public:
