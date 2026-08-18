@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../models/Command.hpp"
 #include "../models/ExecutionTarget.hpp"
 #include "../models/GroupExecutionTarget.hpp"
 #include "../models/SingleExecutionTarget.hpp"
@@ -19,7 +18,7 @@ namespace Editor::Serializer {
         static QJsonObject deserialized( Models::ExecutionTarget* executionTarget );
 
       private:
-        static std::optional<Models::Command*> serializedCommand( const QJsonObject& obj );
+        static std::optional<QString> serializedCommand( const QJsonObject& obj );
 
         static std::optional<Models::SingleExecutionTarget*>
         serializedSingleExecutionTarget( const QJsonObject& obj );
@@ -32,7 +31,5 @@ namespace Editor::Serializer {
 
         static std::optional<Models::GroupExecutionTarget*>
         serializedGroup( const QJsonObject& obj );
-
-        static QString deserializedCommand( const Models::Command& command );
     };
 } // namespace Editor::Serializer

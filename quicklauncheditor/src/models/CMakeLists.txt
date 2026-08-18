@@ -1,7 +1,6 @@
 set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/Profile.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Command.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileView.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTarget.hpp

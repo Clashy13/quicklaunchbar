@@ -42,9 +42,7 @@ namespace Editor::Serializer {
                 obj[ ExecutionTargetSerializer::iconSourceStr ] =
                     Shared::Serializer::IconSourceSerializer::deserialized(
                         programExecutionTarget->iconSource() );
-                obj[ ExecutionTargetSerializer::commandStr ] =
-                    ExecutionTargetSerializer::deserializedCommand(
-                        *programExecutionTarget->command() );
+                obj[ ExecutionTargetSerializer::commandStr ] = programExecutionTarget->command();
                 return obj;
             }
             case Type::OpenFile: {
@@ -78,11 +76,12 @@ namespace Editor::Serializer {
         }
     }
 
-    std::optional<Models::Command*>
-    ExecutionTargetSerializer::serializedCommand( const QJsonObject& obj ) {
+    std::optional<QString> ExecutionTargetSerializer::serializedCommand( const QJsonObject& obj ) {
         if ( const auto commandOpt =
-                 Shared::Serializer::ExecutionTargetSerializer::serializedCommand( obj ) ) {
-            return new Models::Command( ( *commandOpt ).program, ( *commandOpt ).arguments );
+                 Shared::Serializer::PropertySerializer::serializedStringProperty(
+                     obj,
+                     ExecutionTargetSerializer::commandStr ) ) {
+            return *commandOpt;
         } else {
             return std::nullopt;
         }
@@ -197,14 +196,6 @@ namespace Editor::Serializer {
             return new Models::GroupExecutionTarget( *uuid, *name, *type, *executionTargets );
         } else {
             return std::nullopt;
-        }
-    }
-
-    QString ExecutionTargetSerializer::deserializedCommand( const Models::Command& command ) {
-        if ( command.arguments.isEmpty() ) {
-            return command.program;
-        } else {
-            return command.program + " " + command.arguments.join( " " );
         }
     }
 } // namespace Editor::Serializer
