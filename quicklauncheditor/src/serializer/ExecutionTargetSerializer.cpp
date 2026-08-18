@@ -1,10 +1,13 @@
 #include "ExecutionTargetSerializer.hpp"
 
+#include "../models/ExecutableFileExecutionTarget.hpp"
 #include "../models/OpenFileExecutionTarget.hpp"
 #include "../models/OpenUrlExecutionTarget.hpp"
 #include "../models/ProgramExecutionTarget.hpp"
 #include "shared/serializer/IconSourceSerializer.hpp"
 #include "shared/serializer/PropertySerializer.hpp"
+
+#include <QProcess>
 
 namespace Editor::Serializer {
 
@@ -34,8 +37,26 @@ namespace Editor::Serializer {
 
         using Type = Shared::Models::ExecutionTarget::Type;
         switch ( executionTarget->type() ) {
-            case Type::DesktopApplication:
-            case Type::ExecutableFile:
+            case Type::DesktopApplication: {
+                const auto programExecutionTarget =
+                    dynamic_cast<Models::ProgramExecutionTarget*>( executionTarget );
+                obj[ ExecutionTargetSerializer::iconSourceStr ] =
+                    Shared::Serializer::IconSourceSerializer::deserialized(
+                        programExecutionTarget->iconSource() );
+                obj[ ExecutionTargetSerializer::commandStr ] = programExecutionTarget->command();
+                return obj;
+            }
+            case Type::ExecutableFile: {
+                const auto executableFileExecutionTarget =
+                    dynamic_cast<Models::ExecutableFileExecutionTarget*>( executionTarget );
+                obj[ ExecutionTargetSerializer::iconSourceStr ] =
+                    Shared::Serializer::IconSourceSerializer::deserialized(
+                        executableFileExecutionTarget->iconSource() );
+                obj[ ExecutionTargetSerializer::commandStr ] =
+                    executableFileExecutionTarget->filePath() + " " +
+                    executableFileExecutionTarget->arguments();
+                return obj;
+            }
             case Type::Command: {
                 const auto programExecutionTarget =
                     dynamic_cast<Models::ProgramExecutionTarget*>( executionTarget );
@@ -96,8 +117,37 @@ namespace Editor::Serializer {
         using Type = Shared::Models::ExecutionTarget::Type;
         if ( uuid && name && type ) {
             switch ( *type ) {
-                case Type::DesktopApplication:
-                case Type::ExecutableFile:
+                case Type::DesktopApplication: {
+                    const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj );
+                    const auto command = ExecutionTargetSerializer::serializedCommand( obj );
+
+                    if ( iconSource && command ) {
+                        return new Models::ProgramExecutionTarget( *uuid,
+                                                                   *name,
+                                                                   *type,
+                                                                   *iconSource,
+                                                                   *command );
+                    } else {
+                        return std::nullopt;
+                    }
+                }
+                case Type::ExecutableFile: {
+                    const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj );
+                    const auto command = ExecutionTargetSerializer::serializedCommand( obj );
+
+                    if ( iconSource && command ) {
+                        auto arguments = QProcess::splitCommand( *command );
+                        const auto filePath = arguments.takeFirst();
+                        return new Models::ExecutableFileExecutionTarget( *uuid,
+                                                                          *name,
+                                                                          *type,
+                                                                          *iconSource,
+                                                                          filePath,
+                                                                          arguments.join( " " ) );
+                    } else {
+                        return std::nullopt;
+                    }
+                }
                 case Type::Command: {
                     const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj );
                     const auto command = ExecutionTargetSerializer::serializedCommand( obj );
