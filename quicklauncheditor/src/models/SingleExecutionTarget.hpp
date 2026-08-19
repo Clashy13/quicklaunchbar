@@ -45,20 +45,6 @@ namespace Editor::Models {
       signals:
         void iconUrlChanged();
 
-      private:
-        // static QUrl iconSourceToUrl( const IconSource& iconSource ) {
-        //     switch ( iconSource.type ) {
-        //         case IconSource::Type::Theme:
-        //             return QUrl( "image://themeicons/" + iconSource.value );
-        //         case IconSource::Type::FromFile:
-        //             return QUrl( "image://fileicons" + iconSource.value );
-        //         case IconSource::Type::Image:
-        //             return QUrl( "image:/" + iconSource.value );
-        //         case IconSource::Type::Resource:
-        //             return QUrl( "qrc:/icons/" + iconSource.value + ".svg" );
-        //     }
-        // }
-
         IconSource _iconSource;
         QUrl _iconUrl;
     };
