@@ -4,7 +4,8 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileView.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTarget.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ProgramExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DesktopApplicationExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CommandExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutableFileExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenFileExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenUrlExecutionTarget.hpp

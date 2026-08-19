@@ -6,20 +6,23 @@
 
 namespace Editor::Models {
 
-    class ProgramExecutionTarget : public SingleExecutionTarget {
+    class CommandExecutionTarget : public SingleExecutionTarget {
 
         Q_OBJECT
 
         Q_PROPERTY( QString command READ command WRITE setCommand NOTIFY commandChanged );
+        Q_PROPERTY( QString iconFilePath READ iconFilePath WRITE setIconFilePath NOTIFY
+                        iconFilePathChanged );
 
       public:
-        explicit ProgramExecutionTarget( const QUuid& uuid,
+        explicit CommandExecutionTarget( const QUuid& uuid,
                                          const QString& name,
                                          const Type type,
-                                         const IconSource& iconSource,
                                          const QString& command,
+                                         const QString& iconFilePath,
                                          QObject* parent = nullptr )
-            : SingleExecutionTarget( uuid, name, type, iconSource, parent ), _command( command ) {}
+            : SingleExecutionTarget( uuid, name, type, parent ), _command( command ),
+              _iconFilePath( iconFilePath ) {}
 
         auto command() const {
             return this->_command;
@@ -30,10 +33,21 @@ namespace Editor::Models {
             emit this->commandChanged();
         }
 
+        auto iconFilePath() const {
+            return this->_iconFilePath;
+        }
+
+        void setIconFilePath( const QString& iconFilePath ) {
+            this->_iconFilePath = iconFilePath;
+            emit this->iconFilePathChanged();
+        }
+
       signals:
         void commandChanged();
+        void iconFilePathChanged();
 
       private:
         QString _command;
+        QString _iconFilePath;
     };
 } // namespace Editor::Models

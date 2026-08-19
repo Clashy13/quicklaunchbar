@@ -9,16 +9,18 @@ namespace Editor::Models {
         Q_OBJECT
 
         Q_PROPERTY( QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged );
+        Q_PROPERTY( QString iconFilePath READ iconFilePath WRITE setIconFilePath NOTIFY
+                        iconFilePathChanged );
 
       public:
         explicit OpenFileExecutionTarget( const QUuid& uuid,
                                           const QString& name,
                                           const Type type,
-                                          const IconSource& iconSource,
                                           const QString& filePath,
+                                          const QString& iconFilePath,
                                           QObject* parent = nullptr )
-            : SingleExecutionTarget( uuid, name, type, iconSource, parent ), _filePath( filePath ) {
-        }
+            : SingleExecutionTarget( uuid, name, type, parent ), _filePath( filePath ),
+              _iconFilePath( iconFilePath ) {}
 
         auto filePath() const {
             return this->_filePath;
@@ -29,10 +31,21 @@ namespace Editor::Models {
             emit this->filePathChanged();
         }
 
+        auto iconFilePath() const {
+            return this->_iconFilePath;
+        }
+
+        void setIconFilePath( const QString& iconFilePath ) {
+            this->_iconFilePath = iconFilePath;
+            emit this->iconFilePathChanged();
+        }
+
       signals:
         void filePathChanged();
+        void iconFilePathChanged();
 
       private:
         QString _filePath;
+        QString _iconFilePath;
     };
 } // namespace Editor::Models
