@@ -18,6 +18,8 @@ namespace Editor::Serializer {
         static QJsonObject deserialized( Models::ExecutionTarget* executionTarget );
 
       private:
+        static std::optional<bool> serializedUseDefaultName( const QJsonObject& obj );
+
         static std::optional<QString> serializedCommand( const QJsonObject& obj );
 
         static std::optional<Models::SingleExecutionTarget*>
@@ -31,5 +33,7 @@ namespace Editor::Serializer {
 
         static std::optional<Models::GroupExecutionTarget*>
         serializedGroup( const QJsonObject& obj );
+
+        static constexpr auto useDefaultNameStr = "use_default_name";
     };
 } // namespace Editor::Serializer

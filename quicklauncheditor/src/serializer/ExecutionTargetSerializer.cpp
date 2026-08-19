@@ -7,6 +7,7 @@
 #include "shared/serializer/IconSourceSerializer.hpp"
 #include "shared/serializer/PropertySerializer.hpp"
 
+#include <QFileInfo>
 #include <QProcess>
 
 namespace Editor::Serializer {
@@ -31,7 +32,6 @@ namespace Editor::Serializer {
         QJsonObject obj;
         obj[ ExecutionTargetSerializer::uuidStr ] =
             executionTarget->uuid().toString( QUuid::WithoutBraces );
-        obj[ ExecutionTargetSerializer::nameStr ] = executionTarget->name();
         obj[ ExecutionTargetSerializer::typeStr ] =
             ExecutionTargetSerializer::typeToString( executionTarget->type() );
 
@@ -44,6 +44,7 @@ namespace Editor::Serializer {
                     Shared::Serializer::IconSourceSerializer::deserialized(
                         programExecutionTarget->iconSource() );
                 obj[ ExecutionTargetSerializer::commandStr ] = programExecutionTarget->command();
+                obj[ ExecutionTargetSerializer::nameStr ] = programExecutionTarget->name();
                 return obj;
             }
             case Type::ExecutableFile: {
@@ -55,6 +56,15 @@ namespace Editor::Serializer {
                 obj[ ExecutionTargetSerializer::commandStr ] =
                     executableFileExecutionTarget->filePath() + " " +
                     executableFileExecutionTarget->arguments();
+
+                const auto useDefaultName = executableFileExecutionTarget->name().isEmpty();
+                obj[ ExecutionTargetSerializer::useDefaultNameStr ] = useDefaultName;
+
+                auto name = executableFileExecutionTarget->name();
+                if ( useDefaultName ) {
+                    name = QFileInfo( executableFileExecutionTarget->filePath() ).fileName();
+                }
+                obj[ ExecutionTargetSerializer::nameStr ] = name;
                 return obj;
             }
             case Type::Command: {
@@ -64,6 +74,15 @@ namespace Editor::Serializer {
                     Shared::Serializer::IconSourceSerializer::deserialized(
                         programExecutionTarget->iconSource() );
                 obj[ ExecutionTargetSerializer::commandStr ] = programExecutionTarget->command();
+
+                const auto useDefaultName = programExecutionTarget->name().isEmpty();
+                obj[ ExecutionTargetSerializer::useDefaultNameStr ] = useDefaultName;
+
+                auto name = programExecutionTarget->name();
+                if ( useDefaultName ) {
+                    name = programExecutionTarget->command();
+                }
+                obj[ ExecutionTargetSerializer::nameStr ] = name;
                 return obj;
             }
             case Type::OpenFile: {
@@ -72,7 +91,17 @@ namespace Editor::Serializer {
                 obj[ ExecutionTargetSerializer::iconSourceStr ] =
                     Shared::Serializer::IconSourceSerializer::deserialized(
                         fileExecutionTarget->iconSource() );
+
                 obj[ ExecutionTargetSerializer::filePathStr ] = fileExecutionTarget->filePath();
+
+                const auto useDefaultName = fileExecutionTarget->name().isEmpty();
+                obj[ ExecutionTargetSerializer::useDefaultNameStr ] = useDefaultName;
+
+                auto name = fileExecutionTarget->name();
+                if ( useDefaultName ) {
+                    name = QFileInfo( fileExecutionTarget->filePath() ).fileName();
+                }
+                obj[ ExecutionTargetSerializer::nameStr ] = name;
                 return obj;
             }
             case Type::OpenUrl: {
@@ -82,6 +111,15 @@ namespace Editor::Serializer {
                     Shared::Serializer::IconSourceSerializer::deserialized(
                         urlExecutionTarget->iconSource() );
                 obj[ ExecutionTargetSerializer::urlStr ] = urlExecutionTarget->url().toString();
+
+                const auto useDefaultName = urlExecutionTarget->name().isEmpty();
+                obj[ ExecutionTargetSerializer::useDefaultNameStr ] = useDefaultName;
+
+                auto name = urlExecutionTarget->name();
+                if ( useDefaultName ) {
+                    name = urlExecutionTarget->url().toString();
+                }
+                obj[ ExecutionTargetSerializer::nameStr ] = name;
                 return obj;
             }
             case Type::Group: {
@@ -94,6 +132,18 @@ namespace Editor::Serializer {
             }
             default:
                 return {};
+        }
+    }
+
+    std::optional<bool>
+    ExecutionTargetSerializer::serializedUseDefaultName( const QJsonObject& obj ) {
+        if ( const auto useDefaultNameOpt =
+                 Shared::Serializer::PropertySerializer::serializedBoolProperty(
+                     obj,
+                     ExecutionTargetSerializer::useDefaultNameStr ) ) {
+            return *useDefaultNameOpt;
+        } else {
+            return std::nullopt;
         }
     }
 
@@ -134,12 +184,16 @@ namespace Editor::Serializer {
                 case Type::ExecutableFile: {
                     const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj );
                     const auto command = ExecutionTargetSerializer::serializedCommand( obj );
+                    const auto useDefaultName =
+                        ExecutionTargetSerializer::serializedUseDefaultName( obj );
 
-                    if ( iconSource && command ) {
+                    if ( iconSource && command && useDefaultName ) {
                         auto arguments = QProcess::splitCommand( *command );
                         const auto filePath = arguments.takeFirst();
+
                         return new Models::ExecutableFileExecutionTarget( *uuid,
-                                                                          *name,
+                                                                          *useDefaultName ? ""
+                                                                                          : *name,
                                                                           *type,
                                                                           *iconSource,
                                                                           filePath,
@@ -151,10 +205,12 @@ namespace Editor::Serializer {
                 case Type::Command: {
                     const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj );
                     const auto command = ExecutionTargetSerializer::serializedCommand( obj );
+                    const auto useDefaultName =
+                        ExecutionTargetSerializer::serializedUseDefaultName( obj );
 
-                    if ( iconSource && command ) {
+                    if ( iconSource && command && useDefaultName ) {
                         return new Models::ProgramExecutionTarget( *uuid,
-                                                                   *name,
+                                                                   *useDefaultName ? "" : *name,
                                                                    *type,
                                                                    *iconSource,
                                                                    *command );
@@ -165,10 +221,12 @@ namespace Editor::Serializer {
                 case Type::OpenFile: {
                     const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj );
                     const auto filePath = ExecutionTargetSerializer::serializedFilePath( obj );
+                    const auto useDefaultName =
+                        ExecutionTargetSerializer::serializedUseDefaultName( obj );
 
-                    if ( iconSource && filePath ) {
+                    if ( iconSource && filePath && useDefaultName ) {
                         return new Models::OpenFileExecutionTarget( *uuid,
-                                                                    *name,
+                                                                    *useDefaultName ? "" : *name,
                                                                     *type,
                                                                     *iconSource,
                                                                     *filePath );
@@ -179,10 +237,12 @@ namespace Editor::Serializer {
                 case Type::OpenUrl: {
                     const auto iconSource = ExecutionTargetSerializer::serializedIconSource( obj );
                     const auto url = ExecutionTargetSerializer::serializedUrl( obj );
+                    const auto useDefaultName =
+                        ExecutionTargetSerializer::serializedUseDefaultName( obj );
 
-                    if ( iconSource && url ) {
+                    if ( iconSource && url && useDefaultName ) {
                         return new Models::OpenUrlExecutionTarget( *uuid,
-                                                                   *name,
+                                                                   *useDefaultName ? "" : *name,
                                                                    *type,
                                                                    *iconSource,
                                                                    *url );
