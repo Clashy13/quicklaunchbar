@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SingleExecutionTarget.hpp"
+#include "SingleExecutionTargetListModel.hpp"
 
 #include <QQmlListProperty>
 
@@ -10,8 +11,8 @@ namespace Editor::Models {
 
         Q_OBJECT
 
-        Q_PROPERTY( QQmlListProperty<SingleExecutionTarget> executionTargets READ
-                        getExecutionTargets CONSTANT )
+        Q_PROPERTY(
+            SingleExecutionTargetListModel* executionTargets READ executionTargets CONSTANT )
 
       public:
         explicit GroupExecutionTarget( const QUuid& uuid,
@@ -19,21 +20,14 @@ namespace Editor::Models {
                                        const Type type,
                                        const QList<SingleExecutionTarget*>& executionTargets,
                                        QObject* parent = nullptr )
-            : ExecutionTarget( uuid, name, type, parent ), _executionTargets( executionTargets ) {
-            for ( auto executionTarget : this->_executionTargets ) {
-                executionTarget->setParent( this );
-            }
-        }
+            : ExecutionTarget( uuid, name, type, parent ),
+              _executionTargets( executionTargets, this ) {}
 
-        QQmlListProperty<SingleExecutionTarget> getExecutionTargets() {
-            return QQmlListProperty<SingleExecutionTarget>( this, &this->_executionTargets );
-        }
-
-        auto executionTargets() const {
-            return this->_executionTargets;
+        auto executionTargets() {
+            return &this->_executionTargets;
         }
 
       private:
-        QList<SingleExecutionTarget*> _executionTargets;
+        SingleExecutionTargetListModel _executionTargets;
     };
 } // namespace Editor::Models

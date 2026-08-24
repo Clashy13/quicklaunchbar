@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ExecutionTarget.hpp"
+#include "ExecutionTargetListModel.hpp"
 #include "ProfileView.hpp"
 
 #include <QQmlListProperty>
@@ -15,8 +16,7 @@ namespace Editor::Models {
         Q_PROPERTY( bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged );
         Q_PROPERTY( QString shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged );
         Q_PROPERTY( ProfileView* view READ view WRITE setView NOTIFY viewChanged );
-        Q_PROPERTY(
-            QQmlListProperty<ExecutionTarget> executionTargets READ getExecutionTargets CONSTANT )
+        Q_PROPERTY( ExecutionTargetListModel* executionTargets READ executionTargets CONSTANT )
 
       public:
         explicit Profile( const QUuid& uuid,
@@ -27,11 +27,8 @@ namespace Editor::Models {
                           const QList<ExecutionTarget*>& executionTargets,
                           QObject* parent = nullptr )
             : QObject( parent ), _uuid( uuid ), _name( name ), _enabled( enabled ),
-              _shortcut( shortcut ), _view( view ), _executionTargets( executionTargets ) {
+              _shortcut( shortcut ), _view( view ), _executionTargets( executionTargets, this ) {
             this->_view->setParent( this );
-            for ( auto executionTarget : this->_executionTargets ) {
-                executionTarget->setParent( this );
-            }
         }
 
         auto uuid() const {
@@ -74,12 +71,8 @@ namespace Editor::Models {
             emit this->viewChanged();
         }
 
-        QQmlListProperty<ExecutionTarget> getExecutionTargets() {
-            return QQmlListProperty<ExecutionTarget>( this, &this->_executionTargets );
-        }
-
-        auto executionTargets() const {
-            return this->_executionTargets;
+        auto executionTargets() {
+            return &this->_executionTargets;
         }
 
       signals:
@@ -94,6 +87,6 @@ namespace Editor::Models {
         bool _enabled;
         QString _shortcut;
         ProfileView* _view;
-        QList<ExecutionTarget*> _executionTargets;
+        ExecutionTargetListModel _executionTargets;
     };
 } // namespace Editor::Models

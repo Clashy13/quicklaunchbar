@@ -436,6 +436,6 @@ namespace Editor::Serializer {
                  { ExecutionTargetSerializer::nameStr, executionTarget->name() },
                  { ExecutionTargetSerializer::executionTargetsStr,
                    ExecutionTargetSerializer::deserializedSingleExecutionTargets(
-                       executionTarget->executionTargets() ) } };
+                       executionTarget->executionTargets()->list() ) } };
     }
 } // namespace Editor::Serializer

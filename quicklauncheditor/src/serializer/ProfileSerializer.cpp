@@ -31,15 +31,15 @@ namespace Editor::Serializer {
 
     QJsonObject ProfileSerializer::deserialized( Models::Profile* profile ) {
         const auto view = static_cast<Shared::Models::Profile::ProfileView>( *profile->view() );
-        return {
-            { ProfileSerializer::uuidStr, profile->uuid().toString( QUuid::WithoutBraces ) },
-            { ProfileSerializer::nameStr, profile->name() },
-            { ProfileSerializer::enabledStr, profile->enabled() },
-            { ProfileSerializer::shortcutStr, profile->shortcut() },
-            { ProfileSerializer::viewStr,
-              Shared::Serializer::ProfileViewSerializer::deserialized( view ) },
-            { ProfileSerializer::executionTargetsStr,
-              ProfileSerializer::deserializedExecutionTargets( profile->executionTargets() ) } };
+        return { { ProfileSerializer::uuidStr, profile->uuid().toString( QUuid::WithoutBraces ) },
+                 { ProfileSerializer::nameStr, profile->name() },
+                 { ProfileSerializer::enabledStr, profile->enabled() },
+                 { ProfileSerializer::shortcutStr, profile->shortcut() },
+                 { ProfileSerializer::viewStr,
+                   Shared::Serializer::ProfileViewSerializer::deserialized( view ) },
+                 { ProfileSerializer::executionTargetsStr,
+                   ProfileSerializer::deserializedExecutionTargets(
+                       profile->executionTargets()->list() ) } };
     }
 
     std::optional<Models::ProfileView*>

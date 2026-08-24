@@ -10,5 +10,8 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenFileExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenUrlExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GroupExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ItemListModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetListModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTargetListModel.hpp
     PARENT_SCOPE
 )
