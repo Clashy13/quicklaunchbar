@@ -12,7 +12,7 @@ namespace Shared::Models::ExecutionTarget {
         explicit IconSource( const IconSource::Type type, const QString& value )
             : type( type ), value( value ) {}
 
-        bool operator==( const IconSource& other ) {
+        bool operator==( const IconSource& other ) const {
             return this->type == other.type && this->value == other.value;
         }
 
