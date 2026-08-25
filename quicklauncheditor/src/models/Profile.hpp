@@ -15,7 +15,7 @@ namespace Editor::Models {
         Q_PROPERTY( QString name READ name WRITE setName NOTIFY nameChanged );
         Q_PROPERTY( bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged );
         Q_PROPERTY( QString shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged );
-        Q_PROPERTY( ProfileView* view READ view WRITE setView NOTIFY viewChanged );
+        Q_PROPERTY( ProfileView* view READ view CONSTANT );
         Q_PROPERTY( ExecutionTargetListModel* executionTargets READ executionTargets CONSTANT )
 
       public:
@@ -40,8 +40,10 @@ namespace Editor::Models {
         }
 
         void setName( const QString& name ) {
-            this->_name = name;
-            emit this->nameChanged();
+            if ( this->_name != name ) {
+                this->_name = name;
+                emit this->nameChanged();
+            }
         }
 
         auto enabled() const {
@@ -49,8 +51,10 @@ namespace Editor::Models {
         }
 
         void setEnabled( const bool enabled ) {
-            this->_enabled = enabled;
-            emit this->enabledChanged();
+            if ( this->_enabled != enabled ) {
+                this->_enabled = enabled;
+                emit this->enabledChanged();
+            }
         }
 
         auto shortcut() const {
@@ -58,17 +62,14 @@ namespace Editor::Models {
         }
 
         void setShortcut( const QString& shortcut ) {
-            this->_shortcut = shortcut;
-            emit this->shortcutChanged();
+            if ( this->_shortcut != shortcut ) {
+                this->_shortcut = shortcut;
+                emit this->shortcutChanged();
+            }
         }
 
         auto view() const {
             return this->_view;
-        }
-
-        void setView( ProfileView* view ) {
-            this->_view = view;
-            emit this->viewChanged();
         }
 
         auto executionTargets() {
@@ -79,7 +80,6 @@ namespace Editor::Models {
         void nameChanged();
         void enabledChanged();
         void shortcutChanged();
-        void viewChanged();
 
       private:
         QUuid _uuid;

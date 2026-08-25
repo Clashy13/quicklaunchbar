@@ -29,8 +29,10 @@ namespace Editor::Models {
         }
 
         void setCommand( const QString& command ) {
-            this->_command = command;
-            emit this->commandChanged();
+            if ( this->_command != command ) {
+                this->_command = command;
+                emit this->commandChanged();
+            }
         }
 
         auto iconFilePath() const {
@@ -38,8 +40,10 @@ namespace Editor::Models {
         }
 
         void setIconFilePath( const QString& iconFilePath ) {
-            this->_iconFilePath = iconFilePath;
-            emit this->iconFilePathChanged();
+            if ( this->_iconFilePath != iconFilePath ) {
+                this->_iconFilePath = iconFilePath;
+                emit this->iconFilePathChanged();
+            }
         }
 
       signals:

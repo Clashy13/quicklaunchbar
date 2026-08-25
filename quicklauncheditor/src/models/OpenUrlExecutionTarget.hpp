@@ -29,8 +29,10 @@ namespace Editor::Models {
         }
 
         void setUrl( const QUrl& url ) {
-            this->_url = url;
-            emit this->urlChanged();
+            if ( this->_url != url ) {
+                this->_url = url;
+                emit this->urlChanged();
+            }
         }
 
         auto iconFilePath() const {
@@ -38,8 +40,10 @@ namespace Editor::Models {
         }
 
         void setIconFilePath( const QString& iconFilePath ) {
-            this->_iconFilePath = iconFilePath;
-            emit this->iconFilePathChanged();
+            if ( this->_iconFilePath != iconFilePath ) {
+                this->_iconFilePath = iconFilePath;
+                emit this->iconFilePathChanged();
+            }
         }
 
       signals:

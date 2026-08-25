@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ExecutionTarget.hpp"
-#include "shared/models/IconSource.hpp"
 
 #include <QUrl>
 
@@ -12,8 +11,6 @@ namespace Editor::Models {
         Q_OBJECT
 
       public:
-        using IconSource = Shared::Models::ExecutionTarget::IconSource;
-
         explicit SingleExecutionTarget( const QUuid& uuid,
                                         const QString& name,
                                         const Type type,

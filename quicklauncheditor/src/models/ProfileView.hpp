@@ -41,8 +41,10 @@ namespace Editor::Models {
         }
 
         void setMode( const Mode mode ) {
-            this->mode = mode;
-            emit this->modeChanged();
+            if ( this->mode != mode ) {
+                this->mode = mode;
+                emit this->modeChanged();
+            }
         }
 
         auto getPosition() const {
@@ -50,8 +52,10 @@ namespace Editor::Models {
         }
 
         void setPosition( const Position position ) {
-            this->position = position;
-            emit this->positionChanged();
+            if ( this->position != position ) {
+                this->position = position;
+                emit this->positionChanged();
+            }
         }
 
         auto getOffset() const {
@@ -59,8 +63,10 @@ namespace Editor::Models {
         }
 
         void setOffset( const qsizetype offset ) {
-            this->offset = offset;
-            emit this->offsetChanged();
+            if ( this->offset != offset ) {
+                this->offset = offset;
+                emit this->offsetChanged();
+            }
         }
 
         auto getWrapMode() const {
@@ -68,8 +74,10 @@ namespace Editor::Models {
         }
 
         void setWrapMode( const WrapMode wrapMode ) {
-            this->wrapMode = wrapMode;
-            emit this->wrapModeChanged();
+            if ( this->wrapMode != wrapMode ) {
+                this->wrapMode = wrapMode;
+                emit this->wrapModeChanged();
+            }
         }
 
         auto getFlowDirection() const {
@@ -77,8 +85,10 @@ namespace Editor::Models {
         }
 
         void setFlowDirection( const FlowDirection flowDirection ) {
-            this->flowDirection = flowDirection;
-            emit this->flowDirectionChanged();
+            if ( this->flowDirection != flowDirection ) {
+                this->flowDirection = flowDirection;
+                emit this->flowDirectionChanged();
+            }
         }
 
       signals:

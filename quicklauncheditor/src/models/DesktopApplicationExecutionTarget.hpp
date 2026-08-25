@@ -14,6 +14,8 @@ namespace Editor::Models {
         Q_PROPERTY( QString command READ command WRITE setCommand NOTIFY commandChanged );
         Q_PROPERTY( QUrl iconUrl READ iconUrl NOTIFY iconUrlChanged );
 
+        using IconSource = Shared::Models::ExecutionTarget::IconSource;
+
       public:
         explicit DesktopApplicationExecutionTarget( const QUuid& uuid,
                                                     const QString& name,
@@ -30,8 +32,10 @@ namespace Editor::Models {
         }
 
         void setCommand( const QString& command ) {
-            this->_command = command;
-            emit this->commandChanged();
+            if ( this->_command != command ) {
+                this->_command = command;
+                emit this->commandChanged();
+            }
         }
 
         auto iconUrl() const {
@@ -43,10 +47,12 @@ namespace Editor::Models {
         }
 
         void setIconSource( const IconSource& iconSource ) {
-            this->_iconSource = iconSource;
-            this->_iconUrl =
-                Shared::Serializer::IconSourceSerializer::iconSourceToUrl( iconSource );
-            emit this->iconUrlChanged();
+            if ( this->_iconSource != iconSource ) {
+                this->_iconSource = iconSource;
+                this->_iconUrl =
+                    Shared::Serializer::IconSourceSerializer::iconSourceToUrl( iconSource );
+                emit this->iconUrlChanged();
+            }
         }
 
       signals:
