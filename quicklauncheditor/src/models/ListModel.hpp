@@ -4,27 +4,30 @@
 
 namespace Editor::Models {
 
-    template <typename T> class ItemListModel : public QAbstractListModel {
+    template <typename T> class ListModel : public QAbstractListModel {
 
       public:
         enum Roles { ItemRole = Qt::UserRole + 1 };
 
-        explicit ItemListModel( const QList<T*>& items, QObject* parent = nullptr )
+        explicit ListModel( const QList<T*>& items, QObject* parent = nullptr )
             : QAbstractListModel( parent ), _items( items ) {}
 
         int rowCount( const QModelIndex& parent = {} ) const override {
-            if ( parent.isValid() )
+            if ( parent.isValid() ) {
                 return 0;
-
-            return this->_items.size();
+            } else {
+                return this->_items.size();
+            }
         }
 
         QVariant data( const QModelIndex& index, int role ) const override {
-            if ( !index.isValid() || index.row() < 0 || index.row() >= this->_items.size() )
+            if ( !index.isValid() || index.row() < 0 || index.row() >= this->_items.size() ) {
                 return {};
+            }
 
-            if ( role == ItemRole )
+            if ( role == ItemRole ) {
                 return QVariant::fromValue( this->_items.at( index.row() ) );
+            }
 
             return {};
         }
@@ -35,19 +38,19 @@ namespace Editor::Models {
 
         void addItem( T* item ) {
             const int row = this->_items.size();
-
-            beginInsertRows( {}, row, row );
+            this->beginInsertRows( {}, row, row );
             this->_items.append( item );
-            endInsertRows();
+            this->endInsertRows();
         }
 
-        Q_INVOKABLE void removeItem( int row ) {
-            if ( row < 0 || row >= this->_items.size() )
+        Q_INVOKABLE void removeItem( qsizetype index ) {
+            if ( index < 0 || index >= this->_items.size() ) {
                 return;
+            }
 
-            beginRemoveRows( {}, row, row );
-            this->_items.removeAt( row );
-            endRemoveRows();
+            this->beginRemoveRows( {}, index, index );
+            this->_items.removeAt( index );
+            this->endRemoveRows();
         }
 
         auto& list() const {

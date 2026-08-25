@@ -1,25 +1,25 @@
 #pragma once
 
-#include "ItemListModel.hpp"
+#include "ListModel.hpp"
 #include "SingleExecutionTarget.hpp"
 
 namespace Editor::Models {
 
-    class SingleExecutionTargetListModel : public ItemListModel<SingleExecutionTarget> {
+    class SingleExecutionTargetListModel : public ListModel<SingleExecutionTarget> {
         Q_OBJECT
 
       public:
         explicit SingleExecutionTargetListModel(
             const QList<SingleExecutionTarget*>& executionTargets,
             QObject* parent = nullptr )
-            : ItemListModel( executionTargets, parent ) {}
+            : ListModel( executionTargets, parent ) {}
 
         Q_INVOKABLE void addItem( SingleExecutionTarget* item ) {
-            ItemListModel<SingleExecutionTarget>::addItem( item );
+            ListModel<SingleExecutionTarget>::addItem( item );
         }
 
         Q_INVOKABLE void removeItem( int row ) {
-            ItemListModel<SingleExecutionTarget>::removeItem( row );
+            ListModel<SingleExecutionTarget>::removeItem( row );
         }
     };
 

@@ -1,26 +1,26 @@
 #pragma once
 
 #include "ExecutionTarget.hpp"
-#include "ItemListModel.hpp"
+#include "ListModel.hpp"
 
 #include <qtmetamacros.h>
 
 namespace Editor::Models {
 
-    class ExecutionTargetListModel : public ItemListModel<ExecutionTarget> {
+    class ExecutionTargetListModel : public ListModel<ExecutionTarget> {
         Q_OBJECT
 
       public:
         explicit ExecutionTargetListModel( const QList<ExecutionTarget*>& executionTargets,
                                            QObject* parent = nullptr )
-            : ItemListModel( executionTargets, parent ) {}
+            : ListModel( executionTargets, parent ) {}
 
         Q_INVOKABLE void addItem( ExecutionTarget* item ) {
-            ItemListModel<ExecutionTarget>::addItem( item );
+            ListModel<ExecutionTarget>::addItem( item );
         }
 
         Q_INVOKABLE void removeItem( int row ) {
-            ItemListModel<ExecutionTarget>::removeItem( row );
+            ListModel<ExecutionTarget>::removeItem( row );
         }
     };
 
