@@ -20,29 +20,24 @@ namespace Editor::Models {
                                           const QString& iconFilePath,
                                           QObject* parent = nullptr )
             : SingleExecutionTarget( uuid, name, type, parent ), _filePath( filePath ),
-              _iconFilePath( iconFilePath ) {}
+              _iconFilePath( iconFilePath ), _savedFilePath( filePath ),
+              _savedIconFilePath( iconFilePath ) {}
 
         auto filePath() const {
             return this->_filePath;
         }
 
-        void setFilePath( const QString& filePath ) {
-            if ( this->_filePath != filePath ) {
-                this->_filePath = filePath;
-                emit this->filePathChanged();
-            }
-        }
+        void setFilePath( const QString& filePath );
 
         auto iconFilePath() const {
             return this->_iconFilePath;
         }
 
-        void setIconFilePath( const QString& iconFilePath ) {
-            if ( this->_iconFilePath != iconFilePath ) {
-                this->_iconFilePath = iconFilePath;
-                emit this->iconFilePathChanged();
-            }
-        }
+        void setIconFilePath( const QString& iconFilePath );
+
+        bool isEdited() override;
+
+        void saveEdited() override;
 
       signals:
         void filePathChanged();
@@ -51,5 +46,7 @@ namespace Editor::Models {
       private:
         QString _filePath;
         QString _iconFilePath;
+        QString _savedFilePath;
+        QString _savedIconFilePath;
     };
 } // namespace Editor::Models

@@ -11,16 +11,24 @@ namespace Editor::Models {
       public:
         explicit SingleExecutionTargetListModel(
             const QList<SingleExecutionTarget*>& executionTargets,
-            QObject* parent = nullptr )
-            : ListModel( executionTargets, parent ) {}
+            QObject* parent = nullptr );
 
         Q_INVOKABLE void addItem( SingleExecutionTarget* item ) {
             ListModel<SingleExecutionTarget>::addItem( item );
+            emit this->editedChanged( true );
         }
 
-        Q_INVOKABLE void removeItem( int row ) {
-            ListModel<SingleExecutionTarget>::removeItem( row );
-        }
+        Q_INVOKABLE void removeItem( int row );
+
+        bool isEdited() const;
+
+        void saveEdited();
+
+      signals:
+        void editedChanged( const bool edited );
+
+      private:
+        QList<QUuid> _uuidList;
     };
 
 } // namespace Editor::Models

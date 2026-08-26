@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ExecutionTarget.hpp"
 #include "SingleExecutionTarget.hpp"
 
 #include <QUrl>
@@ -22,29 +23,24 @@ namespace Editor::Models {
                                          const QString& iconFilePath,
                                          QObject* parent = nullptr )
             : SingleExecutionTarget( uuid, name, type, parent ), _command( command ),
-              _iconFilePath( iconFilePath ) {}
+              _iconFilePath( iconFilePath ), _savedCommand( command ),
+              _savedIconFilePath( iconFilePath ) {}
 
         auto command() const {
             return this->_command;
         }
 
-        void setCommand( const QString& command ) {
-            if ( this->_command != command ) {
-                this->_command = command;
-                emit this->commandChanged();
-            }
-        }
+        void setCommand( const QString& command );
 
         auto iconFilePath() const {
             return this->_iconFilePath;
         }
 
-        void setIconFilePath( const QString& iconFilePath ) {
-            if ( this->_iconFilePath != iconFilePath ) {
-                this->_iconFilePath = iconFilePath;
-                emit this->iconFilePathChanged();
-            }
-        }
+        void setIconFilePath( const QString& iconFilePath );
+
+        bool isEdited() override;
+
+        void saveEdited() override;
 
       signals:
         void commandChanged();
@@ -53,5 +49,7 @@ namespace Editor::Models {
       private:
         QString _command;
         QString _iconFilePath;
+        QString _savedCommand;
+        QString _savedIconFilePath;
     };
 } // namespace Editor::Models

@@ -25,18 +25,14 @@ namespace Editor::Models {
                                                     QObject* parent = nullptr )
             : SingleExecutionTarget( uuid, name, type, parent ), _command( command ),
               _iconSource( iconSource ),
-              _iconUrl( Shared::Serializer::IconSourceSerializer::iconSourceToUrl( iconSource ) ) {}
+              _iconUrl( Shared::Serializer::IconSourceSerializer::iconSourceToUrl( iconSource ) ),
+              _savedCommand( command ), _savedIconSource( iconSource ) {}
 
         auto command() const {
             return this->_command;
         }
 
-        void setCommand( const QString& command ) {
-            if ( this->_command != command ) {
-                this->_command = command;
-                emit this->commandChanged();
-            }
-        }
+        void setCommand( const QString& command );
 
         auto iconUrl() const {
             return this->_iconUrl;
@@ -46,14 +42,11 @@ namespace Editor::Models {
             return this->_iconSource;
         }
 
-        void setIconSource( const IconSource& iconSource ) {
-            if ( this->_iconSource != iconSource ) {
-                this->_iconSource = iconSource;
-                this->_iconUrl =
-                    Shared::Serializer::IconSourceSerializer::iconSourceToUrl( iconSource );
-                emit this->iconUrlChanged();
-            }
-        }
+        void setIconSource( const IconSource& iconSource );
+
+        bool isEdited() override;
+
+        void saveEdited() override;
 
       signals:
         void commandChanged();
@@ -63,5 +56,7 @@ namespace Editor::Models {
         QString _command;
         IconSource _iconSource;
         QUrl _iconUrl;
+        QString _savedCommand;
+        IconSource _savedIconSource;
     };
 } // namespace Editor::Models

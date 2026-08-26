@@ -57,7 +57,7 @@ namespace Editor::Models {
             return this->_items;
         }
 
-      private:
+      protected:
         QList<T*> _items;
     };
 

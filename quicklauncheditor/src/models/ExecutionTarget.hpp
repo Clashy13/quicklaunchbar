@@ -22,7 +22,7 @@ namespace Editor::Models {
                                   const QString& name,
                                   const Type type,
                                   QObject* parent )
-            : QObject( parent ), _uuid( uuid ), _name( name ), _type( type ) {}
+            : QObject( parent ), _uuid( uuid ), _name( name ), _type( type ), _savedName( name ) {}
 
         virtual ~ExecutionTarget() = 0;
 
@@ -38,6 +38,7 @@ namespace Editor::Models {
             if ( this->_name != name ) {
                 this->_name = name;
                 emit this->nameChanged();
+                emit this->editedChanged( this->_name != this->_savedName );
             }
         }
 
@@ -45,13 +46,23 @@ namespace Editor::Models {
             return this->_type;
         }
 
+        virtual bool isEdited() {
+            return this->_name != this->_savedName;
+        }
+
+        virtual void saveEdited() {
+            this->_savedName = this->_name;
+        }
+
       signals:
         void nameChanged();
+        void editedChanged( const bool edited );
 
       private:
         QUuid _uuid;
         QString _name;
         Type _type;
+        QString _savedName;
     };
 
     inline ExecutionTarget::~ExecutionTarget() = default;

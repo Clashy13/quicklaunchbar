@@ -22,29 +22,23 @@ namespace Editor::Models {
                                          const QString& iconFilePath,
                                          QObject* parent = nullptr )
             : SingleExecutionTarget( uuid, name, type, parent ), _url( url ),
-              _iconFilePath( iconFilePath ) {}
+              _iconFilePath( iconFilePath ), _savedUrl( url ), _savedIconFilePath( iconFilePath ) {}
 
         auto url() const {
             return this->_url;
         }
 
-        void setUrl( const QUrl& url ) {
-            if ( this->_url != url ) {
-                this->_url = url;
-                emit this->urlChanged();
-            }
-        }
+        void setUrl( const QUrl& url );
 
         auto iconFilePath() const {
             return this->_iconFilePath;
         }
 
-        void setIconFilePath( const QString& iconFilePath ) {
-            if ( this->_iconFilePath != iconFilePath ) {
-                this->_iconFilePath = iconFilePath;
-                emit this->iconFilePathChanged();
-            }
-        }
+        void setIconFilePath( const QString& iconFilePath );
+
+        bool isEdited() override;
+
+        void saveEdited() override;
 
       signals:
         void urlChanged();
@@ -53,5 +47,7 @@ namespace Editor::Models {
       private:
         QUrl _url;
         QString _iconFilePath;
+        QUrl _savedUrl;
+        QString _savedIconFilePath;
     };
 } // namespace Editor::Models

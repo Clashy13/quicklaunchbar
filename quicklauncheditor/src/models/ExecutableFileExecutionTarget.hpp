@@ -24,40 +24,30 @@ namespace Editor::Models {
                                                 const QString& iconFilePath,
                                                 QObject* parent = nullptr )
             : SingleExecutionTarget( uuid, name, type, parent ), _filePath( filePath ),
-              _arguments( arguments ), _iconFilePath( iconFilePath ) {}
+              _arguments( arguments ), _iconFilePath( iconFilePath ), _savedFilePath( filePath ),
+              _savedArguments( arguments ), _savedIconFilePath( iconFilePath ) {}
 
         auto filePath() {
             return this->_filePath;
         }
 
-        void setFilePath( const QString& filePath ) {
-            if ( this->_filePath != filePath ) {
-                this->_filePath = filePath;
-                emit this->filePathChanged();
-            }
-        }
+        void setFilePath( const QString& filePath );
 
         auto arguments() const {
             return this->_arguments;
         }
 
-        void setArguments( const QString& arguments ) {
-            if ( this->_arguments != arguments ) {
-                this->_arguments = arguments;
-                emit this->argumentsChanged();
-            }
-        }
+        void setArguments( const QString& arguments );
 
         auto iconFilePath() const {
             return this->_iconFilePath;
         }
 
-        void setIconFilePath( const QString& iconFilePath ) {
-            if ( this->_iconFilePath != iconFilePath ) {
-                this->_iconFilePath = iconFilePath;
-                emit this->iconFilePathChanged();
-            }
-        }
+        void setIconFilePath( const QString& iconFilePath );
+
+        bool isEdited() override;
+
+        void saveEdited() override;
 
       signals:
         void filePathChanged();
@@ -68,5 +58,9 @@ namespace Editor::Models {
         QString _filePath;
         QString _arguments;
         QString _iconFilePath;
+
+        QString _savedFilePath;
+        QString _savedArguments;
+        QString _savedIconFilePath;
     };
 } // namespace Editor::Models

@@ -25,11 +25,7 @@ namespace Editor::Models {
                           const QString& shortcut,
                           ProfileView* view,
                           const QList<ExecutionTarget*>& executionTargets,
-                          QObject* parent = nullptr )
-            : QObject( parent ), _uuid( uuid ), _name( name ), _enabled( enabled ),
-              _shortcut( shortcut ), _view( view ), _executionTargets( executionTargets, this ) {
-            this->_view->setParent( this );
-        }
+                          QObject* parent = nullptr );
 
         auto uuid() const {
             return this->_uuid;
@@ -39,34 +35,19 @@ namespace Editor::Models {
             return this->_name;
         }
 
-        void setName( const QString& name ) {
-            if ( this->_name != name ) {
-                this->_name = name;
-                emit this->nameChanged();
-            }
-        }
+        void setName( const QString& name );
 
         auto enabled() const {
             return this->_enabled;
         }
 
-        void setEnabled( const bool enabled ) {
-            if ( this->_enabled != enabled ) {
-                this->_enabled = enabled;
-                emit this->enabledChanged();
-            }
-        }
+        void setEnabled( const bool enabled );
 
         auto shortcut() const {
             return this->_shortcut;
         }
 
-        void setShortcut( const QString& shortcut ) {
-            if ( this->_shortcut != shortcut ) {
-                this->_shortcut = shortcut;
-                emit this->shortcutChanged();
-            }
-        }
+        void setShortcut( const QString& shortcut );
 
         auto view() const {
             return this->_view;
@@ -76,10 +57,15 @@ namespace Editor::Models {
             return &this->_executionTargets;
         }
 
+        bool isEdited() const;
+
+        void saveEdited();
+
       signals:
         void nameChanged();
         void enabledChanged();
         void shortcutChanged();
+        void editedChanged( const bool edited );
 
       private:
         QUuid _uuid;
@@ -88,5 +74,9 @@ namespace Editor::Models {
         QString _shortcut;
         ProfileView* _view;
         ExecutionTargetListModel _executionTargets;
+
+        QString _savedName;
+        bool _savedEnabled;
+        QString _savedShortcut;
     };
 } // namespace Editor::Models

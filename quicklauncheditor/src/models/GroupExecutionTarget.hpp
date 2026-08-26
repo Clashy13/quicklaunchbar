@@ -21,10 +21,24 @@ namespace Editor::Models {
                                        const QList<SingleExecutionTarget*>& executionTargets,
                                        QObject* parent = nullptr )
             : ExecutionTarget( uuid, name, type, parent ),
-              _executionTargets( executionTargets, this ) {}
+              _executionTargets( executionTargets, this ) {
+            this->connect( &this->_executionTargets,
+                           &SingleExecutionTargetListModel::editedChanged,
+                           this,
+                           [ this ]( const bool edited ) { emit this->editedChanged( edited ); } );
+        }
 
         auto executionTargets() {
             return &this->_executionTargets;
+        }
+
+        bool isEdited() override {
+            return ExecutionTarget::isEdited() || this->_executionTargets.isEdited();
+        }
+
+        void saveEdited() override {
+            ExecutionTarget::saveEdited();
+            this->_executionTargets.saveEdited();
         }
 
       private:
