@@ -67,12 +67,6 @@ Window {
         }
     }
 
-    onActiveChanged: {
-        if (!active && !root.suppressInactive) {
-            backend.hideWindow();
-        }
-    }
-
     function transformWindow() {
         const currentScreenRect = backend.currentScreenRect();
         root.x = currentScreenRect.x;
@@ -94,18 +88,6 @@ Window {
         root.raise();
         if(!root.active) {
             root.requestActivate();
-        }
-        root.suppressInactive = true;
-        suppressInactiveTimer.restart();
-    }
-
-    property bool suppressInactive: false
-
-    Timer {
-        id: suppressInactiveTimer
-        interval: 100
-        onTriggered: {
-            root.suppressInactive = false
         }
     }
 }
