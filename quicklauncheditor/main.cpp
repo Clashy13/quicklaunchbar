@@ -1,3 +1,5 @@
+#include "shared/iconprovider/FileIconProvider.hpp"
+#include "shared/iconprovider/ThemeIconProvider.hpp"
 #include "src/QmlRegistration.hpp"
 
 #include <QGuiApplication>
@@ -5,10 +7,13 @@
 
 int main( int argc, char* argv[] ) {
     QGuiApplication app( argc, argv );
-
-    QQmlApplicationEngine engine;
+    app.setApplicationName( "Quick Launch Editor" );
 
     Editor::QmlRegistration::registerTypes();
+
+    QQmlApplicationEngine engine;
+    engine.addImageProvider( "fileicons", new Shared::IconProvider::FileIconProvider );
+    engine.addImageProvider( "themeicons", new Shared::IconProvider::ThemeIconProvider );
 
     const QUrl url( QStringLiteral( "qrc:/Main.qml" ) );
     QObject::connect(

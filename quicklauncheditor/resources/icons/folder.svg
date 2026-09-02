@@ -1,0 +1,19 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M15 30
+       Q15 22 20 22
+       H48
+       L58 34
+       H100
+       Q105 34 105 42
+       V92
+       Q105 100 100 100
+       H20
+       Q15 100 15 92
+       Z"
+    fill="true"
+    stroke="#000000"
+    stroke-width="10"
+    stroke-linejoin="round"
+  />
+</svg>

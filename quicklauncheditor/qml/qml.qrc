@@ -2,5 +2,33 @@
     <qresource prefix="/">
         <file>utils/Colors.qml</file>
         <file>utils/Icons.qml</file>
+        <file>components/ScrollList.qml</file>
+        <file>components/Button.qml</file>
+        <file>sections/AddProfileOption.qml</file>
+        <file>sections/ProfileList.qml</file>
+        <file>sections/GeneralProfileSettings.qml</file>
+        <file>components/CheckBox.qml</file>
+        <file>components/SelectorBar.qml</file>
+        <file>components/PositionSelectionField.qml</file>
+        <file>components/OffsetSelector.qml</file>
+        <file>components/ShortcutEdit.qml</file>
+        <file>sections/ProfileTitleBar.qml</file>
+        <file>components/FormTextBox.qml</file>
+        <file>sections/ExecutionTargetList.qml</file>
+        <file>executiontargets/ExecutionTargetBox.qml</file>
+        <file>executiontargets/DesktopApplicationContent.qml</file>
+        <file>executiontargets/CommandContent.qml</file>
+        <file>components/TextField.qml</file>
+        <file>executiontargets/OpenFileContent.qml</file>
+        <file>components/IconImageSelector.qml</file>
+        <file>executiontargets/ExecutableFileContent.qml</file>
+        <file>executiontargets/OpenUrlContent.qml</file>
+        <file>executiontargets/GroupContent.qml</file>
+        <file>components/AddExecutionTargetOption.qml</file>
+        <file>executiontargets/SingleExecutionTargetBox.qml</file>
+        <file>components/Text.qml</file>
+        <file>sections/SaveBar.qml</file>
+        <file>components/DesktopApplicationSelectionWindow.qml</file>
+        <file>components/ToolWindow.qml</file>
     </qresource>
 </RCC>

@@ -1,0 +1,19 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Trash can body -->
+  <rect x="30" y="24" width="60" height="80" rx="10"
+        fill="none" stroke="#000000" stroke-width="12"/>
+
+  <!-- Lid -->
+  <path d="M22 24 H98"
+        fill="none" stroke="#000000" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Handle -->
+  <path d="M45 16 H75"
+        fill="none" stroke="#000000" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Two lines -->
+  <path d="M50 44 V86"
+        fill="none" stroke="#000000" stroke-width="12" stroke-linecap="round"/>
+  <path d="M70 44 V86"
+        fill="none" stroke="#000000" stroke-width="12" stroke-linecap="round"/>
+</svg>

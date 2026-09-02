@@ -22,5 +22,8 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetListModel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTargetListModel.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTargetListModel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileListModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileListModel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DesktopApplication.hpp
     PARENT_SCOPE
 )

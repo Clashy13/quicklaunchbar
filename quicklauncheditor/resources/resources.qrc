@@ -1,5 +1,25 @@
 <RCC>
     <qresource prefix="/resources">
+        <file>icons/checkbox_unchecked.svg</file>
+        <file>icons/checkbox_checked.svg</file>
+        <file>icons/icon_view_mode.svg</file>
+        <file>icons/list_view_mode.svg</file>
+        <file>icons/bottom_position.svg</file>
+        <file>icons/top_position.svg</file>
+        <file>icons/top_left_position.svg</file>
+        <file>icons/bottom_right_position.svg</file>
+        <file>icons/bottom_left_position.svg</file>
+        <file>icons/top_right_position.svg</file>
+        <file>icons/right_position.svg</file>
+        <file>icons/left_position.svg</file>
         <file>icons/plus.svg</file>
+        <file>icons/scroll_wrap_mode.svg</file>
+        <file>icons/grid_wrap_mode.svg</file>
+        <file>icons/flow_right.svg</file>
+        <file>icons/flow_down.svg</file>
+        <file>icons/edit.svg</file>
+        <file>icons/trash_can.svg</file>
+        <file>icons/folder.svg</file>
+        <file>icons/search.svg</file>
     </qresource>
 </RCC>

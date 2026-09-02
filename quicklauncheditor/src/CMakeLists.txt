@@ -1,5 +1,8 @@
 add_subdirectory(models)
 add_subdirectory(serializer)
+add_subdirectory(manager)
+add_subdirectory(qmlelements)
+add_subdirectory(provider)
 
 set(SOURCES
     ${SOURCES}
