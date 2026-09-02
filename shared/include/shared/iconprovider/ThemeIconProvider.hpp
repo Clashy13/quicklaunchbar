@@ -18,6 +18,12 @@ namespace Shared::IconProvider {
                 *size = s;
             }
 
+            if ( icon.isNull() ) {
+                QPixmap result( s );
+                result.fill( Qt::transparent );
+                return result;
+            }
+
             return icon.pixmap( s );
         }
     };
