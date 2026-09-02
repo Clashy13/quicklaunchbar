@@ -12,7 +12,7 @@ namespace Editor::Models {
         Q_OBJECT
 
         Q_PROPERTY( QString name READ name WRITE setName NOTIFY nameChanged );
-        Q_PROPERTY( Type type READ type WRITE setType NOTIFY typeChanged );
+        Q_PROPERTY( Type type READ type CONSTANT );
 
       public:
         using Type = Shared::Models::ExecutionTarget::Type;
@@ -22,7 +22,7 @@ namespace Editor::Models {
                                   const QString& name,
                                   const Type type,
                                   QObject* parent )
-            : QObject( parent ), _uuid( uuid ), _name( name ), _type( type ) {}
+            : QObject( parent ), _uuid( uuid ), _name( name ), _type( type ), _savedName( name ) {}
 
         virtual ~ExecutionTarget() = 0;
 
@@ -35,27 +35,34 @@ namespace Editor::Models {
         }
 
         void setName( const QString& name ) {
-            this->_name = name;
-            emit this->nameChanged();
+            if ( this->_name != name ) {
+                this->_name = name;
+                emit this->nameChanged();
+                emit this->editedChanged( this->_name != this->_savedName );
+            }
         }
 
         auto type() const {
             return this->_type;
         }
 
-        void setType( const Type type ) {
-            this->_type = type;
-            emit this->typeChanged();
+        virtual bool isEdited() {
+            return this->_name != this->_savedName;
+        }
+
+        virtual void saveEdited() {
+            this->_savedName = this->_name;
         }
 
       signals:
         void nameChanged();
-        void typeChanged();
+        void editedChanged( const bool edited );
 
       private:
         QUuid _uuid;
         QString _name;
         Type _type;
+        QString _savedName;
     };
 
     inline ExecutionTarget::~ExecutionTarget() = default;

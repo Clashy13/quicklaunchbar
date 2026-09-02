@@ -12,7 +12,13 @@ namespace Shared::IconProvider {
         QPixmap
         requestPixmap( const QString& id, QSize* size, const QSize& requestedSize ) override {
             QIcon icon = QIcon::fromTheme( id );
-            return icon.pixmap( requestedSize );
+
+            QSize s = requestedSize.isValid() ? requestedSize : QSize( 64, 64 );
+            if ( size ) {
+                *size = s;
+            }
+
+            return icon.pixmap( s );
         }
     };
 } // namespace Shared::IconProvider

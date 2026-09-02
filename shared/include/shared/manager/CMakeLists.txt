@@ -1,0 +1,5 @@
+set(SOURCES
+    ${SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/ThemeManager.hpp
+    PARENT_SCOPE
+)

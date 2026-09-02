@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ExecutionTarget.hpp"
+#include "ExecutionTargetListModel.hpp"
 #include "ProfileView.hpp"
 
 #include <QQmlListProperty>
@@ -14,9 +15,8 @@ namespace Editor::Models {
         Q_PROPERTY( QString name READ name WRITE setName NOTIFY nameChanged );
         Q_PROPERTY( bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged );
         Q_PROPERTY( QString shortcut READ shortcut WRITE setShortcut NOTIFY shortcutChanged );
-        Q_PROPERTY( ProfileView* view READ view WRITE setView NOTIFY viewChanged );
-        Q_PROPERTY(
-            QQmlListProperty<ExecutionTarget> executionTargets READ getExecutionTargets CONSTANT )
+        Q_PROPERTY( ProfileView* view READ view CONSTANT );
+        Q_PROPERTY( ExecutionTargetListModel* executionTargets READ executionTargets CONSTANT )
 
       public:
         explicit Profile( const QUuid& uuid,
@@ -25,14 +25,7 @@ namespace Editor::Models {
                           const QString& shortcut,
                           ProfileView* view,
                           const QList<ExecutionTarget*>& executionTargets,
-                          QObject* parent = nullptr )
-            : QObject( parent ), _uuid( uuid ), _name( name ), _enabled( enabled ),
-              _shortcut( shortcut ), _view( view ), _executionTargets( executionTargets ) {
-            this->_view->setParent( this );
-            for ( auto executionTarget : this->_executionTargets ) {
-                executionTarget->setParent( this );
-            }
-        }
+                          QObject* parent = nullptr );
 
         auto uuid() const {
             return this->_uuid;
@@ -42,51 +35,37 @@ namespace Editor::Models {
             return this->_name;
         }
 
-        void setName( const QString& name ) {
-            this->_name = name;
-            emit this->nameChanged();
-        }
+        void setName( const QString& name );
 
         auto enabled() const {
             return this->_enabled;
         }
 
-        void setEnabled( const bool enabled ) {
-            this->_enabled = enabled;
-            emit this->enabledChanged();
-        }
+        void setEnabled( const bool enabled );
 
         auto shortcut() const {
             return this->_shortcut;
         }
 
-        void setShortcut( const QString& shortcut ) {
-            this->_shortcut = shortcut;
-            emit this->shortcutChanged();
-        }
+        void setShortcut( const QString& shortcut );
 
         auto view() const {
             return this->_view;
         }
 
-        void setView( ProfileView* view ) {
-            this->_view = view;
-            emit this->viewChanged();
+        auto executionTargets() {
+            return &this->_executionTargets;
         }
 
-        QQmlListProperty<ExecutionTarget> getExecutionTargets() {
-            return QQmlListProperty<ExecutionTarget>( this, &this->_executionTargets );
-        }
+        bool isEdited() const;
 
-        auto executionTargets() const {
-            return this->_executionTargets;
-        }
+        void saveEdited();
 
       signals:
         void nameChanged();
         void enabledChanged();
         void shortcutChanged();
-        void viewChanged();
+        void editedChanged( const bool edited );
 
       private:
         QUuid _uuid;
@@ -94,6 +73,10 @@ namespace Editor::Models {
         bool _enabled;
         QString _shortcut;
         ProfileView* _view;
-        QList<ExecutionTarget*> _executionTargets;
+        ExecutionTargetListModel _executionTargets;
+
+        QString _savedName;
+        bool _savedEnabled;
+        QString _savedShortcut;
     };
 } // namespace Editor::Models

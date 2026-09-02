@@ -1,0 +1,23 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pen body -->
+  <path
+    d="M14 106 L23 86 L91 14 L106 29 L38 101 Z"
+    fill="none"
+    stroke="black"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Filled tip -->
+  <path
+    d="M14 106 L23 86 L38 101 Z"
+    fill="black"
+  />
+
+  <!-- Filled end -->
+  <path
+    d="M91 14 L106 29 L98 37 L83 22 Z"
+    fill="black"
+  />
+</svg>

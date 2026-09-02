@@ -1,12 +1,29 @@
 set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/Profile.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Command.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Profile.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileView.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileView.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTarget.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DesktopApplicationExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DesktopApplicationExecutionTarget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CommandExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CommandExecutionTarget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutableFileExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutableFileExecutionTarget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenFileExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenFileExecutionTarget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenUrlExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenUrlExecutionTarget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GroupExecutionTarget.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ListModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetListModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetListModel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTargetListModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleExecutionTargetListModel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileListModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProfileListModel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DesktopApplication.hpp
     PARENT_SCOPE
 )

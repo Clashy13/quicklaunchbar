@@ -34,52 +34,43 @@ namespace Editor::Models {
                                                                        position,
                                                                        offset,
                                                                        wrapMode,
-                                                                       flowDirection ) {}
+                                                                       flowDirection ),
+              _savedMode( mode ), _savedPosition( position ), _savedOffset( offset ),
+              _savedWrapMode( wrapMode ), _savedFlowDirection( flowDirection ) {}
 
         auto getMode() const {
             return this->mode;
         }
 
-        void setMode( const Mode mode ) {
-            this->mode = mode;
-            emit this->modeChanged();
-        }
+        void setMode( const Mode mode );
 
         auto getPosition() const {
             return this->position;
         }
 
-        void setPosition( const Position position ) {
-            this->position = position;
-            emit this->positionChanged();
-        }
+        void setPosition( const Position position );
 
         auto getOffset() const {
             return this->offset;
         }
 
-        void setOffset( const qsizetype offset ) {
-            this->offset = offset;
-            emit this->offsetChanged();
-        }
+        void setOffset( const qsizetype offset );
 
         auto getWrapMode() const {
             return this->wrapMode;
         }
 
-        void setWrapMode( const WrapMode wrapMode ) {
-            this->wrapMode = wrapMode;
-            emit this->wrapModeChanged();
-        }
+        void setWrapMode( const WrapMode wrapMode );
 
         auto getFlowDirection() const {
             return this->flowDirection;
         }
 
-        void setFlowDirection( const FlowDirection flowDirection ) {
-            this->flowDirection = flowDirection;
-            emit this->flowDirectionChanged();
-        }
+        void setFlowDirection( const FlowDirection flowDirection );
+
+        bool isEdited();
+
+        void saveEdited();
 
       signals:
         void modeChanged();
@@ -87,5 +78,14 @@ namespace Editor::Models {
         void offsetChanged();
         void wrapModeChanged();
         void flowDirectionChanged();
+
+        void editedChanged( const bool edited );
+
+      private:
+        Mode _savedMode;
+        Position _savedPosition;
+        qsizetype _savedOffset;
+        WrapMode _savedWrapMode;
+        FlowDirection _savedFlowDirection;
     };
 } // namespace Editor::Models

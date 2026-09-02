@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SingleExecutionTarget.hpp"
+#include "SingleExecutionTargetListModel.hpp"
 
 #include <QQmlListProperty>
 
@@ -8,8 +9,10 @@ namespace Editor::Models {
 
     class GroupExecutionTarget : public ExecutionTarget {
 
-        Q_PROPERTY( QQmlListProperty<SingleExecutionTarget> executionTargets READ
-                        getExecutionTargets CONSTANT )
+        Q_OBJECT
+
+        Q_PROPERTY(
+            SingleExecutionTargetListModel* executionTargets READ executionTargets CONSTANT )
 
       public:
         explicit GroupExecutionTarget( const QUuid& uuid,
@@ -17,21 +20,28 @@ namespace Editor::Models {
                                        const Type type,
                                        const QList<SingleExecutionTarget*>& executionTargets,
                                        QObject* parent = nullptr )
-            : ExecutionTarget( uuid, name, type, parent ), _executionTargets( executionTargets ) {
-            for ( auto executionTarget : this->_executionTargets ) {
-                executionTarget->setParent( this );
-            }
+            : ExecutionTarget( uuid, name, type, parent ),
+              _executionTargets( executionTargets, this ) {
+            this->connect( &this->_executionTargets,
+                           &SingleExecutionTargetListModel::editedChanged,
+                           this,
+                           [ this ]( const bool edited ) { emit this->editedChanged( edited ); } );
         }
 
-        QQmlListProperty<SingleExecutionTarget> getExecutionTargets() {
-            return QQmlListProperty<SingleExecutionTarget>( this, &this->_executionTargets );
+        auto executionTargets() {
+            return &this->_executionTargets;
         }
 
-        auto executionTargets() const {
-            return this->_executionTargets;
+        bool isEdited() override {
+            return ExecutionTarget::isEdited() || this->_executionTargets.isEdited();
+        }
+
+        void saveEdited() override {
+            ExecutionTarget::saveEdited();
+            this->_executionTargets.saveEdited();
         }
 
       private:
-        QList<SingleExecutionTarget*> _executionTargets;
+        SingleExecutionTargetListModel _executionTargets;
     };
 } // namespace Editor::Models

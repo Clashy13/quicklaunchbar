@@ -1,9 +1,28 @@
-#include <QApplication>
-#include <QMainWindow>
+#include "shared/iconprovider/FileIconProvider.hpp"
+#include "shared/iconprovider/ThemeIconProvider.hpp"
+#include "src/QmlRegistration.hpp"
+
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 int main( int argc, char* argv[] ) {
-    QApplication a( argc, argv );
-    QMainWindow w;
-    w.show();
-    return a.exec();
+    QGuiApplication app( argc, argv );
+    app.setApplicationName( "Quick Launch Editor" );
+
+    Editor::QmlRegistration::registerTypes();
+
+    QQmlApplicationEngine engine;
+    engine.addImageProvider( "fileicons", new Shared::IconProvider::FileIconProvider );
+    engine.addImageProvider( "themeicons", new Shared::IconProvider::ThemeIconProvider );
+
+    const QUrl url( QStringLiteral( "qrc:/Main.qml" ) );
+    QObject::connect(
+        &engine,
+        &QQmlApplicationEngine::objectCreationFailed,
+        &app,
+        []() { QCoreApplication::exit( -1 ); },
+        Qt::QueuedConnection );
+    engine.load( url );
+
+    return app.exec();
 }

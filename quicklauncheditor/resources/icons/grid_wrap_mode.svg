@@ -1,0 +1,13 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Row 1 -->
+  <rect x="10" y="10" width="45" height="25" rx="6" fill="#000000"/>
+  <rect x="65" y="10" width="45" height="25" rx="6" fill="#000000"/>
+
+  <!-- Row 2 -->
+  <rect x="10" y="47.5" width="45" height="25" rx="6" fill="#000000"/>
+  <rect x="65" y="47.5" width="45" height="25" rx="6" fill="#000000"/>
+
+  <!-- Row 3 -->
+  <rect x="10" y="85" width="45" height="25" rx="6" fill="#000000"/>
+  <rect x="65" y="85" width="45" height="25" rx="6" fill="#000000"/>
+</svg>

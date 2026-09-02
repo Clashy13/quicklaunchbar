@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Backend.hpp"
-#include "ThemeManager.hpp"
+#include "shared/manager/ThemeManager.hpp"
 
 class QmlRegistration {
   public:
@@ -20,6 +20,11 @@ class QmlRegistration {
                                   QmlRegistration::versionMajor,
                                   QmlRegistration::versionMinor,
                                   "Constants" );
+        qmlRegisterSingletonInstance( QmlRegistration::uri,
+                                      QmlRegistration::versionMajor,
+                                      QmlRegistration::versionMinor,
+                                      "Theme",
+                                      ThemeManager::instance() );
     }
 
     static void registerThemeManager( ThemeManager* themeManager ) {
