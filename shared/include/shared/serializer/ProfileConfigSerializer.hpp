@@ -6,9 +6,10 @@ namespace Shared::Serializer {
 
     class ProfileConfigSerializer {
 
-      protected:
+      public:
         static QString filePath();
 
+      protected:
         static constexpr auto profilesStr = "profiles";
     };
 } // namespace Shared::Serializer
