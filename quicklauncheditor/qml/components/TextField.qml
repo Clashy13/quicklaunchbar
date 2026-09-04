@@ -11,6 +11,7 @@ TextField {
     color: Colors.text
     padding: 6
 
+    palette.placeholderText: Colors.textDisabled
     background: Rectangle {
         color: Colors.primary.textInput
         border.width: 1
