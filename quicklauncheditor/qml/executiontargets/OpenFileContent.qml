@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 import QuickLaunchEditor 1.0
 
@@ -38,12 +39,38 @@ Item {
             text: "File Path"
         }
 
-        TextField {
+        RowLayout {
             Layout.fillWidth: true
-            text: executionTarget.filePath
 
-            onTextEdited: {
-                executionTarget.filePath = text;
+            TextField {
+                Layout.fillWidth: true
+                text: executionTarget.filePath
+
+                onTextEdited: {
+                    executionTarget.filePath = text;
+                }
+            }
+
+            Button {
+                Layout.preferredWidth: height
+                Layout.fillHeight: true
+                icon.source: Icons.folder
+                onClicked: {
+                    fileDialog.open();
+                }
+            }
+
+            FileDialog {
+                id: fileDialog
+
+                title: "Select a file"
+                nameFilters: [
+                    "All files (*)"
+                ]
+
+                onAccepted: {
+                    executionTarget.filePath = new URL(selectedFile).pathname;;
+                }
             }
         }
 
