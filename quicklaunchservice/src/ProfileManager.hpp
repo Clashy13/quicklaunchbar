@@ -3,7 +3,9 @@
 #include "models/Profile.hpp"
 #include "shared/models/Command.hpp"
 
+#include <QHotkey>
 #include <QObject>
+#include <memory>
 
 namespace Service {
 
@@ -23,10 +25,14 @@ namespace Service {
         void toggleProfile( Models::Profile* profile );
 
       private:
+        void reloadProfiles();
+
         void connectShortcutsToProfiles();
 
         static void startProcesses( const QList<Command>& commands, const QList<QUrl>& uriList );
 
-        const QList<Models::Profile*> _profiles;
+        QList<Models::Profile*> _profiles;
+        std::vector<std::unique_ptr<QHotkey>> _hotkeys;
+        QList<QMetaObject::Connection> _shortcutConnections;
     };
 } // namespace Service
