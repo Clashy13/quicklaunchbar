@@ -27,14 +27,6 @@ class QmlRegistration {
                                       ThemeManager::instance() );
     }
 
-    static void registerThemeManager( ThemeManager* themeManager ) {
-        qmlRegisterSingletonInstance( QmlRegistration::uri,
-                                      QmlRegistration::versionMajor,
-                                      QmlRegistration::versionMinor,
-                                      "Theme",
-                                      themeManager );
-    }
-
   private:
     static constexpr auto uri = "QuickLaunchService";
     static const int versionMajor = 1;
