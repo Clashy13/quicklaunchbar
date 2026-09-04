@@ -43,7 +43,6 @@ Item {
             Layout.fillWidth: true
 
             TextField {
-                id: iconFilePathEdit
                 Layout.fillWidth: true
                 text: executionTarget.filePath
 
