@@ -89,5 +89,24 @@ Window {
         if(!root.active) {
             root.requestActivate();
         }
+        root.suppressInactive = true;
+        suppressInactiveTimer.restart();
+    }
+
+    onActiveChanged: {
+        if (!active && !root.suppressInactive
+        ) { 
+            backend.hideWindow();
+        }
+    }
+
+    property bool suppressInactive: false
+
+    Timer {
+        id: suppressInactiveTimer
+        interval: 200
+        onTriggered: {
+            root.suppressInactive = false
+        }
     }
 }
