@@ -11,31 +11,33 @@ find_package(Boost 1.83.0 REQUIRED)
 
 qt_standard_project_setup()
 
-add_subdirectory(../shared shared_build)
+if(NOT TARGET shared)
+    add_subdirectory(../shared shared_build)
+endif()
 add_subdirectory(src)
 
-qt_add_executable(appquicklaunchservice
+qt_add_executable(quicklaunchservice
     main.cpp
     main.qrc
     qml/qml.qrc
     ${SOURCES}
 )
 
-set_target_properties(appquicklaunchservice PROPERTIES
+set_target_properties(quicklaunchservice PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
 
-target_include_directories(appquicklaunchservice PUBLIC src)
+target_include_directories(quicklaunchservice PUBLIC src)
 
-target_link_libraries(appquicklaunchservice
+target_link_libraries(quicklaunchservice
     PRIVATE Qt6::Quick Qt6::Widgets QHotkey::QHotkey Boost::boost shared
 )
 
 include(GNUInstallDirs)
-install(TARGETS appquicklaunchservice
+install(TARGETS quicklaunchservice
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

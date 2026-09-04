@@ -13,7 +13,9 @@ find_package(Boost 1.83.0 REQUIRED)
 
 qt_standard_project_setup()
 
-add_subdirectory(../shared shared_build)
+if(NOT TARGET shared)
+    add_subdirectory(../shared shared_build)
+endif()
 add_subdirectory(src)
 
 qt_add_executable(quicklauncheditor
