@@ -7,7 +7,6 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/Backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileManager.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileManager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ThemeManager.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/QmlRegistration.hpp
     PARENT_SCOPE
 )
