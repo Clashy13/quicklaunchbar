@@ -7,7 +7,6 @@ project(quicklaunchservice VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.8.3 REQUIRED COMPONENTS Quick Widgets)
-find_package(Boost 1.83.0 REQUIRED)
 
 qt_standard_project_setup()
 
@@ -33,7 +32,7 @@ set_target_properties(quicklaunchservice PROPERTIES
 target_include_directories(quicklaunchservice PUBLIC src)
 
 target_link_libraries(quicklaunchservice
-    PRIVATE Qt6::Quick Qt6::Widgets QHotkey::QHotkey Boost::boost shared
+    PRIVATE Qt6::Quick Qt6::Widgets QHotkey::QHotkey shared
 )
 
 include(GNUInstallDirs)
