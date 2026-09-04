@@ -12,7 +12,7 @@ Window {
     visible: false
     color: "transparent"
 
-    flags: Qt.BypassWindowManagerHint | Qt.WindowStaysOnTopHint
+    flags: Qt.Tool | Qt.BypassWindowManagerHint | Qt.WindowStaysOnTopHint
 
     Rectangle {
         id: content
