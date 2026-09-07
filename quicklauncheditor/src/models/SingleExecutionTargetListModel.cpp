@@ -57,6 +57,7 @@ namespace Editor::Models {
         this->_uuidList.clear();
         this->_uuidList.reserve( this->_items.size() );
         for ( const auto& executionTarget : this->_items ) {
+            executionTarget->saveEdited();
             this->_uuidList.push_back( executionTarget->uuid() );
         }
     }
