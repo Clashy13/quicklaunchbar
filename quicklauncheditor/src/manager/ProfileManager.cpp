@@ -6,6 +6,9 @@ namespace Editor::Manager {
     ProfileManager::ProfileManager( QObject* parent )
         : QObject( parent ),
           _profiles( Editor::Serializer::ProfileConfigSerializer::load(), this ) {
+        if ( this->_profiles.rowCount() ) {
+            this->_currentProfileIndex = 0;
+        }
         this->connect( &this->_profiles,
                        &Models::ProfileListModel::editedChanged,
                        this,

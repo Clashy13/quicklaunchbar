@@ -66,7 +66,7 @@ namespace Editor::Manager {
         void saveEdited();
 
         Models::ProfileListModel _profiles;
-        qsizetype _currentProfileIndex = 0;
+        qsizetype _currentProfileIndex = -1;
         bool _edited = false;
     };
 } // namespace Editor::Manager
