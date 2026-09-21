@@ -1,6 +1,7 @@
 #include "Backend.hpp"
 
 #include "ProfileManager.hpp"
+#include "SingleSessionManager.hpp"
 #include "shared/models/ProfileView.hpp"
 
 #include <QCursor>
@@ -18,6 +19,10 @@ namespace Service {
                  &ProfileManager::toggleProfile,
                  this,
                  &Backend::toggleProfile );
+        connect( SingleSessionManager::instance(),
+                 &SingleSessionManager::refreshed,
+                 &this->_profileManager,
+                 &ProfileManager::reloadProfiles );
     }
 
     void Backend::launchExecutionTargetByIndex( const qsizetype index ) {

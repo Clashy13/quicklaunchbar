@@ -17,6 +17,8 @@ namespace Service {
       public:
         ProfileManager( QObject* parent = nullptr );
 
+        void reloadProfiles();
+
         void launchExecutionTargetByIndex( const qsizetype index );
 
         Models::Profile* currentProfile;
@@ -25,8 +27,6 @@ namespace Service {
         void toggleProfile( Models::Profile* profile );
 
       private:
-        void reloadProfiles();
-
         void connectShortcutsToProfiles();
 
         static void startProcesses( const QList<Command>& commands, const QList<QUrl>& uriList );

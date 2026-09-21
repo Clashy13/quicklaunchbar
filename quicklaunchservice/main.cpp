@@ -1,4 +1,5 @@
 #include "QmlRegistration.hpp"
+#include "SingleSessionManager.hpp"
 #include "shared/iconprovider/FileIconProvider.hpp"
 #include "shared/iconprovider/ThemeIconProvider.hpp"
 
@@ -7,6 +8,10 @@
 
 int main( int argc, char* argv[] ) {
     QGuiApplication app( argc, argv );
+
+    if ( !Service::SingleSessionManager::instance()->tryAcquire( app ) ) {
+        return 0;
+    }
 
     QmlRegistration::registerTypes();
 

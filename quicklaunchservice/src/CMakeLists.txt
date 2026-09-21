@@ -8,5 +8,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileManager.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/QmlRegistration.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleSessionManager.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleSessionManager.cpp
     PARENT_SCOPE
 )
