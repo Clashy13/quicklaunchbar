@@ -117,10 +117,6 @@ namespace Service {
         return screenHeight - offset * 2;
     }
 
-    void Backend::maskWindow( QQuickWindow* window, QRect contentRect ) {
-        window->setMask( QRegion( contentRect ) );
-    }
-
     QRect Backend::currentScreenRect() const {
         if ( this->_currentProfileScreen ) {
             return this->_currentProfileScreen->geometry();

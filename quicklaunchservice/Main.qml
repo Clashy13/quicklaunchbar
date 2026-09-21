@@ -14,12 +14,23 @@ Window {
 
     flags: Qt.Tool | Qt.BypassWindowManagerHint | Qt.WindowStaysOnTopHint
 
+    MouseArea {
+        anchors.fill: parent
+        onPressed: {
+            backend.hideWindow()
+        }
+    }
+
     Rectangle {
         id: content
         radius: 10
         border.width: 2
         border.color: Colors.secondary
         color: Colors.primary
+
+        MouseArea {
+            anchors.fill: parent
+        }
 
         Column {
             id: column
@@ -38,7 +49,6 @@ Window {
                     profileViewLoader.item.launchedExecutionTargetByIndex.connect(backend.launchExecutionTargetByIndex);
                     root.transformWindow();
                     root.positionContent();
-                    backend.maskWindow(root,Qt.rect(content.x,content.y,content.width,content.height));
                     root.showWindow();
                     content.forceActiveFocus();
                 }
