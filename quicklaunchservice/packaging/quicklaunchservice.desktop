@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=quicklaunchservice
+Comment=Launch your profiles via shortcuts.
+Exec=env QT_QPA_PLATFORM=xcb /opt/quicklaunchbar/bin/quicklaunchservice
+Terminal=false
+NoDisplay=true
+Categories=Utility
+X-GNOME-Autostart-enabled=true
