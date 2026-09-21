@@ -3,7 +3,7 @@
 QuickLaunchBar is a desktop application where you can edit, open and launch custom collections of applications with global shorcuts (similar to Alt-Tab).
 
 ![](images/QuickLaunchEditor_example.png "Title")
-![](images/QuicklaunchService_example.png "Title")
+![](images/QuickLaunchService_example.png "Title")
 
 ## Features
 
