@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Quick Launch Editor
+Comment=Edit your profiles, launchable via shortcuts.
+Exec=env QT_QPA_PLATFORM=xcb QT_QUICK_CONTROLS_STYLE=Fusion /opt/quicklaunchbar/bin/quicklauncheditor
+Icon=quicklauncheditor
+Terminal=false
+Categories=Utility

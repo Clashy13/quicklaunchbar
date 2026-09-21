@@ -49,9 +49,9 @@ namespace Editor {
                                           "DesktopApplicationProvider",
                                           Provider::LinuxApplicationProvider::instance() );
 #elif defined( Q_OS_WIN )
-            qWarning() << "DesktopApplicationProvider for Windows not yet implemented"
+            qWarning().noquote() << "DesktopApplicationProvider for Windows not yet implemented"
 #elif defined( Q_OS_MACOS )
-            qWarning() << "DesktopApplicationProvider for macOS not yet implemented"
+            qWarning().noquote() << "DesktopApplicationProvider for macOS not yet implemented"
 #endif
         }
 

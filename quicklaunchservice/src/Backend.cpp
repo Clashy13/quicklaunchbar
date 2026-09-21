@@ -1,6 +1,7 @@
 #include "Backend.hpp"
 
 #include "ProfileManager.hpp"
+#include "SingleSessionManager.hpp"
 #include "shared/models/ProfileView.hpp"
 
 #include <QCursor>
@@ -18,6 +19,10 @@ namespace Service {
                  &ProfileManager::toggleProfile,
                  this,
                  &Backend::toggleProfile );
+        connect( SingleSessionManager::instance(),
+                 &SingleSessionManager::refreshed,
+                 &this->_profileManager,
+                 &ProfileManager::reloadProfiles );
     }
 
     void Backend::launchExecutionTargetByIndex( const qsizetype index ) {
@@ -115,10 +120,6 @@ namespace Service {
                                 ? this->_profileManager.currentProfile->view().offset
                                 : 0;
         return screenHeight - offset * 2;
-    }
-
-    void Backend::maskWindow( QQuickWindow* window, QRect contentRect ) {
-        window->setMask( QRegion( contentRect ) );
     }
 
     QRect Backend::currentScreenRect() const {

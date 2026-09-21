@@ -1,6 +1,7 @@
 #include "ProfileManager.hpp"
 
 #include "../serializer/ProfileConfigSerializer.hpp"
+#include "ServiceManager.hpp"
 
 namespace Editor::Manager {
     ProfileManager::ProfileManager( QObject* parent )
@@ -102,6 +103,7 @@ namespace Editor::Manager {
         this->saveEdited();
         this->setEdited( false );
         Serializer::ProfileConfigSerializer::save( this->_profiles.list() );
+        ServiceManager::instance()->sendRefresh();
     }
 
     void ProfileManager::discardEdited() {

@@ -3,7 +3,6 @@
 #include "serializer/ProfileConfigSerializer.hpp"
 
 #include <QDesktopServices>
-#include <QFileSystemWatcher>
 #include <QProcess>
 #include <QUrl>
 #include <memory>
@@ -12,19 +11,6 @@ namespace Service {
 
     ProfileManager::ProfileManager( QObject* parent ) : QObject( parent ) {
         this->reloadProfiles();
-
-        QFileSystemWatcher* watcher = new QFileSystemWatcher( this );
-        watcher->addPath( Serializer::ProfileConfigSerializer::filePath() );
-
-        connect( watcher,
-                 &QFileSystemWatcher::fileChanged,
-                 this,
-                 [ this, watcher ]( const QString& path ) {
-                     this->reloadProfiles();
-                     if ( !watcher->files().contains( path ) ) {
-                         watcher->addPath( path );
-                     }
-                 } );
     }
 
     void ProfileManager::launchExecutionTargetByIndex( const qsizetype index ) {

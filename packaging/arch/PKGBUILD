@@ -1,0 +1,26 @@
+pkgname=quicklaunchbar
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Project containing quicklauncheditor and quicklaunchservice"
+arch=('x86_64')
+license=('custom')
+
+depends=(
+    'qt6-base'
+)
+
+makedepends=(
+    'cmake'
+    'ninja'
+)
+
+build() {
+    cd /src
+    cmake -S . -B build-arch -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt -DQUICKLAUNCHBAR_QT_DEPLOY=OFF -DCMAKE_INSTALL_PREFIX=/opt/quicklaunchbar
+    cmake --build build-arch
+}
+
+package() {
+    cd /src
+    DESTDIR="$pkgdir" cmake --install build-arch
+}

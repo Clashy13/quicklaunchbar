@@ -28,8 +28,6 @@ namespace Service {
 
         Q_INVOKABLE qsizetype availableContentHeight();
 
-        Q_INVOKABLE void maskWindow( QQuickWindow* window, QRect contentRect );
-
         Q_INVOKABLE QRect currentScreenRect() const;
 
       signals:

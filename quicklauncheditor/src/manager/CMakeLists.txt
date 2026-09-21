@@ -4,5 +4,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ProfileManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetManager.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ExecutionTargetManager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ServiceManager.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SingleSessionManager.hpp
     PARENT_SCOPE
 )
