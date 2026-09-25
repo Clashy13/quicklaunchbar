@@ -5,10 +5,6 @@ pkgdesc="Project containing quicklauncheditor and quicklaunchservice"
 arch=('x86_64')
 license=('custom')
 
-depends=(
-    'qt6-base'
-)
-
 makedepends=(
     'cmake'
     'ninja'
