@@ -69,11 +69,22 @@ Rectangle {
                         root.removed();
                     }
                 }
+
+                Button {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: height
+                    style: Colors.Secondary
+                    text: root.executionTarget.collapsed ? '▼' : '▲'
+                    onPressed: {
+                        root.executionTarget.collapsed = !root.executionTarget.collapsed
+                    }
+                }
             }
         }
 
         Loader {
             id: contentLoader
+            visible: !root.executionTarget.collapsed
             Layout.fillWidth: true
             Layout.preferredHeight: item ? item.implicitHeight : 0
             sourceComponent: root.sourceContentComponent
