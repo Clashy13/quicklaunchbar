@@ -25,13 +25,6 @@ qt_add_executable(quicklaunchservice
     ${SOURCES}
 )
 
-set_target_properties(quicklaunchservice PROPERTIES
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
-
 target_include_directories(quicklaunchservice PUBLIC src)
 
 target_link_libraries(quicklaunchservice
@@ -68,8 +61,6 @@ if(QUICKLAUNCHBAR_QT_DEPLOY)
 
     install(SCRIPT ${deploy_script})
 else()
-    set(deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_quicklaunchservice.cmake")
-
     install(
         DIRECTORY /opt/qt/lib/
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -87,19 +78,4 @@ else()
         DIRECTORY /opt/qt/qml/
         DESTINATION qml
     )
-
-    file(GENERATE
-        OUTPUT "${deploy_script}"
-        CONTENT "
-include(\"${QT_DEPLOY_SUPPORT}\")
-
-qt_deploy_runtime_dependencies(
-    EXECUTABLE \"\${QT_DEPLOY_BIN_DIR}/$<TARGET_FILE_NAME:quicklaunchservice>\"
-    GENERATE_QT_CONF
-    VERBOSE
-)
-    "
-    )
-
-    install(SCRIPT "${deploy_script}")
 endif()
