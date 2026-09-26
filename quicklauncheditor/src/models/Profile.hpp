@@ -3,12 +3,13 @@
 #include "ExecutionTarget.hpp"
 #include "ExecutionTargetListModel.hpp"
 #include "ProfileView.hpp"
+#include "UuidModel.hpp"
 
 #include <QQmlListProperty>
 
 namespace Editor::Models {
 
-    class Profile : public QObject {
+    class Profile : public UuidModel {
 
         Q_OBJECT
 
@@ -26,10 +27,6 @@ namespace Editor::Models {
                           ProfileView* view,
                           const QList<ExecutionTarget*>& executionTargets,
                           QObject* parent = nullptr );
-
-        auto uuid() const {
-            return this->_uuid;
-        }
 
         auto name() const {
             return this->_name;
@@ -57,9 +54,9 @@ namespace Editor::Models {
             return &this->_executionTargets;
         }
 
-        bool isEdited() const;
+        virtual bool isEdited() const override;
 
-        void saveEdited();
+        virtual void saveEdited() override;
 
       signals:
         void nameChanged();
@@ -68,7 +65,6 @@ namespace Editor::Models {
         void editedChanged( const bool edited );
 
       private:
-        QUuid _uuid;
         QString _name;
         bool _enabled;
         QString _shortcut;

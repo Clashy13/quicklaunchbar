@@ -45,9 +45,9 @@ namespace Editor::Models {
 
         void setIconFilePath( const QString& iconFilePath );
 
-        bool isEdited() override;
+        virtual bool isEdited() const override;
 
-        void saveEdited() override;
+        virtual void saveEdited() override;
 
       signals:
         void filePathChanged();

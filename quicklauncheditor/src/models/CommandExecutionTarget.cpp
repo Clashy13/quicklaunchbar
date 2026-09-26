@@ -18,7 +18,7 @@ namespace Editor::Models {
         }
     }
 
-    bool CommandExecutionTarget::isEdited() {
+    bool CommandExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_command != this->_savedCommand ||
                this->_iconFilePath != this->_savedIconFilePath;
     }

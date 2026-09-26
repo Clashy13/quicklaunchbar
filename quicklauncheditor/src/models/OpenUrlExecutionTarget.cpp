@@ -18,7 +18,7 @@ namespace Editor::Models {
         }
     }
 
-    bool OpenUrlExecutionTarget::isEdited() {
+    bool OpenUrlExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_url != this->_savedUrl ||
                this->_iconFilePath != this->_savedIconFilePath;
     }

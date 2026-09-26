@@ -12,30 +12,33 @@ namespace Editor::Models {
         Q_OBJECT
 
       public:
-        explicit ProfileListModel( const QList<Profile*>& profiles, QObject* parent = nullptr );
+        explicit ProfileListModel( const QList<Profile*>& profiles, QObject* parent = nullptr )
+            : ListModel( profiles, parent ) {}
 
         Q_INVOKABLE Profile* itemAt( const qsizetype index ) const {
             return this->_items.at( index );
         }
 
-        void setItems( const QList<Profile*>& profiles );
-
-        Q_INVOKABLE void addItem( Profile* item ) {
-            ListModel<Profile>::addItem( item );
+        void setItems( const QList<Profile*>& profiles ) {
+            this->beginResetModel();
+            this->_items = profiles;
+            this->endResetModel();
+            for ( const auto& profile : profiles ) {
+                QObject::connect( profile,
+                                  &Profile::editedChanged,
+                                  this,
+                                  &ListModelBase::emitEditedChanged );
+            }
             emit this->editedChanged( true );
         }
 
-        Q_INVOKABLE void removeItem( qsizetype index );
+        Q_INVOKABLE void addItem( Profile* item ) {
+            ListModel<Profile>::addItem( item );
+        }
 
-        bool isEdited() const;
-
-        void saveEdited();
-
-      signals:
-        void editedChanged( const bool edited );
-
-      private:
-        QList<QUuid> _uuidList;
+        Q_INVOKABLE void removeItem( qsizetype index ) {
+            ListModel<Profile>::removeItem( index );
+        }
     };
 
 } // namespace Editor::Models

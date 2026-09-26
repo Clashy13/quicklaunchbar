@@ -32,11 +32,11 @@ namespace Editor::Models {
             return &this->_executionTargets;
         }
 
-        bool isEdited() override {
+        virtual bool isEdited() const override {
             return ExecutionTarget::isEdited() || this->_executionTargets.isEdited();
         }
 
-        void saveEdited() override {
+        virtual void saveEdited() override {
             ExecutionTarget::saveEdited();
             this->_executionTargets.saveEdited();
         }

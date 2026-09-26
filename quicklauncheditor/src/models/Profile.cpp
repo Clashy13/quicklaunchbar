@@ -1,5 +1,7 @@
 #include "Profile.hpp"
 
+#include "UuidModel.hpp"
+
 namespace Editor::Models {
     Profile::Profile( const QUuid& uuid,
                       const QString& name,
@@ -8,9 +10,9 @@ namespace Editor::Models {
                       ProfileView* view,
                       const QList<ExecutionTarget*>& executionTargets,
                       QObject* parent )
-        : QObject( parent ), _uuid( uuid ), _name( name ), _enabled( enabled ),
-          _shortcut( shortcut ), _view( view ), _executionTargets( executionTargets, this ),
-          _savedName( name ), _savedEnabled( enabled ), _savedShortcut( shortcut ) {
+        : UuidModel( uuid, parent ), _name( name ), _enabled( enabled ), _shortcut( shortcut ),
+          _view( view ), _executionTargets( executionTargets, this ), _savedName( name ),
+          _savedEnabled( enabled ), _savedShortcut( shortcut ) {
         this->_view->setParent( this );
         this->connect( &this->_executionTargets,
                        &ExecutionTargetListModel::editedChanged,

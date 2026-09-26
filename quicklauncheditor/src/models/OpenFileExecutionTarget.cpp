@@ -18,7 +18,7 @@ namespace Editor::Models {
         }
     }
 
-    bool OpenFileExecutionTarget::isEdited() {
+    bool OpenFileExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_filePath != this->_savedFilePath ||
                this->_iconFilePath != this->_savedIconFilePath;
     }

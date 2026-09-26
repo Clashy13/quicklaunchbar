@@ -20,7 +20,7 @@ namespace Editor::Models {
         }
     }
 
-    bool DesktopApplicationExecutionTarget::isEdited() {
+    bool DesktopApplicationExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_command != this->_savedCommand ||
                this->_iconSource != this->_savedIconSource;
     }

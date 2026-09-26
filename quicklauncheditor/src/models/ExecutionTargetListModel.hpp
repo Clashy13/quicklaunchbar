@@ -12,24 +12,16 @@ namespace Editor::Models {
 
       public:
         explicit ExecutionTargetListModel( const QList<ExecutionTarget*>& executionTargets,
-                                           QObject* parent = nullptr );
+                                           QObject* parent = nullptr )
+            : ListModel( executionTargets, parent ) {}
 
         Q_INVOKABLE void addItem( ExecutionTarget* item ) {
             ListModel<ExecutionTarget>::addItem( item );
-            emit this->editedChanged( true );
         }
 
-        Q_INVOKABLE void removeItem( qsizetype index );
-
-        bool isEdited() const;
-
-        void saveEdited();
-
-      signals:
-        void editedChanged( const bool edited );
-
-      private:
-        QList<QUuid> _uuidList;
+        Q_INVOKABLE void removeItem( qsizetype index ) {
+            ListModel<ExecutionTarget>::removeItem( index );
+        }
     };
 
 } // namespace Editor::Models
