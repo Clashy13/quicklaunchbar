@@ -14,7 +14,6 @@
         <file>components/ShortcutEdit.qml</file>
         <file>sections/ProfileTitleBar.qml</file>
         <file>components/FormTextBox.qml</file>
-        <file>sections/ExecutionTargetList.qml</file>
         <file>executiontargets/ExecutionTargetBox.qml</file>
         <file>executiontargets/DesktopApplicationContent.qml</file>
         <file>executiontargets/CommandContent.qml</file>
@@ -30,5 +29,10 @@
         <file>sections/SaveBar.qml</file>
         <file>components/DesktopApplicationSelectionWindow.qml</file>
         <file>components/ToolWindow.qml</file>
+        <file>sections/ExecutionTargetListView.qml</file>
+        <file>components/ExecutionTargetList.qml</file>
+        <file>components/SingleExecutionTargetList.qml</file>
+        <file>components/ExecutionTargetListBase.qml</file>
+        <file>components/ScrollListBase.qml</file>
     </qresource>
 </RCC>

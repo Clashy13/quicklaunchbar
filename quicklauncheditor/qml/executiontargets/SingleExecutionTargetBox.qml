@@ -91,11 +91,19 @@ Rectangle {
         }
     }
 
+    function desktopApplicationContent() {
+        return desktopApplicationContent;
+    }
+
     Component {
         id: desktopApplicationContent
         DesktopApplicationContent {
             executionTarget: root.executionTarget
         }
+    }
+
+    function executableFileContent() {
+        return executableFileContent;
     }
 
     Component {
@@ -105,6 +113,10 @@ Rectangle {
         }
     }
 
+    function commandContent() {
+        return commandContent;
+    }
+
     Component {
         id: commandContent
         CommandContent {
@@ -112,11 +124,19 @@ Rectangle {
         }
     }
 
+    function openFileContent() {
+        return openFileContent;
+    }
+
     Component {
         id: openFileContent
         OpenFileContent {
             executionTarget: root.executionTarget
         }
+    }
+
+    function openUrlContent() {
+        return openUrlContent;
     }
 
     Component {

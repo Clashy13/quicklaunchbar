@@ -130,7 +130,7 @@ Window {
                             }
                         }
 
-                        ExecutionTargetList {
+                        ExecutionTargetListView {
                             Layout.fillHeight: true
                             Layout.fillWidth: true
                             Layout.preferredHeight: 160

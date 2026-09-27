@@ -13,38 +13,32 @@ Item {
     Item {
         id: content
         anchors.fill: parent
-        // clip: true
 
-        ScrollList {
+        ScrollListBase {
             id: scrollview
             anchors.fill: parent
             anchors.margins: 0
             anchors.rightMargin: scrollview.contentHeight > scrollview.height ? 1 : 0
-            model: {
-                if(ProfileManager.currentProfile) {
-                    return ProfileManager.currentProfile.executionTargets
-                } else {
-                    return []
-                }
-            }
-            onModelChanged: {
-                scrollview.reload();
-                scrollview.moveTo(0,0);
-            }
+            repeater: executionTargetList.repeater
             spacing: -2
-            delegate: ExecutionTargetBox {
-                required property int index
-                required property var item 
-                executionTarget: item
+
+            ExecutionTargetList {
+                id: executionTargetList
                 width: scrollview.contentHeight > scrollview.height ? scrollview.width - 10 : scrollview.width
-                Component.onCompleted: {
-                    childItemAdded.connect((top,bottom) => {
-                        scrollview.moveToSubItem(index,top,bottom);
-                    })
+                spacing: -2
+                executionTargets: {
+                    if(ProfileManager.currentProfile) {
+                        return ProfileManager.currentProfile.executionTargets
+                    } else {
+                        return []
+                    }
                 }
-                onRemoved: {
-                    deleteWindow.index = index;
-                    deleteWindow.showCentered(root.Window.window);
+                onExecutionTargetsChanged: {
+                    scrollview.reload();
+                    scrollview.moveTo(0,0);
+                }
+                onChildItemAdded: (index,top,bottom) => {
+                    scrollview.moveToSubItem(index,top,bottom);
                 }
             }
         }   

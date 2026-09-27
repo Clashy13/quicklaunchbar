@@ -14,52 +14,17 @@ SingleExecutionTargetBox {
     sourceContentComponent: {
         switch(root.executionTarget.type) {
             case 0:
-                return desktopApplicationContent;
+                return root.desktopApplicationContent();
             case 1:
-                return executableFileContent;
+                return root.executableFileContent();
             case 2:
-                return commandContent;
+                return root.commandContent();
             case 3:
-                return openFileContent;
+                return root.openFileContent();
             case 4:
-                return openUrlContent;
+                return root.openUrlContent();
             case 5:
                 return groupContent;
-        }
-    }
-
-    Component {
-        id: desktopApplicationContent
-        DesktopApplicationContent {
-            executionTarget: root.executionTarget
-        }
-    }
-
-    Component {
-        id: executableFileContent
-        ExecutableFileContent {
-            executionTarget: root.executionTarget
-        }
-    }
-
-    Component {
-        id: commandContent
-        CommandContent {
-            executionTarget: root.executionTarget
-        }
-    }
-
-    Component {
-        id: openFileContent
-        OpenFileContent {
-            executionTarget: root.executionTarget
-        }
-    }
-
-    Component {
-        id: openUrlContent
-        OpenUrlContent {
-            executionTarget: root.executionTarget
         }
     }
 
