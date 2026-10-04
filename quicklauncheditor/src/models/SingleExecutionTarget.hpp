@@ -18,6 +18,8 @@ namespace Editor::Models {
             : ExecutionTarget( uuid, name, type, parent ) {}
 
         virtual ~SingleExecutionTarget() = 0;
+
+        virtual SingleExecutionTarget* copy() const = 0;
     };
 
     inline SingleExecutionTarget::~SingleExecutionTarget() = default;

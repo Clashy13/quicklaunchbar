@@ -20,6 +20,16 @@ namespace Editor::Models {
         }
     }
 
+    DesktopApplicationExecutionTarget* DesktopApplicationExecutionTarget::copy() const {
+        const IconSource iconSource( this->iconSource().type, this->iconSource().value );
+        return new DesktopApplicationExecutionTarget( QUuid::createUuid(),
+                                                      this->name(),
+                                                      this->type(),
+                                                      iconSource,
+                                                      this->command(),
+                                                      this->parent() );
+    }
+
     bool DesktopApplicationExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_command != this->_savedCommand ||
                this->_iconSource != this->_savedIconSource;

@@ -16,6 +16,10 @@ namespace Editor::Models {
             return this->_uuid;
         }
 
+        void setUuid( const QUuid& uuid ) {
+            this->_uuid = uuid;
+        }
+
         virtual bool isEdited() const = 0;
 
         virtual void saveEdited() = 0;

@@ -29,4 +29,6 @@ QtObject {
     readonly property url folder: "qrc:/resources/icons/folder.svg"
     readonly property url search: "qrc:/resources/icons/search.svg"
     readonly property url drag: "qrc:/resources/icons/drag.svg"
+    readonly property url menu: "qrc:/resources/icons/menu.svg"
+    readonly property url paste: "qrc:/resources/icons/paste.svg"
 }

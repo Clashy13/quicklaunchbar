@@ -26,7 +26,9 @@ Rectangle {
     signal dragStarted()
     signal dragFinished()
     signal removed()
+    signal removedWithWindow()
     signal removedItem(model: var, index: int)
+    signal duplicated()
 
     required property var executionTarget
     property var sourceContentComponent: {
@@ -111,23 +113,92 @@ Rectangle {
                     spacing: 4
 
                     Button {
-                        icon.source: Icons.trashCan
-                        height: parent.height
-                        width: height
-                        Layout.preferredWidth: height
-                        style: Colors.Secondary
-                        onClicked: {
-                            root.removed();
-                        }
-                    }
-
-                    Button {
                         height: parent.height
                         width: height
                         style: Colors.Secondary
                         text: root.executionTarget.collapsed ? '▼' : '▲'
                         onPressed: {
                             root.executionTarget.collapsed = !root.executionTarget.collapsed
+                        }
+                    }
+
+                    Button {
+                        id: menuButton
+                        icon.source: Icons.menu
+                        height: parent.height
+                        width: height
+                        style: Colors.Secondary
+                        onPressed: {
+                            if(menu.visible) {
+                                menu.close()
+                            } else {
+                                menu.open()
+                            }
+                        }
+
+                        Menu {
+                            id: menu
+                            y: menuButton.height
+                            width: 140
+                            closePolicy: Popup.CloseOnPressOutsideParent
+                            background: Rectangle {
+                                color: Colors.primary.background
+                                border.width: 1
+                                border.color: Colors.secondary.border
+                            }
+
+                            MenuItem {
+                                id: removeButton
+                                contentItem: Text {
+                                    text: "Delete"
+                                }
+                                background:  Rectangle {
+                                    color: removeButton.hovered ? Colors.listItemSelected : "transparent"
+                                }
+                                onTriggered: {
+                                    root.removedWithWindow();
+                                }
+                            }
+
+                            MenuItem {
+                                id: copyButton
+                                contentItem: Text {
+                                    text: "Copy"
+                                }
+                                background:  Rectangle {
+                                    color: copyButton.hovered ? Colors.listItemSelected : "transparent"
+                                }
+                                onTriggered: {
+                                    ExecutionTargetManager.executionTargetToClipboard(root.executionTarget);
+                                }
+                            }
+
+                            MenuItem {
+                                id: cutButton
+                                contentItem: Text {
+                                    text: "Cut"
+                                }
+                                background:  Rectangle {
+                                    color: cutButton.hovered ? Colors.listItemSelected : "transparent"
+                                }
+                                onTriggered: {
+                                    ExecutionTargetManager.executionTargetToClipboard(root.executionTarget);
+                                    root.removed();
+                                }
+                            }
+
+                            MenuItem {
+                                id: duplicateButton
+                                contentItem: Text {
+                                    text: "Duplicate"
+                                }
+                                background:  Rectangle {
+                                    color: duplicateButton.hovered ? Colors.listItemSelected : "transparent"
+                                }
+                                onTriggered: {
+                                    root.duplicated();
+                                }
+                            }
                         }
                     }
                 }

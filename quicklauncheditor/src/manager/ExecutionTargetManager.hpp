@@ -38,6 +38,12 @@ namespace Editor::Manager {
             return this->_executionTargetNames.mid( 0, this->_executionTargetNames.size() - 1 );
         }
 
+        void renewExecutionTargetUuid( Models::ExecutionTarget* executionTarget );
+
+        Q_INVOKABLE void executionTargetToClipboard( Models::ExecutionTarget* executionTarget );
+
+        std::optional<Models::ExecutionTarget*> executionTargetFromClipboard();
+
       private:
         explicit ExecutionTargetManager( QObject* parent = nullptr );
 

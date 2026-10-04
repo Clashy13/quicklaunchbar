@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../manager/ExecutionTargetManager.hpp"
 #include "ExecutionTarget.hpp"
 #include "ListModel.hpp"
 
@@ -33,6 +34,27 @@ namespace Editor::Models {
 
         Q_INVOKABLE void insertItem( const qsizetype index, ExecutionTarget* item ) {
             ListModel<ExecutionTarget>::insertItem( index, item );
+        }
+
+        Q_INVOKABLE void duplicateItem( const qsizetype index ) {
+            if ( index < 0 || index > this->_items.size() ) {
+                return;
+            }
+
+            if ( index == this->_items.size() - 1 ) {
+                this->addItem( this->_items.at( index )->copy() );
+            } else {
+                this->insertItem( index + 1, this->_items.at( index )->copy() );
+            }
+        }
+
+        Q_INVOKABLE void pasteFromClipboard() {
+            if ( const auto executionTarget =
+                     Manager::ExecutionTargetManager::instance()->executionTargetFromClipboard() ) {
+                Manager::ExecutionTargetManager::instance()->renewExecutionTargetUuid(
+                    *executionTarget );
+                this->addItem( *executionTarget );
+            }
         }
     };
 

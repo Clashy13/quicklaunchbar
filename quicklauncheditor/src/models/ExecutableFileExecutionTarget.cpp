@@ -26,6 +26,16 @@ namespace Editor::Models {
         }
     }
 
+    ExecutableFileExecutionTarget* ExecutableFileExecutionTarget::copy() const {
+        return new ExecutableFileExecutionTarget( QUuid::createUuid(),
+                                                  this->name(),
+                                                  this->type(),
+                                                  this->filePath(),
+                                                  this->arguments(),
+                                                  this->iconFilePath(),
+                                                  this->parent() );
+    }
+
     bool ExecutableFileExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_filePath != this->_savedFilePath ||
                this->_arguments != this->_savedArguments ||

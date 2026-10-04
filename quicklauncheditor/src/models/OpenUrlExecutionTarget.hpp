@@ -36,6 +36,8 @@ namespace Editor::Models {
 
         void setIconFilePath( const QString& iconFilePath );
 
+        virtual OpenUrlExecutionTarget* copy() const override;
+
         virtual bool isEdited() const override;
 
         virtual void saveEdited() override;

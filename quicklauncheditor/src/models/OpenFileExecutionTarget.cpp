@@ -18,6 +18,15 @@ namespace Editor::Models {
         }
     }
 
+    OpenFileExecutionTarget* OpenFileExecutionTarget::copy() const {
+        return new OpenFileExecutionTarget( QUuid::createUuid(),
+                                            this->name(),
+                                            this->type(),
+                                            this->filePath(),
+                                            this->iconFilePath(),
+                                            this->parent() );
+    }
+
     bool OpenFileExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_filePath != this->_savedFilePath ||
                this->_iconFilePath != this->_savedIconFilePath;

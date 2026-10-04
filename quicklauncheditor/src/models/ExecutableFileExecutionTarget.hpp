@@ -27,7 +27,7 @@ namespace Editor::Models {
               _arguments( arguments ), _iconFilePath( iconFilePath ), _savedFilePath( filePath ),
               _savedArguments( arguments ), _savedIconFilePath( iconFilePath ) {}
 
-        auto filePath() {
+        auto filePath() const {
             return this->_filePath;
         }
 
@@ -44,6 +44,8 @@ namespace Editor::Models {
         }
 
         void setIconFilePath( const QString& iconFilePath );
+
+        virtual ExecutableFileExecutionTarget* copy() const override;
 
         virtual bool isEdited() const override;
 

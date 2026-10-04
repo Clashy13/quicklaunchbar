@@ -22,5 +22,7 @@
         <file>icons/folder.svg</file>
         <file>icons/search.svg</file>
         <file>icons/drag.svg</file>
+        <file>icons/menu.svg</file>
+        <file>icons/paste.svg</file>
     </qresource>
 </RCC>

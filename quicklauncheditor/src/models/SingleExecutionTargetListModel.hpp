@@ -1,7 +1,9 @@
 #pragma once
 
+#include "../manager/ExecutionTargetManager.hpp"
 #include "ListModel.hpp"
 #include "SingleExecutionTarget.hpp"
+#include "shared/models/ExecutionTargetType.hpp"
 
 namespace Editor::Models {
 
@@ -32,6 +34,31 @@ namespace Editor::Models {
 
         Q_INVOKABLE void insertItem( const qsizetype index, SingleExecutionTarget* item ) {
             ListModel<SingleExecutionTarget>::insertItem( index, item );
+        }
+
+        Q_INVOKABLE void duplicateItem( const qsizetype index ) {
+            if ( index < 0 || index > this->_items.size() ) {
+                return;
+            }
+
+            if ( index == this->_items.size() - 1 ) {
+                this->addItem( this->_items.at( index )->copy() );
+            } else {
+                this->insertItem( index + 1, this->_items.at( index )->copy() );
+            }
+        }
+
+        Q_INVOKABLE void pasteFromClipboard() {
+            if ( const auto executionTarget =
+                     Manager::ExecutionTargetManager::instance()->executionTargetFromClipboard() ) {
+                if ( executionTarget.value()->type() ==
+                     Shared::Models::ExecutionTarget::Type::Group ) {
+                    return;
+                }
+                Manager::ExecutionTargetManager::instance()->renewExecutionTargetUuid(
+                    *executionTarget );
+                this->addItem( dynamic_cast<SingleExecutionTarget*>( *executionTarget ) );
+            }
         }
     };
 

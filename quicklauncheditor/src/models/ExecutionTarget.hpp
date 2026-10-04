@@ -53,6 +53,8 @@ namespace Editor::Models {
             emit this->collapsedChanged();
         }
 
+        virtual ExecutionTarget* copy() const = 0;
+
         virtual bool isEdited() const override {
             return this->_name != this->_savedName;
         }

@@ -20,6 +20,7 @@ QtObject {
 
     readonly property color text: isDarkMode ? "#eeeeee" : "#212121"
     readonly property color textDisabled: isDarkMode ? Qt.darker(text,1.6) : '#afafaf'
+    readonly property color textToolTip: isDarkMode ? Qt.darker(text,1.2) : '#727272'
 
     readonly property color markedBlue: "#1f9ede"
     readonly property color markedRed: '#ea2929'

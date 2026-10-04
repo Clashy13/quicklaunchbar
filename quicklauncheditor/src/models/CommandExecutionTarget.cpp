@@ -18,6 +18,15 @@ namespace Editor::Models {
         }
     }
 
+    CommandExecutionTarget* CommandExecutionTarget::copy() const {
+        return new CommandExecutionTarget( QUuid::createUuid(),
+                                           this->name(),
+                                           this->type(),
+                                           this->command(),
+                                           this->iconFilePath(),
+                                           this->parent() );
+    }
+
     bool CommandExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_command != this->_savedCommand ||
                this->_iconFilePath != this->_savedIconFilePath;

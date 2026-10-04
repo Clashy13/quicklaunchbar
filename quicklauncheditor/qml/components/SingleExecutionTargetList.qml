@@ -17,7 +17,13 @@ ExecutionTargetListBase {
         width: parent.width
         executionTarget: item
         onRemoved: {
+            root.executionTargets.removeItem(index);
+        }
+        onRemovedWithWindow: {
             root.showDeleteWindow(index)
+        }
+        onDuplicated: {
+            root.executionTargets.duplicateItem(index);
         }
     }
 }

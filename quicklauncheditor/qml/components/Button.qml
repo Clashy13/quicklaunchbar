@@ -31,6 +31,7 @@ Button {
     enabled: !selected
     property int style: Colors.Primary
     property int backgroundColorStyle: Button.Default
+    property string toolTipText
     icon.color: palette.buttonText
     font.pixelSize: 14
     padding: 6
@@ -70,4 +71,23 @@ Button {
         }
 
     }
+
+    ToolTip {
+        visible: root.hovered && root.toolTipText
+
+        delay: 600
+        y: root.height + 2
+        background: Rectangle {
+            color: Colors.primary.textInput
+            border.width: 1
+            border.color: Colors.primary.border
+            radius: 4
+        }
+        contentItem: Text {
+            text: root.toolTipText
+            color: Colors.textToolTip
+            font.pixelSize: 12
+        }
+    }
+
 }
