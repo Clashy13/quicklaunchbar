@@ -15,6 +15,7 @@ ExecutionTargetListBase {
     delegate: ExecutionTargetBox {
         required property int index
         required property var item
+        dragParent: root.dragParent
         width: parent.width
         executionTarget: item
         onRemoved: {

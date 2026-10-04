@@ -9,9 +9,11 @@ import "qrc:/executiontargets"
 
 ExecutionTargetListBase {
     id: root
+    allowGroup: false
     delegate: SingleExecutionTargetBox {
         required property int index
         required property var item
+        dragParent: root.dragParent
         width: parent.width
         executionTarget: item
         onRemoved: {

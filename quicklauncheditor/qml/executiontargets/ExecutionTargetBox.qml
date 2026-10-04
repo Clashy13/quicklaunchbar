@@ -24,6 +24,7 @@ SingleExecutionTargetBox {
             case 4:
                 return root.openUrlContent();
             case 5:
+                root.isGroup = true;
                 return groupContent;
         }
     }
@@ -32,6 +33,7 @@ SingleExecutionTargetBox {
         id: groupContent
         GroupContent {
             executionTarget: root.executionTarget
+            dragParent: root.dragParent
             onItemAdded: (top,bottom) => {
                 const localY = mapToItem(root, 0, 0).y
                 root.childItemAdded(localY+top,localY+bottom);

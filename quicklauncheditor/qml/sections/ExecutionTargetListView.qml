@@ -10,6 +10,8 @@ import "qrc:/executiontargets"
 Item {
     id: root
 
+    property int extendedEndHeight: 0
+
     Item {
         id: content
         anchors.fill: parent
@@ -24,8 +26,10 @@ Item {
 
             ExecutionTargetList {
                 id: executionTargetList
+                dragParent: root
                 width: scrollview.contentHeight > scrollview.height ? scrollview.width - 10 : scrollview.width
                 spacing: -2
+                extendedEndHeight: root.extendedEndHeight
                 executionTargets: {
                     if(ProfileManager.currentProfile) {
                         return ProfileManager.currentProfile.executionTargets

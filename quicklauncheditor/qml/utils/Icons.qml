@@ -28,4 +28,5 @@ QtObject {
     readonly property url trashCan: "qrc:/resources/icons/trash_can.svg"
     readonly property url folder: "qrc:/resources/icons/folder.svg"
     readonly property url search: "qrc:/resources/icons/search.svg"
+    readonly property url drag: "qrc:/resources/icons/drag.svg"
 }

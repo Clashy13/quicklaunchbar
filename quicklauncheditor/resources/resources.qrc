@@ -21,5 +21,6 @@
         <file>icons/trash_can.svg</file>
         <file>icons/folder.svg</file>
         <file>icons/search.svg</file>
+        <file>icons/drag.svg</file>
     </qresource>
 </RCC>

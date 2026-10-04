@@ -11,6 +11,7 @@ ColumnLayout {
     spacing: 12
 
     required property var executionTarget
+    required property var dragParent
     signal itemAdded(top: int, bottom: int)
 
     RowLayout {
@@ -43,6 +44,21 @@ ColumnLayout {
         color: Colors.secondary.background
         Layout.preferredHeight: rec.implicitHeight + rec.anchors.topMargin + rec.anchors.bottomMargin
 
+        DropArea {
+            anchors.fill: parent
+            enabled: executionTargetList.emptyExtended
+            onEntered: (drag) => {
+                if(drag.source.isGroup) {
+                     return;
+                }
+                drag.source.dragTargetList.extendedItemIndex = -1;
+                drag.source.dragTargetList = executionTargetList;
+                drag.source.dragItemIndex = 0;
+                executionTargetList.extendedItemIndex = 0;
+                executionTargetList.extendedItemHeight = drag.source.height;
+            }
+        }
+
         Rectangle {
             id: rec
             anchors.fill: parent
@@ -54,11 +70,13 @@ ColumnLayout {
 
             SingleExecutionTargetList {
                 id: executionTargetList
+                dragParent: root.dragParent
                 anchors.fill: parent
                 anchors.topMargin: 6
                 anchors.leftMargin: 6
                 anchors.bottomMargin: 6
                 anchors.rightMargin: -1
+                insideGroup: true
                 spacing: -2
                 executionTargets: root.executionTarget.executionTargets
                 onItemAdded: (top,bottom) => {
