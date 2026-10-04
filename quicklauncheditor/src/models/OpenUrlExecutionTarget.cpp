@@ -18,7 +18,16 @@ namespace Editor::Models {
         }
     }
 
-    bool OpenUrlExecutionTarget::isEdited() {
+    OpenUrlExecutionTarget* OpenUrlExecutionTarget::copy() const {
+        return new OpenUrlExecutionTarget( QUuid::createUuid(),
+                                           this->name(),
+                                           this->type(),
+                                           this->url(),
+                                           this->iconFilePath(),
+                                           this->parent() );
+    }
+
+    bool OpenUrlExecutionTarget::isEdited() const {
         return ExecutionTarget::isEdited() || this->_url != this->_savedUrl ||
                this->_iconFilePath != this->_savedIconFilePath;
     }

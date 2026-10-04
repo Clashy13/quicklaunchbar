@@ -32,11 +32,24 @@ namespace Editor::Models {
             return &this->_executionTargets;
         }
 
-        bool isEdited() override {
+        virtual GroupExecutionTarget* copy() const override {
+            QList<SingleExecutionTarget*> executionTargets;
+            executionTargets.reserve( this->_executionTargets.rowCount() );
+            for ( auto executionTarget : this->_executionTargets.list() ) {
+                executionTargets.push_back( executionTarget->copy() );
+            }
+            return new GroupExecutionTarget( QUuid::createUuid(),
+                                             this->name(),
+                                             this->type(),
+                                             executionTargets,
+                                             this->parent() );
+        }
+
+        virtual bool isEdited() const override {
             return ExecutionTarget::isEdited() || this->_executionTargets.isEdited();
         }
 
-        void saveEdited() override {
+        virtual void saveEdited() override {
             ExecutionTarget::saveEdited();
             this->_executionTargets.saveEdited();
         }

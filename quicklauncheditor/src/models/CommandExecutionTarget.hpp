@@ -4,6 +4,7 @@
 #include "SingleExecutionTarget.hpp"
 
 #include <QUrl>
+#include <quuid.h>
 
 namespace Editor::Models {
 
@@ -38,9 +39,11 @@ namespace Editor::Models {
 
         void setIconFilePath( const QString& iconFilePath );
 
-        bool isEdited() override;
+        virtual CommandExecutionTarget* copy() const override;
 
-        void saveEdited() override;
+        virtual bool isEdited() const override;
+
+        virtual void saveEdited() override;
 
       signals:
         void commandChanged();

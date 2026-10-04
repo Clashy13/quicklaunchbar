@@ -5,7 +5,15 @@
 #include "../models/GroupExecutionTarget.hpp"
 #include "../models/OpenFileExecutionTarget.hpp"
 #include "../models/OpenUrlExecutionTarget.hpp"
+#include "../serializer/ExecutionTargetSerializer.hpp"
+#include "shared/models/ExecutionTargetType.hpp"
+#include "shared/serializer/PropertySerializer.hpp"
 
+#include <QApplication>
+#include <QClipboard>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <optional>
 #include <qurl.h>
 #include <quuid.h>
 
@@ -74,5 +82,69 @@ namespace Editor::Manager {
                                                               Type::DesktopApplication,
                                                               application->iconSource(),
                                                               application->command() );
+    }
+
+    void
+    ExecutionTargetManager::renewExecutionTargetUuid( Models::ExecutionTarget* executionTarget ) {
+        executionTarget->setUuid( QUuid::createUuid() );
+        if ( executionTarget->type() == Shared::Models::ExecutionTarget::Type::Group ) {
+            for ( auto singleExecutionTarget :
+                  dynamic_cast<Models::GroupExecutionTarget*>( executionTarget )
+                      ->executionTargets()
+                      ->list() ) {
+                singleExecutionTarget->setUuid( QUuid::createUuid() );
+            }
+        }
+    }
+
+    void
+    ExecutionTargetManager::executionTargetToClipboard( Models::ExecutionTarget* executionTarget ) {
+        auto deserializedExecutionTarget =
+            Serializer::ExecutionTargetSerializer::deserialized( executionTarget );
+        QJsonObject clipboardContent = { { "type", "quicklauncheditor/clipboard" },
+                                         { "execution_target", deserializedExecutionTarget } };
+
+        QString clipboardContentStr =
+            QJsonDocument( clipboardContent ).toJson( QJsonDocument::Indented );
+        QApplication::clipboard()->setText( clipboardContentStr );
+    }
+
+    std::optional<Models::ExecutionTarget*> ExecutionTargetManager::executionTargetFromClipboard() {
+        QString text = QGuiApplication::clipboard()->text();
+
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson( text.toUtf8(), &error );
+
+        if ( error.error != QJsonParseError::NoError ) {
+            return std::nullopt;
+        }
+
+        if ( !doc.isObject() ) {
+            return std::nullopt;
+        }
+
+        QJsonObject clipboardContent = doc.object();
+
+        if ( const auto type =
+                 Shared::Serializer::PropertySerializer::serializedStringProperty( clipboardContent,
+                                                                                   "type" ) ) {
+            if ( *type != "quicklauncheditor/clipboard" ) {
+                return std::nullopt;
+            }
+        }
+
+        if ( const auto executionTargetObj =
+                 Shared::Serializer::PropertySerializer::serializedObjectProperty(
+                     clipboardContent,
+                     "execution_target" ) ) {
+            if ( const auto executionTarget =
+                     Serializer::ExecutionTargetSerializer::serialized( *executionTargetObj ) ) {
+                return executionTarget;
+            } else {
+                return std::nullopt;
+            }
+        } else {
+            return std::nullopt;
+        }
     }
 } // namespace Editor::Manager

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "UuidModel.hpp"
 #include "shared/models/ExecutionTargetType.hpp"
 
 #include <QObject>
@@ -7,12 +8,13 @@
 
 namespace Editor::Models {
 
-    class ExecutionTarget : public QObject {
+    class ExecutionTarget : public UuidModel {
 
         Q_OBJECT
 
         Q_PROPERTY( QString name READ name WRITE setName NOTIFY nameChanged );
         Q_PROPERTY( Type type READ type CONSTANT );
+        Q_PROPERTY( bool collapsed READ collapsed WRITE setCollapsed NOTIFY collapsedChanged );
 
       public:
         using Type = Shared::Models::ExecutionTarget::Type;
@@ -22,13 +24,9 @@ namespace Editor::Models {
                                   const QString& name,
                                   const Type type,
                                   QObject* parent )
-            : QObject( parent ), _uuid( uuid ), _name( name ), _type( type ), _savedName( name ) {}
+            : UuidModel( uuid, parent ), _name( name ), _type( type ), _savedName( name ) {}
 
         virtual ~ExecutionTarget() = 0;
-
-        auto uuid() const {
-            return this->_uuid;
-        }
 
         auto name() const {
             return this->_name;
@@ -46,22 +44,34 @@ namespace Editor::Models {
             return this->_type;
         }
 
-        virtual bool isEdited() {
+        auto collapsed() const {
+            return this->_collapsed;
+        }
+
+        void setCollapsed( const bool collapsed ) {
+            this->_collapsed = collapsed;
+            emit this->collapsedChanged();
+        }
+
+        virtual ExecutionTarget* copy() const = 0;
+
+        virtual bool isEdited() const override {
             return this->_name != this->_savedName;
         }
 
-        virtual void saveEdited() {
+        virtual void saveEdited() override {
             this->_savedName = this->_name;
         }
 
       signals:
         void nameChanged();
+        void collapsedChanged();
         void editedChanged( const bool edited );
 
       private:
-        QUuid _uuid;
         QString _name;
         Type _type;
+        bool _collapsed = false;
         QString _savedName;
     };
 

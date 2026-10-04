@@ -44,9 +44,11 @@ namespace Editor::Models {
 
         void setIconSource( const IconSource& iconSource );
 
-        bool isEdited() override;
+        virtual DesktopApplicationExecutionTarget* copy() const override;
 
-        void saveEdited() override;
+        virtual bool isEdited() const override;
+
+        virtual void saveEdited() override;
 
       signals:
         void commandChanged();

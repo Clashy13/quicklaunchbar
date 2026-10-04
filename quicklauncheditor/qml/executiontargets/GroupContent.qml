@@ -11,6 +11,7 @@ ColumnLayout {
     spacing: 12
 
     required property var executionTarget
+    required property var dragParent
     signal itemAdded(top: int, bottom: int)
 
     RowLayout {
@@ -43,6 +44,21 @@ ColumnLayout {
         color: Colors.secondary.background
         Layout.preferredHeight: rec.implicitHeight + rec.anchors.topMargin + rec.anchors.bottomMargin
 
+        DropArea {
+            anchors.fill: parent
+            enabled: executionTargetList.emptyExtended
+            onEntered: (drag) => {
+                if(drag.source.isGroup) {
+                     return;
+                }
+                drag.source.dragTargetList.extendedItemIndex = -1;
+                drag.source.dragTargetList = executionTargetList;
+                drag.source.dragItemIndex = 0;
+                executionTargetList.extendedItemIndex = 0;
+                executionTargetList.extendedItemHeight = drag.source.height;
+            }
+        }
+
         Rectangle {
             id: rec
             anchors.fill: parent
@@ -51,67 +67,23 @@ ColumnLayout {
             anchors.bottomMargin: 10
             color: Colors.primary.background
             implicitHeight: executionTargetList.implicitHeight + executionTargetList.anchors.topMargin + executionTargetList.anchors.bottomMargin
-            
-            Column {
+
+            SingleExecutionTargetList {
                 id: executionTargetList
+                dragParent: root.dragParent
                 anchors.fill: parent
                 anchors.topMargin: 6
                 anchors.leftMargin: 6
                 anchors.bottomMargin: 6
+                anchors.rightMargin: -1
+                insideGroup: true
                 spacing: -2
-
-                Repeater {
-                    id: repeater
-                    model: root.executionTarget.executionTargets
-
-                    delegate: SingleExecutionTargetBox {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.rightMargin: -1
-                        required property var item
-                        required property int index 
-                        executionTarget: item
-                        onRemoved: {
-                            deleteWindow.index = index;
-                            deleteWindow.showCentered(root.Window.window);
-                        }
-                    }
-                    onItemAdded: (index, item) => {
-                        let top = repeater.mapToItem(root, 0, 0).y;
-                        for(let i = 0; i < index; i++) {
-                            top += repeater.itemAt(i).height + root.spacing;
-                        }
-                        root.itemAdded(top,top + item.height);
-                    }
+                executionTargets: root.executionTarget.executionTargets
+                onItemAdded: (top,bottom) => {
+                    const localY = executionTargetList.mapToItem(root, 0, 0).y;
+                    root.itemAdded(localY+top,localY+bottom)
                 }
             }
-        }
-    }
-
-    ToolWindow {
-        id: deleteWindow
-        minimumWidth: 200
-        minimumHeight: 100
-        maximumWidth: 200
-        maximumHeight: 100
-
-        property int index: -1
-        onButtonPressed: (index) => {
-            if(index == 1 && deleteWindow.index != -1) {
-                root.executionTarget.executionTargets.removeItem(deleteWindow.index);
-                deleteWindow.index = -1;
-            }
-        }
-
-        buttonModel: [ { name: "Cancel" }, { name: "Delete" } ]
-
-        Text {
-            anchors.fill: parent
-            anchors.margins: 6
-            text: "Do you really want to delete this execution target?"
-            wrapMode: Text.WordWrap
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
         }
     }
 }

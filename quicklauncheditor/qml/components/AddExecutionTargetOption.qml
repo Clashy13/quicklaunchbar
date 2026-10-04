@@ -19,6 +19,7 @@ Item {
         id: row
         anchors.fill: parent
         anchors.leftMargin: 6
+        anchors.rightMargin: 2
         spacing: 6
 
         Text {
@@ -27,6 +28,15 @@ Item {
 
         Item {
             Layout.fillWidth: true
+        }
+
+        Button {
+            id: pasteButton
+            icon.source: Icons.paste
+            onPressed: {
+                root.executionTargets.pasteFromClipboard();
+            }
+            toolTipText: "Paste from clipboard"
         }
 
         Button {
