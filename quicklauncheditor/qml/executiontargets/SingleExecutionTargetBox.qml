@@ -117,6 +117,7 @@ Rectangle {
                         width: height
                         style: Colors.Secondary
                         text: root.executionTarget.collapsed ? '▼' : '▲'
+                        toolTipText: root.executionTarget.collapsed ? "Open" : "Close"
                         onPressed: {
                             root.executionTarget.collapsed = !root.executionTarget.collapsed
                         }
@@ -128,6 +129,8 @@ Rectangle {
                         height: parent.height
                         width: height
                         style: Colors.Secondary
+                        toolTipText: "More Actions"
+                        hideToolTip: menu.visible
                         onPressed: {
                             if(menu.visible) {
                                 menu.close()

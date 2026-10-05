@@ -10,6 +10,7 @@ Button {
     id: root
 
     property alias rectangle: rec
+    property bool hideToolTip: false
 
     enum Style {
         Default,
@@ -73,7 +74,12 @@ Button {
     }
 
     ToolTip {
-        visible: root.hovered && root.toolTipText
+        visible: {
+            if(root.hideToolTip) {
+                return false;
+            }
+            return root.hovered && root.toolTipText && !root.pressed
+        }
 
         delay: 600
         y: root.height + 2

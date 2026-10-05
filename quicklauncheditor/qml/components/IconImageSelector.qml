@@ -27,6 +27,7 @@ RowLayout {
         Layout.fillHeight: true
         icon.source: Icons.folder
         icon.color: Colors.text
+        toolTipText: "Select Image File"
         onClicked: {
             imageDialog.open();
         }
