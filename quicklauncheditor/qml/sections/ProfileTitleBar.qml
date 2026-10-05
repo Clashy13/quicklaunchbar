@@ -92,6 +92,7 @@ Item {
                 icon.source: Icons.edit
                 Layout.fillHeight: true
                 Layout.preferredWidth: height
+                toolTipText: "Edit Profile Name"
                 onClicked: {
                     if(nameTitle.editing) {
                         nameField.accepted();
@@ -114,6 +115,7 @@ Item {
             icon.color: Colors.text
             Layout.fillHeight: true
             Layout.preferredWidth: height
+            toolTipText: "Delete Profile"
             onClicked: {
                 deleteProfileWindow.showCentered(root.Window.window);
             }

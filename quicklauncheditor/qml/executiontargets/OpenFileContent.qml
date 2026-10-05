@@ -55,6 +55,7 @@ Item {
                 Layout.preferredWidth: height
                 Layout.fillHeight: true
                 icon.source: Icons.folder
+                toolTipText: "Select File"
                 onClicked: {
                     fileDialog.open();
                 }
